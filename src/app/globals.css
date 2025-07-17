@@ -1,26 +1,690 @@
 @import "tailwindcss";
 
+/* Pretendard 폰트 임포트 (CDN) */
+@import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css");
+
+@font-face {
+  font-family: "Ownglyph PDH";
+  src: url("/fonts/OwnglyphPDH.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Ownglyph RDO ballpen";
+  src: url("/fonts/OwnglyphRDO.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+  /* 폰트 패밀리 */
+  --font-pretendard: "Pretendard", "Apple SD Gothic Neo", "Malgun Gothic",
+    "맑은 고딕", "Nanum Gothic", "나눔고딕", "돋움", Dotum, Arial, sans-serif;
+  --font-ownglyph-pdh: "Ownglyph PDH", "Pretendard", sans-serif;
+  --font-ownglyph-rdo: "Ownglyph RDO ballpen", "Pretendard", sans-serif;
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+  /* Neutral Greys */
+  --grey-0: #ffffff;
+  --grey-1: #fafafa;
+  --grey-2: #f0f0f0;
+  --grey-3: #e4e4e4;
+  --grey-4: #cbcbcb;
+  --grey-5: #b5b5b5;
+  --grey-6: #8e8e8e;
+  --grey-7: #666666;
+  --grey-8: #4e4e4e;
+  --grey-9: #333333;
+  --grey-10: #1e1e1e;
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  /* Yellow */
+  --yellow-1: #fff6d9;
+  --yellow-2: #ffecb0;
+  --yellow-3: #ffc60d;
+  --yellow-4: #9f7607;
+  --yellow-5: #86610c;
+
+  /* Orange */
+  --orange-1: #fff1e5;
+  --orange-2: #ffdbbc;
+  --orange-3: #ff8419;
+  --orange-4: #ab4e07;
+  --orange-5: #91410d;
+
+  /* Red */
+  --red-1: #ffe5e5;
+  --red-2: #ffbcbc;
+  --red-3: #ff1919;
+  --red-4: #ab070d;
+  --red-5: #910d15;
+
+  /* Blue */
+  --blue-1: #f5f7ff;
+  --blue-2: #ccd7ff;
+  --blue-3: #2957ff;
+  --blue-4: #0834ba;
+  --blue-5: #0e37a0;
+
+  /* Teal */
+  --teal-1: #e5fbff;
+  --teal-2: #bff3fc;
+  --teal-3: #3ac5de;
+  --teal-4: #218491;
+  --teal-5: #23737a;
+
+  /* Green */
+  --green-1: #dbffde;
+  --green-2: #b4fdba;
+  --green-3: #2ce23c;
+  --green-4: #1b8d21;
+  --green-5: #1e7620;
+
+  /* 기존 컬러 변수(백업) */
+  --color-bg-main: var(--grey-0);
+  --color-bg-sub: var(--grey-1);
+  --color-bg-gray: var(--grey-2);
+  --color-border: var(--grey-3);
+  --color-border-dark: var(--grey-8);
+  --color-text-main: var(--grey-10);
+  --color-text-sub: var(--grey-7);
+  --color-text-accent: var(--blue-4);
+  --color-text-success: var(--green-4);
+  --color-text-error: var(--red-4);
+  --color-accent: var(--blue-1);
+  --color-error-bg: var(--red-1);
+  --shadow-main: 0px 4px 12px 0px rgba(0, 0, 0, 0.04);
+  --shadow-sub: 0px 2px 6px 0px rgba(0, 0, 0, 0.04);
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-pretendard);
+  background: var(--color-bg-main);
+  color: var(--color-text-main);
+  margin: 0;
 }
+
+/* 타이포그래피 예시 (Figma 기준) */
+.text-extra-title {
+  font-family: "Ownglyph PDH", "Pretendard", sans-serif !important;
+  font-size: 58px;
+  font-weight: 400;
+  line-height: 68px;
+}
+.text-screen-title {
+  font-family: "Ownglyph PDH", "Pretendard", sans-serif !important;
+  font-size: 42px;
+  font-weight: 400;
+  line-height: 46px;
+}
+.text-screen-subtitle {
+  font-family: "Ownglyph RDO ballpen", "Pretendard", sans-serif !important;
+  font-size: 28px;
+  font-weight: 400;
+  line-height: 24px;
+}
+.text-section-title {
+  font-family: "Ownglyph RDO ballpen", "Pretendard", sans-serif !important;
+  font-size: 26px;
+  font-weight: 400;
+  line-height: 24px;
+}
+.text-section-subtitle {
+  font-family: "Ownglyph RDO ballpen", "Pretendard", sans-serif !important;
+  font-size: 18px;
+  font-weight: 400;
+  line-height: 18px;
+}
+.text-group-title {
+  font-family: var(--font-pretendard);
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 20px;
+}
+.text-group-subtitle {
+  font-family: var(--font-pretendard);
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 18px;
+}
+
+/* 텍스트 바디 스타일 (Regular, Medium, SemiBold) */
+.text-body1-regular {
+  font-family: var(--font-pretendard);
+  font-size: 18px;
+  font-weight: 400;
+  line-height: 24px;
+}
+.text-body1-medium {
+  font-family: var(--font-pretendard);
+  font-size: 18px;
+  font-weight: 500;
+  line-height: 24px;
+}
+.text-body1-semibold {
+  font-family: var(--font-pretendard);
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 24px;
+}
+
+.text-body2-regular {
+  font-family: var(--font-pretendard);
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 20px;
+}
+.text-body2-medium {
+  font-family: var(--font-pretendard);
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 20px;
+}
+.text-body2-semibold {
+  font-family: var(--font-pretendard);
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 20px;
+}
+
+.text-body3-regular {
+  font-family: var(--font-pretendard);
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 18px;
+}
+.text-body3-medium {
+  font-family: var(--font-pretendard);
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 18px;
+}
+.text-body3-semibold {
+  font-family: var(--font-pretendard);
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 18px;
+}
+
+.text-body4-regular {
+  font-family: var(--font-pretendard);
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 16px;
+}
+.text-body4-medium {
+  font-family: var(--font-pretendard);
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 16px;
+}
+.text-body4-semibold {
+  font-family: var(--font-pretendard);
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 16px;
+}
+
+/* 버튼, 카드 등 주요 컴포넌트 배경/테두리 예시 */
+.card,
+.box,
+.input,
+.button {
+  background: var(--color-bg-sub);
+  border: 1.5px solid var(--color-border);
+  border-radius: 24px;
+  box-shadow: var(--shadow-main);
+}
+
+/* 텍스트 색상 유틸 */
+.text-main {
+  color: var(--color-text-main);
+}
+.text-sub {
+  color: var(--color-text-sub);
+}
+.text-accent {
+  color: var(--color-text-accent);
+}
+.text-success {
+  color: var(--color-text-success);
+}
+.text-error {
+  color: var(--color-text-error);
+}
+
+/* 배경색 유틸 */
+.bg-main {
+  background: var(--color-bg-main);
+}
+.bg-sub {
+  background: var(--color-bg-sub);
+}
+.bg-gray {
+  background: var(--color-bg-gray);
+}
+.bg-accent {
+  background: var(--color-accent);
+}
+.bg-error {
+  background: var(--color-error-bg);
+}
+
+/* 색상 유틸리티 클래스 */
+.bg-grey-0 {
+  background: var(--grey-0) !important;
+}
+.bg-grey-1 {
+  background: var(--grey-1) !important;
+}
+.bg-grey-2 {
+  background: var(--grey-2) !important;
+}
+.bg-grey-3 {
+  background: var(--grey-3) !important;
+}
+.bg-grey-4 {
+  background: var(--grey-4) !important;
+}
+.bg-grey-5 {
+  background: var(--grey-5) !important;
+}
+.bg-grey-6 {
+  background: var(--grey-6) !important;
+}
+.bg-grey-7 {
+  background: var(--grey-7) !important;
+}
+.bg-grey-8 {
+  background: var(--grey-8) !important;
+}
+.bg-grey-9 {
+  background: var(--grey-9) !important;
+}
+.bg-grey-10 {
+  background: var(--grey-10) !important;
+}
+
+.bg-yellow-1 {
+  background: var(--yellow-1) !important;
+}
+.bg-yellow-2 {
+  background: var(--yellow-2) !important;
+}
+.bg-yellow-3 {
+  background: var(--yellow-3) !important;
+}
+.bg-yellow-4 {
+  background: var(--yellow-4) !important;
+}
+.bg-yellow-5 {
+  background: var(--yellow-5) !important;
+}
+
+.bg-orange-1 {
+  background: var(--orange-1) !important;
+}
+.bg-orange-2 {
+  background: var(--orange-2) !important;
+}
+.bg-orange-3 {
+  background: var(--orange-3) !important;
+}
+.bg-orange-4 {
+  background: var(--orange-4) !important;
+}
+.bg-orange-5 {
+  background: var(--orange-5) !important;
+}
+
+.bg-red-1 {
+  background: var(--red-1) !important;
+}
+.bg-red-2 {
+  background: var(--red-2) !important;
+}
+.bg-red-3 {
+  background: var(--red-3) !important;
+}
+.bg-red-4 {
+  background: var(--red-4) !important;
+}
+.bg-red-5 {
+  background: var(--red-5) !important;
+}
+
+.bg-blue-1 {
+  background: var(--blue-1) !important;
+}
+.bg-blue-2 {
+  background: var(--blue-2) !important;
+}
+.bg-blue-3 {
+  background: var(--blue-3) !important;
+}
+.bg-blue-4 {
+  background: var(--blue-4) !important;
+}
+.bg-blue-5 {
+  background: var(--blue-5) !important;
+}
+
+.bg-teal-1 {
+  background: var(--teal-1) !important;
+}
+.bg-teal-2 {
+  background: var(--teal-2) !important;
+}
+.bg-teal-3 {
+  background: var(--teal-3) !important;
+}
+.bg-teal-4 {
+  background: var(--teal-4) !important;
+}
+.bg-teal-5 {
+  background: var(--teal-5) !important;
+}
+
+.bg-green-1 {
+  background: var(--green-1) !important;
+}
+.bg-green-2 {
+  background: var(--green-2) !important;
+}
+.bg-green-3 {
+  background: var(--green-3) !important;
+}
+.bg-green-4 {
+  background: var(--green-4) !important;
+}
+.bg-green-5 {
+  background: var(--green-5) !important;
+}
+
+.text-grey-0 {
+  color: var(--grey-0) !important;
+}
+.text-grey-1 {
+  color: var(--grey-1) !important;
+}
+.text-grey-2 {
+  color: var(--grey-2) !important;
+}
+.text-grey-3 {
+  color: var(--grey-3) !important;
+}
+.text-grey-4 {
+  color: var(--grey-4) !important;
+}
+.text-grey-5 {
+  color: var(--grey-5) !important;
+}
+.text-grey-6 {
+  color: var(--grey-6) !important;
+}
+.text-grey-7 {
+  color: var(--grey-7) !important;
+}
+.text-grey-8 {
+  color: var(--grey-8) !important;
+}
+.text-grey-9 {
+  color: var(--grey-9) !important;
+}
+.text-grey-10 {
+  color: var(--grey-10) !important;
+}
+
+.text-yellow-1 {
+  color: var(--yellow-1) !important;
+}
+.text-yellow-2 {
+  color: var(--yellow-2) !important;
+}
+.text-yellow-3 {
+  color: var(--yellow-3) !important;
+}
+.text-yellow-4 {
+  color: var(--yellow-4) !important;
+}
+.text-yellow-5 {
+  color: var(--yellow-5) !important;
+}
+
+.text-orange-1 {
+  color: var(--orange-1) !important;
+}
+.text-orange-2 {
+  color: var(--orange-2) !important;
+}
+.text-orange-3 {
+  color: var(--orange-3) !important;
+}
+.text-orange-4 {
+  color: var(--orange-4) !important;
+}
+.text-orange-5 {
+  color: var(--orange-5) !important;
+}
+
+.text-red-1 {
+  color: var(--red-1) !important;
+}
+.text-red-2 {
+  color: var(--red-2) !important;
+}
+.text-red-3 {
+  color: var(--red-3) !important;
+}
+.text-red-4 {
+  color: var(--red-4) !important;
+}
+.text-red-5 {
+  color: var(--red-5) !important;
+}
+
+.text-blue-1 {
+  color: var(--blue-1) !important;
+}
+.text-blue-2 {
+  color: var(--blue-2) !important;
+}
+.text-blue-3 {
+  color: var(--blue-3) !important;
+}
+.text-blue-4 {
+  color: var(--blue-4) !important;
+}
+.text-blue-5 {
+  color: var(--blue-5) !important;
+}
+
+.text-teal-1 {
+  color: var(--teal-1) !important;
+}
+.text-teal-2 {
+  color: var(--teal-2) !important;
+}
+.text-teal-3 {
+  color: var(--teal-3) !important;
+}
+.text-teal-4 {
+  color: var(--teal-4) !important;
+}
+.text-teal-5 {
+  color: var(--teal-5) !important;
+}
+
+.text-green-1 {
+  color: var(--green-1) !important;
+}
+.text-green-2 {
+  color: var(--green-2) !important;
+}
+.text-green-3 {
+  color: var(--green-3) !important;
+}
+.text-green-4 {
+  color: var(--green-4) !important;
+}
+.text-green-5 {
+  color: var(--green-5) !important;
+}
+
+/* 기타 Figma 스타일에 따라 추가 가능 */
+
+/* ---- Layout 유틸리티 (Figma Layout 가이드) ---- */
+
+/* Border Radius */
+.radius-40 {
+  border-radius: 40px !important;
+}
+.radius-24 {
+  border-radius: 24px !important;
+}
+.radius-20 {
+  border-radius: 20px !important;
+}
+.radius-16 {
+  border-radius: 16px !important;
+}
+.radius-12 {
+  border-radius: 12px !important;
+}
+.radius-8 {
+  border-radius: 8px !important;
+}
+.radius-4 {
+  border-radius: 4px !important;
+}
+
+/* Box Shadow (Figma effect_KQJRUK) */
+.shadow-main {
+  box-shadow: 0px 4px 12px 0px rgba(0, 0, 0, 0.04) !important;
+}
+
+/* Padding (Figma layout 기준) */
+.p-24 {
+  padding: 24px !important;
+}
+.gap-24 {
+  gap: 24px !important;
+}
+.gap-16 {
+  gap: 16px !important;
+}
+.gap-8 {
+  gap: 8px !important;
+}
+
+/* 카드/섹션 예시 */
+.card-radius-24 {
+  border-radius: 24px !important;
+  box-shadow: 0px 4px 12px 0px rgba(0, 0, 0, 0.04) !important;
+  background: #fff !important;
+}
+.card-radius-20 {
+  border-radius: 20px !important;
+  box-shadow: 0px 4px 12px 0px rgba(0, 0, 0, 0.04) !important;
+  background: #fff !important;
+}
+.card-radius-16 {
+  border-radius: 16px !important;
+  box-shadow: 0px 4px 12px 0px rgba(0, 0, 0, 0.04) !important;
+  background: #fff !important;
+}
+.card-radius-12 {
+  border-radius: 12px !important;
+  box-shadow: 0px 4px 12px 0px rgba(0, 0, 0, 0.04) !important;
+  background: #fff !important;
+}
+.card-radius-8 {
+  border-radius: 8px !important;
+  box-shadow: 0px 4px 12px 0px rgba(0, 0, 0, 0.04) !important;
+  background: #fff !important;
+}
+.card-radius-4 {
+  border-radius: 4px !important;
+  box-shadow: 0px 4px 12px 0px rgba(0, 0, 0, 0.04) !important;
+  background: #fff !important;
+}
+
+/* 예시: <div class="card-radius-24 p-24"> ... </div> */
+
+/* ---- Button 스타일 (Figma Button 가이드) ---- */
+
+/* 버튼 크기별 border-radius, padding */
+.button-large {
+  border-radius: 20px !important;
+  padding: 12px 16px !important;
+  font-size: 26px;
+  font-family: "Ownglyph PDH", "Pretendard", sans-serif;
+  font-weight: 400;
+  line-height: 24px;
+  background: #fff;
+  color: #1e1e1e;
+  box-shadow: 0px 4px 12px 0px rgba(0, 0, 0, 0.04);
+}
+.button-medium {
+  border-radius: 16px !important;
+  padding: 8px 12px !important;
+  font-size: 22px;
+  font-family: "Ownglyph PDH", "Pretendard", sans-serif;
+  font-weight: 400;
+  line-height: 20px;
+  background: #fff;
+  color: #1e1e1e;
+  box-shadow: 0px 4px 12px 0px rgba(0, 0, 0, 0.04);
+}
+.button-small {
+  border-radius: 12px !important;
+  padding: 4px 8px !important;
+  font-size: 18px;
+  font-family: "Ownglyph PDH", "Pretendard", sans-serif;
+  font-weight: 400;
+  line-height: 16px;
+  background: #fff;
+  color: #1e1e1e;
+  box-shadow: 0px 4px 12px 0px rgba(0, 0, 0, 0.04);
+}
+.button-xsmall {
+  border-radius: 8px !important;
+  padding: 4px 7px !important;
+  font-size: 12px;
+  font-family: "Ownglyph PDH", "Pretendard", sans-serif;
+  font-weight: 400;
+  line-height: 10px;
+  background: #fff;
+  color: #1e1e1e;
+  box-shadow: 0px 4px 12px 0px rgba(0, 0, 0, 0.04);
+}
+
+/* 버튼 텍스트 스타일 카드 (설명, 사이즈, 폰트 등) */
+.button-desc {
+  font-family: Pretendard, sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  color: #8e8e8e;
+  line-height: 18px;
+}
+.button-title {
+  font-family: Pretendard, sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  color: #1e1e1e;
+  line-height: 20px;
+}
+
+/* 버튼 카드 배경/테두리 */
+.button-card {
+  background: #fafafa !important;
+  border: 1.5px solid #e4e4e4 !important;
+  border-radius: 24px !important;
+  padding: 16px !important;
+}
+.button-card-content {
+  background: #f0f0f0 !important;
+  border-radius: 16px !important;
+  padding: 16px !important;
+}
+
+/* 예시: <button class="button-large">Large Button</button> */
