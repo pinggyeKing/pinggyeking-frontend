@@ -1,93 +1,193 @@
 "use client";
+import CharacterWithSpeechBubble from "@/components/icons/CharacterWithSpeechBubble";
+import { useEffect, useState } from "react";
 
 function Dashboard() {
+  const [fontLoaded, setFontLoaded] = useState<boolean>(false);
+
+  useEffect(() => {
+    // 폰트 로딩 상태 확인
+    const checkFontLoading = async () => {
+      try {
+        await document.fonts.ready;
+        const fontFaces = Array.from(document.fonts);
+        const ownglyphFont = fontFaces.find(
+          (font) => font.family === "Ownglyph PDH"
+        );
+        setFontLoaded(!!ownglyphFont && ownglyphFont.status === "loaded");
+        console.log("Font loading status:", {
+          ready: true,
+          ownglyphFound: !!ownglyphFont,
+          status: ownglyphFont?.status,
+          allFonts: fontFaces.map((f) => ({
+            family: f.family,
+            status: f.status,
+          })),
+        });
+      } catch (error) {
+        console.error("Font loading check failed:", error);
+      }
+    };
+
+    checkFontLoading();
+  }, []);
+
+  const characters = [
+    "default",
+    "excited",
+    "kidding",
+    "sad",
+    "cute",
+    "cool",
+    "crown",
+    "suit",
+  ] as const;
+
+  const bubblePositions = ["top", "bottom", "left", "right"] as const;
+
   return (
-    <div className="p-8 space-y-8">
-      <div className="bg-blue-1 p-4 rounded mb-4">
-        <h1 className="text-2xl font-bold">폰트 테스트</h1>
+    <div className="p-8 space-y-12">
+      <div className="bg-blue-1 p-4 rounded">
+        <h1 className="text-2xl font-bold">캐릭터 컴포넌트 테스트</h1>
+        <p className="text-sm mt-2">
+          폰트 로딩 상태: {fontLoaded ? "✅ 로드됨" : "❌ 로드 안됨"}
+        </p>
       </div>
 
-      {/* Ownglyph PDH 폰트 테스트 */}
-      <div className="space-y-4">
-        <h2 className="text-xl font-semibold">Ownglyph PDH 폰트</h2>
-        <div className="text-extra-title bg-yellow-1 p-4 rounded">
-          온글잎 PDH - Extra Title (58px)
-        </div>
-        <div className="text-screen-title bg-blue-1 p-4 rounded">
-          온글잎 PDH - Screen Title (42px)
-        </div>
-      </div>
-
-      {/* Ownglyph RDO 폰트 테스트 */}
-      <div className="space-y-4">
-        <h2 className="text-xl font-semibold">Ownglyph RDO ballpen 폰트</h2>
-        <div className="text-screen-subtitle bg-orange-1 p-4 rounded">
-          온글잎 RDO - Screen Subtitle (28px)
-        </div>
-        <div className="text-section-title bg-green-1 p-4 rounded">
-          온글잎 RDO - Section Title (26px)
-        </div>
-        <div className="text-section-subtitle bg-teal-1 p-4 rounded">
-          온글잎 RDO - Section Subtitle (18px)
-        </div>
-      </div>
-
-      {/* Pretendard 폰트 테스트 */}
-      <div className="space-y-4">
-        <h2 className="text-xl font-semibold">Pretendard 폰트</h2>
-        <div className="text-group-title bg-grey-1 p-4 rounded">
-          Pretendard - Group Title (16px, 600)
-        </div>
-        <div className="text-group-subtitle bg-grey-2 p-4 rounded">
-          Pretendard - Group Subtitle (14px, 500)
-        </div>
-        <div className="text-body1-regular bg-grey-1 p-4 rounded">
-          Pretendard - Body1 Regular (18px, 400)
-        </div>
-        <div className="text-body2-medium bg-grey-2 p-4 rounded">
-          Pretendard - Body2 Medium (16px, 500)
-        </div>
-        <div className="text-body3-semibold bg-grey-1 p-4 rounded">
-          Pretendard - Body3 SemiBold (14px, 600)
-        </div>
-        <div className="text-body4-regular bg-grey-2 p-4 rounded">
-          Pretendard - Body4 Regular (12px, 400)
-        </div>
-      </div>
-
-      {/* 색상 테스트 */}
-      <div className="space-y-4">
-        <h2 className="text-xl font-semibold">색상 테스트</h2>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          <div className="bg-yellow-3 text-yellow-5 p-4 rounded text-center">
-            Yellow
+      {/* 폰트 디버깅 테스트 - 상단으로 이동 */}
+      <div className="space-y-6">
+        <h2 className="text-xl font-semibold bg-red-100 p-3 rounded">
+          폰트 디버깅 테스트 (상단)
+        </h2>
+        <div className="bg-grey-1 p-4 rounded space-y-4 border-2 border-red-300">
+          <div>
+            <p className="text-sm text-grey-6 mb-2">Pretendard (기본 폰트):</p>
+            <p
+              style={{ fontFamily: "Pretendard, sans-serif", fontSize: "30px" }}
+            >
+              에에... 그게...
+            </p>
           </div>
-          <div className="bg-orange-3 text-orange-5 p-4 rounded text-center">
-            Orange
+          <div>
+            <p className="text-sm text-grey-6 mb-2">
+              Ownglyph PDH (커스텀 폰트):
+            </p>
+            <p
+              style={{
+                fontFamily: '"Ownglyph PDH", "Pretendard", sans-serif',
+                fontSize: "30px",
+              }}
+            >
+              에에... 그게...
+            </p>
           </div>
-          <div className="bg-red-3 text-red-5 p-4 rounded text-center">Red</div>
-          <div className="bg-blue-3 text-blue-5 p-4 rounded text-center">
-            Blue
+          <div>
+            <p className="text-sm text-grey-6 mb-2">CSS 변수 사용:</p>
+            <p
+              style={{
+                fontFamily: "var(--font-ownglyph-pdh)",
+                fontSize: "30px",
+              }}
+            >
+              에에... 그게...
+            </p>
           </div>
-          <div className="bg-teal-3 text-teal-5 p-4 rounded text-center">
-            Teal
-          </div>
-          <div className="bg-green-3 text-green-5 p-4 rounded text-center">
-            Green
+          <div>
+            <p className="text-sm text-grey-6 mb-2">CSS 클래스 사용:</p>
+            <p className="text-speech-bubble">에에... 그게...</p>
           </div>
         </div>
       </div>
 
-      {/* 디버깅 정보 */}
-      <div className="space-y-4 border-t pt-4">
-        <h2 className="text-xl font-semibold">디버깅 정보</h2>
-        <div className="text-sm text-grey-7 space-y-2">
-          <p>폰트가 로드되지 않으면 브라우저 개발자 도구에서 확인하세요:</p>
-          <ul className="list-disc list-inside space-y-1">
-            <li>Network 탭에서 폰트 파일 로딩 상태 확인</li>
-            <li>Console에서 폰트 관련 오류 확인</li>
-            <li>Elements 탭에서 computed styles 확인</li>
-          </ul>
+      {/* 모든 캐릭터 테스트 */}
+      <div className="space-y-6">
+        <h2 className="text-xl font-semibold">캐릭터 타입별 테스트</h2>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+          {characters.map((character) => (
+            <div key={character} className="text-center space-y-2">
+              <CharacterWithSpeechBubble
+                character={character}
+                speechText={`${character} 캐릭터`}
+              />
+              <p className="text-sm text-grey-6">{character}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* 말풍선 위치 테스트 */}
+      <div className="space-y-6">
+        <h2 className="text-xl font-semibold">말풍선 위치 테스트</h2>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+          {bubblePositions.map((position) => (
+            <div key={position} className="text-center space-y-2">
+              <CharacterWithSpeechBubble
+                character="cool"
+                speechText={`${position} 위치`}
+                bubblePosition={position}
+              />
+              <p className="text-sm text-grey-6">{position}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* 커스텀 스타일 테스트 */}
+      <div className="space-y-6">
+        <h2 className="text-xl font-semibold">커스텀 스타일 테스트</h2>
+        <div className="flex flex-wrap gap-8 justify-center">
+          <div className="text-center space-y-2">
+            <CharacterWithSpeechBubble
+              character="crown"
+              speechText="파란색 말풍선"
+              speechBubbleClassName="bg-blue-1 border-blue-3"
+              textClassName="text-blue-5 font-bold"
+            />
+            <p className="text-sm text-grey-6">파란색 테마</p>
+          </div>
+          <div className="text-center space-y-2">
+            <CharacterWithSpeechBubble
+              character="suit"
+              speechText="노란색 말풍선"
+              speechBubbleClassName="bg-yellow-1 border-yellow-3"
+              textClassName="text-yellow-5 font-bold"
+            />
+            <p className="text-sm text-grey-6">노란색 테마</p>
+          </div>
+        </div>
+      </div>
+
+      {/* 텍스트 길이 테스트 */}
+      <div className="space-y-6">
+        <h2 className="text-xl font-semibold">텍스트 길이 테스트</h2>
+        <div className="flex flex-wrap gap-8 justify-center">
+          <div className="text-center space-y-2">
+            <CharacterWithSpeechBubble character="excited" speechText="짧음" />
+            <p className="text-sm text-grey-6">짧은 텍스트</p>
+          </div>
+          <div className="text-center space-y-2">
+            <CharacterWithSpeechBubble
+              character="kidding"
+              speechText="에에... 그게..."
+            />
+            <p className="text-sm text-grey-6">중간 텍스트</p>
+          </div>
+          <div className="text-center space-y-2">
+            <CharacterWithSpeechBubble
+              character="sad"
+              speechText="긴 텍스트는 어떻게 보일까요?"
+            />
+            <p className="text-sm text-grey-6">긴 텍스트</p>
+          </div>
+        </div>
+      </div>
+
+      {/* 기본값 테스트 */}
+      <div className="space-y-6">
+        <h2 className="text-xl font-semibold">기본값 테스트</h2>
+        <div className="text-center space-y-2">
+          <CharacterWithSpeechBubble />
+          <p className="text-sm text-grey-6">모든 기본값 사용</p>
         </div>
       </div>
     </div>
