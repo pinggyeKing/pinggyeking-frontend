@@ -1,10 +1,31 @@
-"use client";
+'use client';
+
+import React from 'react';
+import Picker from '@/components/picker/Picker';
 
 function Dashboard() {
+  const [pickerValue, setPickerValue] = React.useState('a');
+  const pickerOptions = [
+    { label: '옵션 A', value: 'a' },
+    { label: '옵션 B', value: 'b' },
+    { label: '옵션 C (비활성화)', value: 'c', disabled: true },
+    { label: '옵션 D', value: 'd' },
+  ];
+
   return (
     <div className="p-8 space-y-8">
       <div className="bg-blue-1 p-4 rounded mb-4">
         <h1 className="text-2xl font-bold">폰트 테스트</h1>
+      </div>
+
+      {/* Picker 컴포넌트 예시 */}
+      <div className="space-y-2">
+        <h2 className="text-xl font-semibold">Picker 컴포넌트 예시</h2>
+        <Picker
+          options={pickerOptions}
+          value={pickerValue}
+          onChange={setPickerValue}
+        />
       </div>
 
       {/* Ownglyph PDH 폰트 테스트 */}
