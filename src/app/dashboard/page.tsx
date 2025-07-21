@@ -1,8 +1,90 @@
-"use client";
+'use client';
+
+import React, { useState } from 'react';
+import SearchBar from '@/components/inputs/SearchBar';
+import { TextBox } from '@/components/inputs/TextBox';
 
 function Dashboard() {
+  // SearchBar 상태
+  const [search, setSearch] = useState('');
+  // TextBox 예시 데이터
+  const messages = [
+    { value: '안녕하세요!', author: 'you' as const, time: '오전 9:00' },
+    { value: '반가워요!', author: 'me' as const, time: '오전 9:01' },
+    {
+      value: '이 컴포넌트는 피그마 디자인을 반영했습니다.',
+      author: 'you' as const,
+      time: '오전 9:02',
+    },
+    {
+      value: '네, Tailwind로 만들었어요.',
+      author: 'me' as const,
+      time: '오전 9:03',
+    },
+  ];
+
   return (
     <div className="p-8 space-y-8">
+      {/* 다양한 TextBox 상태 예시 */}
+      <div className="space-y-2">
+        <h2 className="text-xl font-semibold">TextBox 다양한 상태 예시</h2>
+        <div className="flex flex-wrap gap-4">
+          <div className="min-w-[300px] flex-1">
+            <TextBox
+              value="기본 상태"
+              author="you"
+              time="오전 9:10"
+              status="default"
+            />
+          </div>
+          <div className="min-w-[300px] flex-1">
+            <TextBox
+              value="포커스(클릭) 상태"
+              author="me"
+              time="오전 9:11"
+              status="clicked"
+            />
+          </div>
+          <div className="min-w-[300px] flex-1">
+            <TextBox
+              value="입력 완료 상태"
+              author="you"
+              time="오전 9:12"
+              status="inputed"
+            />
+          </div>
+          <div className="min-w-[300px] flex-1">
+            <TextBox
+              value="에러 상태"
+              author="me"
+              time="오전 9:13"
+              error="에러 메시지 예시"
+              status="error"
+            />
+          </div>
+          <div className="min-w-[300px] flex-1">
+            <TextBox
+              value="성공 상태"
+              author="you"
+              time="오전 9:14"
+              status="success"
+            />
+          </div>
+        </div>
+      </div>
+
+      {/* SearchBar 사용 예시 */}
+      <div className="space-y-2">
+        <h2 className="text-xl font-semibold">SearchBar 컴포넌트 예시</h2>
+        <SearchBar
+          value={search}
+          onChange={setSearch}
+          onSearch={(v) => alert(`검색: ${v}`)}
+          placeholder="메시지 검색..."
+        />
+      </div>
+
+      {/* 이하 기존 내용 */}
       <div className="bg-blue-1 p-4 rounded mb-4">
         <h1 className="text-2xl font-bold">폰트 테스트</h1>
       </div>
