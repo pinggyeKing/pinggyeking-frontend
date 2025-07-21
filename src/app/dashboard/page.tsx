@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import SearchBar from '@/components/inputs/SearchBar';
 import { TextBox } from '@/components/inputs/TextBox';
+import Balloon from '@/components/inputs/Balloon';
 
 function Dashboard() {
   // SearchBar 상태
@@ -25,6 +26,36 @@ function Dashboard() {
 
   return (
     <div className="p-8 space-y-8">
+      {/* Balloon 컴포넌트 status 예시 */}
+      <div className="space-y-2">
+        <h2 className="text-xl font-semibold">Balloon 컴포넌트 status 예시</h2>
+        <div className="flex flex-wrap gap-4">
+          <Balloon text="기본 상태" label="핑계킹" status="default" />
+          <Balloon text="클릭(포커스) 상태" label="핑계킹" status="clicked" />
+          <Balloon text="입력 완료 상태" label="핑계킹" status="inputed" />
+          <Balloon
+            text="에러 상태"
+            label="핑계킹"
+            status="error"
+            error="에러 메시지 예시"
+          />
+          <Balloon text="비활성화 상태" label="핑계킹" status="disabled" />
+        </div>
+      </div>
+
+      {/* Balloon 컴포넌트 예시 */}
+      <div className="space-y-2">
+        <h2 className="text-xl font-semibold">Balloon 컴포넌트 예시</h2>
+        <div className="flex flex-wrap gap-4">
+          <Balloon text="말풍선 Max height 220px" label="핑계킹" />
+          <Balloon text="다른 사용자 메시지 예시" label="다른이름" />
+          <Balloon
+            text="긴 텍스트 입력도 지원합니다.\n여러 줄로 표시됩니다."
+            label="핑계킹"
+          />
+        </div>
+      </div>
+
       {/* 다양한 TextBox 상태 예시 */}
       <div className="space-y-2">
         <h2 className="text-xl font-semibold">TextBox 다양한 상태 예시</h2>
