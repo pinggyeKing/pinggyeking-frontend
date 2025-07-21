@@ -1,5 +1,4 @@
 import React from "react";
-import CustomIcon from "./CustomIcon";
 import SpeechBubbleIcon from "./SpeechBubbleIcon";
 
 // 캐릭터 타입 정의
