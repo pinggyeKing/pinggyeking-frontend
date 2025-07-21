@@ -103,6 +103,14 @@ body {
   margin: 0;
 }
 
+/* 말풍선 텍스트 전용 스타일 */
+.text-speech-bubble {
+  font-family: "Ownglyph PDH", "Pretendard", sans-serif !important;
+  font-size: 30px;
+  font-weight: 400;
+  line-height: normal;
+}
+
 /* 타이포그래피 예시 (Figma 기준) */
 .text-extra-title {
   font-family: "Ownglyph PDH", "Pretendard", sans-serif !important;
