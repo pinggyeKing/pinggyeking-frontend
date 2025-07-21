@@ -5,6 +5,7 @@ import SearchBar from '@/components/inputs/SearchBar';
 import { TextBox } from '@/components/inputs/TextBox';
 import Balloon from '@/components/inputs/Balloon';
 import Checkbox from '@/components/inputs/Checkbox';
+import Radio from '@/components/inputs/Radio';
 
 function Dashboard() {
   // SearchBar 상태
@@ -30,8 +31,41 @@ function Dashboard() {
   const [check3, setCheck3] = React.useState(false);
   const [check4, setCheck4] = React.useState(false);
 
+  const [radio1, setRadio1] = React.useState(true);
+  const [radio2, setRadio2] = React.useState(false);
+  const [radio3, setRadio3] = React.useState(false);
+
   return (
     <div className="p-8 space-y-8">
+      {/* Radio 컴포넌트 예시 */}
+      <div className="space-y-2">
+        <h2 className="text-xl font-semibold">Radio 컴포넌트 예시</h2>
+        <div className="flex flex-wrap gap-6 items-center">
+          <Radio
+            checked={radio1}
+            onChange={(v) => {
+              setRadio1(v);
+              setRadio2(!v);
+            }}
+            label="선택됨"
+          />
+          <Radio
+            checked={radio2}
+            onChange={(v) => {
+              setRadio2(v);
+              setRadio1(!v);
+            }}
+            label="선택 안됨"
+          />
+          <Radio
+            checked={radio3}
+            onChange={setRadio3}
+            label="비활성화"
+            disabled
+          />
+        </div>
+      </div>
+
       {/* Checkbox 컴포넌트 예시 */}
       <div className="space-y-2">
         <h2 className="text-xl font-semibold">Checkbox 컴포넌트 예시</h2>
