@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import SearchBar from '@/components/inputs/SearchBar';
 import { TextBox } from '@/components/inputs/TextBox';
 import Balloon from '@/components/inputs/Balloon';
+import Checkbox from '@/components/inputs/Checkbox';
 
 function Dashboard() {
   // SearchBar 상태
@@ -24,8 +25,38 @@ function Dashboard() {
     },
   ];
 
+  const [check1, setCheck1] = React.useState(true);
+  const [check2, setCheck2] = React.useState(false);
+  const [check3, setCheck3] = React.useState(false);
+  const [check4, setCheck4] = React.useState(false);
+
   return (
     <div className="p-8 space-y-8">
+      {/* Checkbox 컴포넌트 예시 */}
+      <div className="space-y-2">
+        <h2 className="text-xl font-semibold">Checkbox 컴포넌트 예시</h2>
+        <div className="flex flex-wrap gap-6 items-center">
+          <Checkbox checked={check1} onChange={setCheck1} label="동의합니다" />
+          <Checkbox
+            checked={check2}
+            onChange={setCheck2}
+            label="동의하지 않음"
+          />
+          <Checkbox
+            checked={check3}
+            onChange={setCheck3}
+            label="비활성화"
+            disabled
+          />
+          <Checkbox
+            checked={check4}
+            onChange={setCheck4}
+            label="작은 체크박스"
+            size="small"
+          />
+        </div>
+      </div>
+
       {/* Balloon 컴포넌트 status 예시 */}
       <div className="space-y-2">
         <h2 className="text-xl font-semibold">Balloon 컴포넌트 status 예시</h2>
