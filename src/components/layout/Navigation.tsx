@@ -32,7 +32,7 @@ const Navigation = () => {
 
   return (
     <nav
-      className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[480px] h-[128px] bg-[#F0F0F0] p-2"
+      className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[480px] h-[128px] p-2"
       aria-label="메인 네비게이션"
     >
       <div className="flex h-full items-center justify-stretch gap-8 rounded-[24px] bg-white px-8 py-6">
