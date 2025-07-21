@@ -16,18 +16,20 @@ interface BalloonProps {
 }
 
 const borderStyle: Record<BalloonStatus, string> = {
-  default: 'border-[#4E4E4E] border-2',
-  clicked: 'border-[#4E4E4E] border-2 ring-2 ring-[#4E4E4E]',
-  inputed: 'border-[#4E4E4E] border-2 font-semibold',
-  error: 'border-[#FF1919] border-2',
-  disabled: 'border-[#B5B5B5] border-2 opacity-60 cursor-not-allowed',
+  default: 'border-[2px] border-[var(--grey-8,#4E4E4E)]',
+  clicked:
+    'border-[2px] border-[var(--grey-8,#4E4E4E)] ring-2 ring-[var(--grey-8,#4E4E4E)]',
+  inputed: 'border-[2px] border-[var(--grey-8,#4E4E4E)] font-semibold',
+  error: 'border-[2px] border-[#FF1919]',
+  disabled:
+    'border-[2px] border-[var(--grey-5,#B5B5B5)] opacity-60 cursor-not-allowed',
 };
 
 const bgStyle: Record<BalloonStatus, string> = {
-  default: 'bg-white text-[#1E1E1E]',
-  clicked: 'bg-white text-[#1E1E1E]',
-  inputed: 'bg-white text-[#1E1E1E]',
-  error: 'bg-white text-[#AB070D]',
+  default: 'bg-[var(--grey-0,#FFF)] text-[#1E1E1E]',
+  clicked: 'bg-[var(--grey-0,#FFF)] text-[#1E1E1E]',
+  inputed: 'bg-[var(--grey-0,#FFF)] text-[#1E1E1E]',
+  error: 'bg-[var(--grey-0,#FFF)] text-[#AB070D]',
   disabled: 'bg-[#F0F0F0] text-[#B5B5B5]',
 };
 
@@ -56,7 +58,7 @@ const Balloon: React.FC<BalloonProps> = ({
         }}
       >
         <div
-          className="bg-white rounded"
+          className="bg-[var(--grey-0,#FFF)] rounded"
           style={{
             position: 'absolute',
             left: 0,
