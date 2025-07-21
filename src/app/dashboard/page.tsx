@@ -6,6 +6,7 @@ import { TextBox } from '@/components/inputs/TextBox';
 import Balloon from '@/components/inputs/Balloon';
 import Checkbox from '@/components/inputs/Checkbox';
 import Radio from '@/components/inputs/Radio';
+import Toggle from '@/components/inputs/Toggle';
 
 function Dashboard() {
   // SearchBar 상태
@@ -35,8 +36,27 @@ function Dashboard() {
   const [radio2, setRadio2] = React.useState(false);
   const [radio3, setRadio3] = React.useState(false);
 
+  const [toggle1, setToggle1] = React.useState(true);
+  const [toggle2, setToggle2] = React.useState(false);
+  const [toggle3, setToggle3] = React.useState(false);
+
   return (
     <div className="p-8 space-y-8">
+      {/* Toggle 컴포넌트 예시 */}
+      <div className="space-y-2">
+        <h2 className="text-xl font-semibold">Toggle 컴포넌트 예시</h2>
+        <div className="flex flex-wrap gap-6 items-center">
+          <Toggle checked={toggle1} onChange={setToggle1} label="토글 ON" />
+          <Toggle checked={toggle2} onChange={setToggle2} label="토글 OFF" />
+          <Toggle
+            checked={toggle3}
+            onChange={setToggle3}
+            label="비활성화"
+            disabled
+          />
+        </div>
+      </div>
+
       {/* Radio 컴포넌트 예시 */}
       <div className="space-y-2">
         <h2 className="text-xl font-semibold">Radio 컴포넌트 예시</h2>
