@@ -1,15 +1,23 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { TextBoxStatusProps } from './types';
 
+interface EditableTextBoxProps extends TextBoxStatusProps {
+  editable?: boolean;
+  onChange?: (value: string) => void;
+}
+
 const statusStyle = {
-  default: 'bg-white border-gray-300 text-gray-900',
-  clicked: 'bg-gray-50 border-gray-800 text-gray-900',
-  inputed: 'bg-white border-gray-800 text-gray-900',
-  error: 'bg-white border-red-500 text-red-600',
-  success: 'bg-white border-green-500 text-green-600',
+  default: 'text-gray-900',
+  clicked: 'text-gray-900',
+  inputed: 'text-gray-900',
+  error: 'text-red-600',
+  success: 'text-green-600',
 };
 
-const TextBox: React.FC<TextBoxStatusProps> = ({
+const borderStyle =
+  "bg-[url('/icons/wavy-border-input.svg')] bg-no-repeat bg-contain bg-center overflow-hidden min-h-[40px] min-w-[120px] max-w-full max-h-[220px]";
+
+const TextBox: React.FC<EditableTextBoxProps> = ({
   value,
   author = 'you',
   multiline = false,
@@ -18,8 +26,20 @@ const TextBox: React.FC<TextBoxStatusProps> = ({
   error,
   success,
   className = '',
+  editable = false,
+  onChange,
 }) => {
   const isMe = author === 'me';
+  const [isFocused, setIsFocused] = useState(false);
+  const effectiveStatus = editable && isFocused ? 'clicked' : status;
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
+    if (!editable) return;
+    if (e.key === 'Enter' || e.key === ' ') {
+      setIsFocused(true);
+    }
+  };
+
   return (
     <div
       className={`flex ${
@@ -27,26 +47,56 @@ const TextBox: React.FC<TextBoxStatusProps> = ({
       } w-full mb-2 ${className}`}
       aria-label={isMe ? '내 메시지' : '상대 메시지'}
     >
-      <div
-        className={`flex flex-col max-w-[80%] ${
-          isMe ? 'items-end' : 'items-start'
-        }`}
-      >
+      <div className={`max-w-[80%] ${isMe ? 'items-end' : 'items-start'}`}>
         {time && (
           <span className="text-xs text-gray-400 mb-1" aria-label="메시지 시간">
             {time}
           </span>
         )}
         <div
-          className={`rounded-2xl px-4 py-2 shadow text-base font-medium whitespace-pre-line border-2 min-h-[40px] transition-colors duration-150
-            ${statusStyle[status]}
-            ${multiline ? 'min-h-[60px]' : ''}
-            ${isMe ? 'bg-gray-100' : ''}
-          `}
-          tabIndex={0}
-          aria-label={value}
+          className={`relative ${borderStyle} flex items-center`}
+          style={{ boxSizing: 'border-box' }}
         >
-          {value}
+          {editable ? (
+            multiline ? (
+              <textarea
+                className={`w-full h-full bg-transparent border-none outline-none resize-none text-base font-medium min-h-[60px] transition-colors duration-150 ${statusStyle[effectiveStatus]} text-left self-center`}
+                value={value}
+                onChange={(e) => onChange && onChange(e.target.value)}
+                aria-label="메시지 입력"
+                rows={4}
+                onFocus={() => setIsFocused(true)}
+                onBlur={() => setIsFocused(false)}
+                placeholder="메시지를 입력하세요"
+                tabIndex={0}
+                style={{ boxSizing: 'border-box' }}
+              />
+            ) : (
+              <input
+                className={`w-full h-full bg-transparent border-none outline-none text-base font-medium min-h-[40px] transition-colors duration-150 ${statusStyle[effectiveStatus]} text-left self-center`}
+                value={value}
+                onChange={(e) => onChange && onChange(e.target.value)}
+                aria-label="메시지 입력"
+                type="text"
+                onFocus={() => setIsFocused(true)}
+                onBlur={() => setIsFocused(false)}
+                placeholder="메시지를 입력하세요"
+                tabIndex={0}
+                style={{ boxSizing: 'border-box' }}
+              />
+            )
+          ) : (
+            <div
+              className={`w-full h-full py-5 px-6  bg-transparent border-none outline-none text-base font-medium whitespace-pre-line min-h-[40px] transition-colors duration-150 ${statusStyle[status]} text-left self-center`}
+              tabIndex={0}
+              aria-label={value}
+              role="textbox"
+              onKeyDown={handleKeyDown}
+              style={{ boxSizing: 'border-box' }}
+            >
+              {value}
+            </div>
+          )}
         </div>
         {error && status === 'error' && (
           <span className="text-xs text-red-500 mt-1" aria-live="polite">
