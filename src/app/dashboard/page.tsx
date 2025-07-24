@@ -1,10 +1,13 @@
-function DashboardPage() {
+import React from "react";
+
+function Dashboard() {
   return (
     <div>
-      <h1>Dashboard</h1>
-      <p>Welcome to your dashboard!</p>
+      <div className="text-extra-title">온글잎 PDH 테스트</div>
+      <div className="text-screen-subtitle">온글잎 RDO 테스트</div>
+      <div className="text-group-title">Pretendard 테스트</div>
     </div>
   );
 }
 
-export default DashboardPage;
+export default Dashboard;
