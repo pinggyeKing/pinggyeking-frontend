@@ -54,17 +54,17 @@ const TextBox: React.FC<EditableTextBoxProps> = ({
           </span>
         )}
         <div
-          className={`relative ${borderStyle} flex items-center`}
+          className={`relative ${borderStyle} w-[339px] h-[64px] pt-[20px] pb-[20px] pl-[24px] pr-[24px]`}
           style={{ boxSizing: 'border-box' }}
         >
           {editable ? (
             multiline ? (
               <textarea
-                className={`w-full h-full bg-transparent border-none outline-none resize-none text-base font-medium min-h-[60px] transition-colors duration-150 ${statusStyle[effectiveStatus]} text-left self-center`}
+                className={`w-[291px] h-[24px] bg-transparent border-none outline-none resize-none text-base font-medium transition-colors duration-150 ${statusStyle[effectiveStatus]} text-left self-start`}
                 value={value}
                 onChange={(e) => onChange && onChange(e.target.value)}
                 aria-label="메시지 입력"
-                rows={4}
+                rows={1}
                 onFocus={() => setIsFocused(true)}
                 onBlur={() => setIsFocused(false)}
                 placeholder="메시지를 입력하세요"
@@ -73,7 +73,7 @@ const TextBox: React.FC<EditableTextBoxProps> = ({
               />
             ) : (
               <input
-                className={`w-full h-full bg-transparent border-none outline-none text-base font-medium min-h-[40px] transition-colors duration-150 ${statusStyle[effectiveStatus]} text-left self-center`}
+                className={`w-[291px] h-[24px] bg-transparent border-none outline-none text-base font-medium transition-colors duration-150 ${statusStyle[effectiveStatus]} text-left self-start`}
                 value={value}
                 onChange={(e) => onChange && onChange(e.target.value)}
                 aria-label="메시지 입력"
@@ -87,7 +87,7 @@ const TextBox: React.FC<EditableTextBoxProps> = ({
             )
           ) : (
             <div
-              className={`w-full h-full py-5 px-6  bg-transparent border-none outline-none text-base font-medium whitespace-pre-line min-h-[40px] transition-colors duration-150 ${statusStyle[status]} text-left self-center`}
+              className={`w-[291px] h-[24px] bg-transparent border-none outline-none text-base font-medium whitespace-pre-line transition-colors duration-150 ${statusStyle[status]} text-left self-start`}
               tabIndex={0}
               aria-label={value}
               role="textbox"
