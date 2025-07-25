@@ -5,6 +5,8 @@ import SectionIndicator from "@/components/SectionIndicator";
 import FunctionIndicator from "@/components/FunctionIndicator";
 import TabSection from "@/components/TabSection";
 import Message from "@/components/Message";
+import ProgressBar from "@/components/ProgressBar";
+import Radius from "@/components/Radius";
 import {
   Home,
   Users,
@@ -22,6 +24,14 @@ export default function TestPage() {
 
   // TabSection 테스트용 상태
   const [tabSelectedSection, setTabSelectedSection] = useState("home");
+
+  // Progress Bar 테스트용 상태 (단계별)
+  const [progressStage, setProgressStage] = useState<20 | 40 | 60 | 80 | 100>(
+    60
+  );
+
+  // Radius 테스트용 상태
+  const [radiusValue, setRadiusValue] = useState(80);
 
   const sectionItems = [
     { id: "dashboard", label: "Dashboard", icon: <Home size={20} /> },
@@ -325,10 +335,276 @@ import Message from '@/components/Message'
           </details>
         </section>
 
+        {/* ProgressBar 테스트 */}
+        <section className="bg-white rounded-lg shadow-sm border p-6">
+          <h2 className="text-xl font-semibold mb-4">ProgressBar Component</h2>
+          <p className="text-gray-600 mb-4">
+            Figma 디자인에서 직접 다운로드한 SVG 이미지를 사용하는 ProgressBar
+            컴포넌트입니다. 직선(straight)과 곡선(curved) 두 가지 스타일을
+            지원하며, 20%, 40%, 60%, 80%, 100% 단계마다 연필 아이콘이 정확히
+            표시됩니다. 각 단계별로 완성된 SVG를 사용하므로 디자인과 100%
+            일치합니다.
+          </p>
+
+          <div className="space-y-8">
+            {/* 단계 선택 */}
+            <div className="bg-gray-50 p-4 rounded-lg">
+              <h3 className="text-sm font-medium mb-3">단계 선택</h3>
+              <div className="flex flex-wrap gap-2">
+                {([20, 40, 60, 80, 100] as const).map((stage) => (
+                  <button
+                    key={stage}
+                    onClick={() => setProgressStage(stage)}
+                    className={`px-4 py-2 rounded-lg border transition-colors ${
+                      progressStage === stage
+                        ? "bg-gray-800 text-white border-gray-800"
+                        : "bg-white text-gray-700 border-gray-300 hover:bg-gray-50"
+                    }`}
+                  >
+                    {stage}%
+                  </button>
+                ))}
+              </div>
+              <p className="text-sm text-gray-600 mt-2">
+                현재 선택된 단계: <strong>{progressStage}%</strong>
+              </p>
+            </div>
+
+            {/* Straight 스타일 (Figma의 Style 1) */}
+            <div className="bg-gray-50 p-6 rounded-lg">
+              <h3 className="text-sm font-medium mb-4">
+                Straight Style (둥근 진행률 바)
+              </h3>
+              <div className="bg-white p-6 rounded-lg border">
+                <ProgressBar stage={progressStage} style="straight" />
+              </div>
+            </div>
+
+            {/* Curved 스타일 (Figma의 Style 2) */}
+            <div className="bg-gray-50 p-6 rounded-lg">
+              <h3 className="text-sm font-medium mb-4">
+                Curved Style (직선 진행률 바)
+              </h3>
+              <div className="bg-white p-6 rounded-lg border">
+                <ProgressBar stage={progressStage} style="curved" />
+              </div>
+            </div>
+
+            {/* 모든 단계 비교 - Straight */}
+            <div className="bg-gray-50 p-6 rounded-lg">
+              <h3 className="text-sm font-medium mb-4">
+                모든 단계 비교 (Straight Style)
+              </h3>
+              <div className="space-y-6">
+                {([20, 40, 60, 80, 100] as const).map((stage) => (
+                  <div key={stage} className="bg-white p-4 rounded-lg border">
+                    <p className="text-sm text-gray-600 mb-3 font-medium">
+                      {stage}% 단계
+                    </p>
+                    <ProgressBar stage={stage} style="straight" />
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* 모든 단계 비교 - Curved */}
+            <div className="bg-gray-50 p-6 rounded-lg">
+              <h3 className="text-sm font-medium mb-4">
+                모든 단계 비교 (Curved Style)
+              </h3>
+              <div className="space-y-6">
+                {([20, 40, 60, 80, 100] as const).map((stage) => (
+                  <div key={stage} className="bg-white p-4 rounded-lg border">
+                    <p className="text-sm text-gray-600 mb-3 font-medium">
+                      {stage}% 단계
+                    </p>
+                    <ProgressBar stage={stage} style="curved" />
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* 사용법 예시 */}
+          <details className="mt-6">
+            <summary className="cursor-pointer text-sm font-medium text-gray-700">
+              사용법 보기
+            </summary>
+            <pre className="mt-2 text-xs bg-gray-100 p-3 rounded overflow-x-scroll">
+              {`// ProgressBar 사용법 (Figma 디자인 기반)
+import ProgressBar from '@/components/ProgressBar'
+import type { ProgressStage } from '@/components/ProgressBar'
+
+// 기본 사용법 (straight 스타일 - 둥근 진행률 바)
+<ProgressBar stage={60} />
+
+// Straight 스타일 (둥근 진행률 바)
+<ProgressBar 
+  stage={80} 
+  style="straight" 
+/>
+
+// Curved 스타일 (직선 진행률 바)
+<ProgressBar 
+  stage={60} 
+  style="curved" 
+/>
+
+// 허용되는 단계: 20, 40, 60, 80, 100
+const stages: ProgressStage[] = [20, 40, 60, 80, 100]
+
+// 각 단계마다 연필 아이콘이 자동으로 표시됩니다
+// 완성된 단계에만 연필 아이콘이 나타납니다
+
+// 커스텀 클래스 적용
+<ProgressBar 
+  stage={100}
+  style="straight"
+  className="my-4"
+/>`}
+            </pre>
+          </details>
+        </section>
+
+        {/* Radius 테스트 */}
+        <section className="bg-white rounded-lg shadow-sm border p-6">
+          <h2 className="text-xl font-semibold mb-4">Radius Component</h2>
+          <p className="text-gray-600 mb-4">
+            원형 진행률을 표시하는 Radius 컴포넌트입니다. 크기와 스타일을
+            커스터마이징할 수 있습니다.
+          </p>
+
+          <div className="space-y-6">
+            {/* 진행률 조절 슬라이더 */}
+            <div className="bg-gray-50 p-4 rounded-lg">
+              <h3 className="text-sm font-medium mb-3">진행률 조절</h3>
+              <div className="flex items-center gap-4">
+                <label className="text-sm text-gray-600">진행률:</label>
+                <input
+                  type="range"
+                  min="0"
+                  max="100"
+                  value={radiusValue}
+                  onChange={(e) => setRadiusValue(Number(e.target.value))}
+                  className="flex-1"
+                />
+                <span className="text-sm font-medium w-12">{radiusValue}%</span>
+              </div>
+            </div>
+
+            {/* 다양한 크기 */}
+            <div className="bg-gray-50 p-4 rounded-lg">
+              <h3 className="text-sm font-medium mb-3">다양한 크기</h3>
+              <div className="flex items-center justify-around gap-4">
+                <div className="text-center">
+                  <Radius progress={radiusValue} size={80} />
+                  <p className="text-xs text-gray-500 mt-2">Small (80px)</p>
+                </div>
+                <div className="text-center">
+                  <Radius progress={radiusValue} size={100} />
+                  <p className="text-xs text-gray-500 mt-2">Medium (100px)</p>
+                </div>
+                <div className="text-center">
+                  <Radius progress={radiusValue} size={120} />
+                  <p className="text-xs text-gray-500 mt-2">Large (120px)</p>
+                </div>
+              </div>
+            </div>
+
+            {/* 다양한 스타일 */}
+            <div className="bg-gray-50 p-4 rounded-lg">
+              <h3 className="text-sm font-medium mb-3">다양한 스타일</h3>
+              <div className="flex items-center justify-around gap-4">
+                <div className="text-center">
+                  <Radius progress={radiusValue} strokeWidth={8} />
+                  <p className="text-xs text-gray-500 mt-2">얇은 선 (8px)</p>
+                </div>
+                <div className="text-center">
+                  <Radius progress={radiusValue} strokeWidth={12} />
+                  <p className="text-xs text-gray-500 mt-2">중간 선 (12px)</p>
+                </div>
+                <div className="text-center">
+                  <Radius progress={radiusValue} strokeWidth={16} />
+                  <p className="text-xs text-gray-500 mt-2">두꺼운 선 (16px)</p>
+                </div>
+              </div>
+            </div>
+
+            {/* 퍼센트 표시 옵션 */}
+            <div className="bg-gray-50 p-4 rounded-lg">
+              <h3 className="text-sm font-medium mb-3">퍼센트 표시 옵션</h3>
+              <div className="flex items-center justify-around gap-4">
+                <div className="text-center">
+                  <Radius progress={radiusValue} showPercentage={true} />
+                  <p className="text-xs text-gray-500 mt-2">퍼센트 표시</p>
+                </div>
+                <div className="text-center">
+                  <Radius progress={radiusValue} showPercentage={false} />
+                  <p className="text-xs text-gray-500 mt-2">퍼센트 숨김</p>
+                </div>
+              </div>
+            </div>
+
+            {/* 고정된 예시들 */}
+            <div className="bg-gray-50 p-4 rounded-lg">
+              <h3 className="text-sm font-medium mb-3">다양한 진행률 예시</h3>
+              <div className="flex items-center justify-around gap-4">
+                {[25, 50, 75, 100].map((value) => (
+                  <div key={value} className="text-center">
+                    <Radius progress={value} size={80} />
+                    <p className="text-xs text-gray-500 mt-2">{value}%</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* 사용법 예시 */}
+          <details className="mt-4">
+            <summary className="cursor-pointer text-sm font-medium text-gray-700">
+              사용법 보기
+            </summary>
+            <pre className="mt-2 text-xs bg-gray-100 p-3 rounded overflow-x-scroll">
+              {`// Radius 사용법
+import Radius from '@/components/Radius'
+
+// 기본 사용법
+<Radius progress={80} />
+
+// 크기 조절
+<Radius 
+  progress={80} 
+  size={120} 
+/>
+
+// 선 두께 조절
+<Radius 
+  progress={80} 
+  strokeWidth={12} 
+/>
+
+// 퍼센트 숨기기
+<Radius 
+  progress={80} 
+  showPercentage={false} 
+/>
+
+// 모든 옵션 조합
+<Radius 
+  progress={80}
+  size={100}
+  strokeWidth={10}
+  showPercentage={true}
+  className="my-4"
+/>`}
+            </pre>
+          </details>
+        </section>
+
         {/* 컴포넌트 상태 요약 */}
         <section className="bg-white rounded-lg shadow-sm border p-6">
           <h2 className="text-xl font-semibold mb-4">Current State Summary</h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
             <div className="p-4 bg-blue-50 rounded-lg">
               <h3 className="font-medium text-blue-900">SectionIndicator</h3>
               <p className="text-sm text-blue-700">
@@ -354,6 +630,22 @@ import Message from '@/components/Message'
               </p>
               <p className="text-sm text-purple-700">
                 Lucide icons with color coding
+              </p>
+            </div>
+            <div className="p-4 bg-orange-50 rounded-lg">
+              <h3 className="font-medium text-orange-900">ProgressBar</h3>
+              <p className="text-sm text-orange-700">
+                Current: {progressStage}%
+              </p>
+              <p className="text-sm text-orange-700">
+                Straight & Curved styles
+              </p>
+            </div>
+            <div className="p-4 bg-indigo-50 rounded-lg">
+              <h3 className="font-medium text-indigo-900">Radius</h3>
+              <p className="text-sm text-indigo-700">Current: {radiusValue}%</p>
+              <p className="text-sm text-indigo-700">
+                Circular progress indicator
               </p>
             </div>
           </div>
