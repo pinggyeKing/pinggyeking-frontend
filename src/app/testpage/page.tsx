@@ -474,8 +474,8 @@ const stages: ProgressStage[] = [20, 40, 60, 80, 100]
             LoadingSpinner Component
           </h2>
           <p className="text-gray-600 mb-4">
-            스핀 애니메이션을 사용하는 로딩 스피너 컴포넌트입니다. 3가지 크기와 선택적 텍스트
-            표시를 지원합니다.
+            스핀 애니메이션을 사용하는 로딩 스피너 컴포넌트입니다. 3가지 크기와
+            선택적 텍스트 표시를 지원합니다.
           </p>
 
           <div className="space-y-8">
@@ -638,9 +638,10 @@ import LoadingSpinner from '@/components/LoadingSpinner'
             CharacterLoading Component
           </h2>
           <p className="text-gray-600 mb-4">
-            Figma 디자인 기반의 캐릭터 로딩 컴포넌트입니다. 기본 상태와 신난 상태를 
-            번갈아가며 표시하여 생동감 있는 로딩 효과를 제공합니다. 3가지 크기와 
-            애니메이션 속도, 선택적 텍스트 표시를 지원합니다.
+            Figma 디자인 기반의 캐릭터 로딩 컴포넌트입니다. 기본 상태와 신난
+            상태를 400ms(100ms delay + 300ms duration) 간격으로 번갈아가며
+            표시하여 생동감 있는 로딩 효과를 제공합니다. 3가지 크기와 선택적
+            텍스트 표시를 지원합니다.
           </p>
 
           <div className="space-y-8">
@@ -663,46 +664,24 @@ import LoadingSpinner from '@/components/LoadingSpinner'
               </div>
             </div>
 
-            {/* 애니메이션 속도 */}
-            <div className="bg-gray-50 p-6 rounded-lg">
-              <h3 className="text-sm font-medium mb-4">애니메이션 속도</h3>
-              <div className="flex items-center justify-around gap-8">
-                <div className="text-center">
-                  <CharacterLoading animationSpeed="slow" />
-                  <p className="text-xs text-gray-500 mt-2">Slow (2초)</p>
-                </div>
-                <div className="text-center">
-                  <CharacterLoading animationSpeed="normal" />
-                  <p className="text-xs text-gray-500 mt-2">Normal (1.2초)</p>
-                </div>
-                <div className="text-center">
-                  <CharacterLoading animationSpeed="fast" />
-                  <p className="text-xs text-gray-500 mt-2">Fast (0.8초)</p>
-                </div>
-              </div>
-            </div>
-
             {/* 텍스트와 함께 */}
             <div className="bg-gray-50 p-6 rounded-lg">
               <h3 className="text-sm font-medium mb-4">텍스트와 함께</h3>
               <div className="flex items-center justify-around gap-8">
                 <div className="text-center">
-                  <CharacterLoading 
-                    size="small" 
-                    text="잠시만 기다려주세요..." 
+                  <CharacterLoading
+                    size="small"
+                    text="잠시만 기다려주세요..."
                   />
                 </div>
                 <div className="text-center">
-                  <CharacterLoading 
-                    size="medium" 
-                    text="데이터를 불러오고 있어요!" 
+                  <CharacterLoading
+                    size="medium"
+                    text="데이터를 불러오고 있어요!"
                   />
                 </div>
                 <div className="text-center">
-                  <CharacterLoading 
-                    size="large" 
-                    text="곧 완료됩니다!" 
-                  />
+                  <CharacterLoading size="large" text="곧 완료됩니다!" />
                 </div>
               </div>
             </div>
@@ -713,10 +692,9 @@ import LoadingSpinner from '@/components/LoadingSpinner'
               <div className="space-y-6">
                 {/* 페이지 전체 로딩 */}
                 <div className="bg-white p-8 rounded-lg border min-h-48 flex flex-col items-center justify-center">
-                  <CharacterLoading 
-                    size="large" 
+                  <CharacterLoading
+                    size="large"
                     text="페이지를 준비하고 있어요!"
-                    animationSpeed="normal"
                   />
                 </div>
 
@@ -724,18 +702,13 @@ import LoadingSpinner from '@/components/LoadingSpinner'
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="bg-white p-6 rounded-lg border text-center">
                     <h4 className="text-sm font-medium mb-4">데이터 처리 중</h4>
-                    <CharacterLoading 
-                      size="small" 
-                      text="분석하고 있어요..."
-                      animationSpeed="fast"
-                    />
+                    <CharacterLoading size="small" text="분석하고 있어요..." />
                   </div>
                   <div className="bg-white p-6 rounded-lg border text-center">
                     <h4 className="text-sm font-medium mb-4">업로드 중</h4>
-                    <CharacterLoading 
-                      size="small" 
+                    <CharacterLoading
+                      size="small"
                       text="파일을 업로드하고 있어요!"
-                      animationSpeed="normal"
                     />
                   </div>
                 </div>
@@ -749,19 +722,13 @@ import LoadingSpinner from '@/components/LoadingSpinner'
                 {/* 밝은 배경 */}
                 <div className="bg-white p-6 rounded-lg border text-center">
                   <h4 className="text-sm font-medium mb-3">밝은 배경</h4>
-                  <CharacterLoading 
-                    size="medium" 
-                    text="로딩 중..." 
-                  />
+                  <CharacterLoading size="medium" text="로딩 중..." />
                 </div>
 
                 {/* 회색 배경 */}
                 <div className="bg-gray-100 p-6 rounded-lg text-center">
                   <h4 className="text-sm font-medium mb-3">회색 배경</h4>
-                  <CharacterLoading 
-                    size="medium" 
-                    text="로딩 중..." 
-                  />
+                  <CharacterLoading size="medium" text="로딩 중..." />
                 </div>
 
                 {/* 어두운 배경 */}
@@ -769,8 +736,8 @@ import LoadingSpinner from '@/components/LoadingSpinner'
                   <h4 className="text-sm font-medium mb-3 text-white">
                     어두운 배경
                   </h4>
-                  <CharacterLoading 
-                    size="medium" 
+                  <CharacterLoading
+                    size="medium"
                     text="로딩 중..."
                     className="text-white"
                   />
@@ -796,11 +763,6 @@ import CharacterLoading from '@/components/CharacterLoading'
 <CharacterLoading size="medium" />
 <CharacterLoading size="large" />
 
-// 애니메이션 속도 조절
-<CharacterLoading animationSpeed="slow" />   // 2초 간격
-<CharacterLoading animationSpeed="normal" /> // 1.2초 간격 (기본)
-<CharacterLoading animationSpeed="fast" />   // 0.8초 간격
-
 // 텍스트와 함께
 <CharacterLoading 
   size="medium" 
@@ -810,7 +772,6 @@ import CharacterLoading from '@/components/CharacterLoading'
 // 모든 옵션 조합
 <CharacterLoading 
   size="large"
-  animationSpeed="normal"
   text="페이지를 준비하고 있어요!"
   className="my-4"
 />
@@ -821,7 +782,12 @@ import CharacterLoading from '@/components/CharacterLoading'
     size="large" 
     text="곧 완료됩니다!" 
   />
-</div>`}
+</div>
+
+// 애니메이션 설정
+// - Delay: 100ms 고정
+// - Duration: 300ms 고정
+// - 전환 주기: 400ms (100ms + 300ms)`}
             </pre>
           </details>
         </section>
@@ -1014,7 +980,7 @@ import Radius from '@/components/Radius'
             <div className="p-4 bg-teal-50 rounded-lg">
               <h3 className="font-medium text-teal-900">CharacterLoading</h3>
               <p className="text-sm text-teal-700">Figma character animation</p>
-              <p className="text-sm text-teal-700">Normal ↔ Excited states</p>
+              <p className="text-sm text-teal-700">400ms cycle (100ms+300ms)</p>
             </div>
           </div>
         </section>

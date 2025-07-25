@@ -40,20 +40,31 @@ const LoadingSpinner: React.FC<LoadingSpinnerProps> = ({
         className
       )}
     >
-      {/* 스피너 - 스핀 애니메이션만 사용 */}
+      {/* Chrome 탭 스타일 스피너 - 1/4 고정, 3/4 회전 */}
       <div
         className={clsx(
           "relative flex items-center justify-center",
           config.container
         )}
       >
+        {/* 배경 원 (연한 회색) */}
         <div
-          className={clsx("rounded-full animate-spin", config.circle)}
+          className={clsx("rounded-full", config.circle)}
           style={{
-            background: `conic-gradient(from 0deg, transparent, transparent, transparent, #CBCBCB)`,
-            animationDuration: "1s",
+            backgroundColor: "#FFFFFF",
           }}
         />
+
+        {/* 회전하는 3/4 원 */}
+        <div
+          className={clsx("absolute rounded-full animate-spin", config.circle)}
+          style={{
+            background: `conic-gradient(from 90deg, #9CA3AF 0deg, #9CA3AF 270deg, transparent 270deg, transparent 360deg)`,
+            animationDuration: "1.2s",
+            animationTimingFunction: "linear",
+          }}
+        />
+
         {/* 중앙의 빈 공간을 위한 내부 원 */}
         <div
           className="absolute rounded-full bg-white"
@@ -64,14 +75,14 @@ const LoadingSpinner: React.FC<LoadingSpinnerProps> = ({
                 : config.circle.includes("w-11")
                 ? "2.75rem"
                 : "3.5rem"
-            } - 8px)`,
+            } - 6px)`,
             height: `calc(${
               config.circle.includes("w-8")
                 ? "2rem"
                 : config.circle.includes("w-11")
                 ? "2.75rem"
                 : "3.5rem"
-            } - 8px)`,
+            } - 6px)`,
           }}
         />
       </div>

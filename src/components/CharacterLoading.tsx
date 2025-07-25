@@ -4,14 +4,12 @@ import clsx from "clsx";
 
 interface CharacterLoadingProps {
   size?: "small" | "medium" | "large";
-  animationSpeed?: "slow" | "normal" | "fast";
   text?: string;
   className?: string;
 }
 
 const CharacterLoading: React.FC<CharacterLoadingProps> = ({
   size = "medium",
-  animationSpeed = "normal",
   text,
   className,
 }) => {
@@ -36,24 +34,22 @@ const CharacterLoading: React.FC<CharacterLoadingProps> = ({
     },
   };
 
-  // 애니메이션 속도별 설정
-  const speedConfig = {
-    slow: 2000, // 2초
-    normal: 1200, // 1.2초
-    fast: 800, // 0.8초
+  // 애니메이션 설정 (고정값)
+  const animationConfig = {
+    delay: 100, // 100ms
+    duration: 300, // 300ms
   };
 
   const config = sizeConfig[size];
-  const duration = speedConfig[animationSpeed];
 
   // 캐릭터 상태를 주기적으로 변경
   useEffect(() => {
     const interval = setInterval(() => {
       setIsExcited((prev) => !prev);
-    }, duration);
+    }, animationConfig.delay + animationConfig.duration);
 
     return () => clearInterval(interval);
-  }, [duration]);
+  }, []);
 
   return (
     <div
@@ -78,7 +74,7 @@ const CharacterLoading: React.FC<CharacterLoadingProps> = ({
           alt="Loading character"
           width={config.image.width}
           height={config.image.height}
-          className="transition-all duration-500 ease-in-out"
+          className="transition-all duration-300 ease-in-out"
           priority
         />
       </div>
