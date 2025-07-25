@@ -77,9 +77,6 @@ const TextBox: React.FC<EditableTextBoxProps> = ({
     }
   };
 
-  // 입력 모드일 때 보더 빨간색
-  const dynamicBorder = isEditing ? 'ring-2 ring-red-500' : '';
-
   return (
     <div className={`max-w-[80%] ${isMe ? 'items-end' : 'items-start'}`}>
       {time && (
@@ -88,7 +85,7 @@ const TextBox: React.FC<EditableTextBoxProps> = ({
         </span>
       )}
       <div
-        className={`relative ${borderStyle} w-[339px] h-[64px] pt-[20px] pb-[20px] pl-[24px] pr-[24px] ${dynamicBorder}`}
+        className={`relative ${borderStyle} w-[339px] h-[64px] pt-[20px] pb-[20px] pl-[24px] pr-[24px]`}
         style={{ boxSizing: 'border-box' }}
       >
         {isEditing ? (
