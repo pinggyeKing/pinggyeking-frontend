@@ -1,11 +1,11 @@
 "use client";
 
-import { useEffect, useState } from 'react';
-import styles from './testpage.module.scss';
-import Checkbox from '@/components/inputs/Checkbox';
-import Radio from '@/components/inputs/Radio';
-import Toggle from '@/components/inputs/Toggle';
-import TextBox from '@/components/inputs/TextBox/TextBox';
+import { useEffect, useState } from "react";
+import styles from "./testpage.module.scss";
+import Checkbox from "@/components/inputs/Checkbox";
+import Radio from "@/components/inputs/Radio";
+import Toggle from "@/components/inputs/Toggle";
+import TextBox from "@/components/inputs/TextBox/TextBox";
 
 import SectionIndicator from "@/components/SectionIndicator";
 import FunctionIndicator from "@/components/FunctionIndicator";
@@ -28,13 +28,13 @@ import {
 export default function TestPage() {
   const [fontLoaded, setFontLoaded] = useState<boolean>(false);
   const [textValue, setTextValue] = useState(
-    '안녕하세요! 이것은 TextBox 컴포넌트 예시입니다.',
+    "안녕하세요! 이것은 TextBox 컴포넌트 예시입니다."
   );
-  const [numberValue, setNumberValue] = useState('');
+  const [numberValue, setNumberValue] = useState("");
   const [checkboxValue, setCheckboxValue] = useState(false);
-  const [radioValue, setRadioValue] = useState('');
-  const [selectValue, setSelectValue] = useState('');
-  const [textareaValue, setTextareaValue] = useState('');
+  const [radioValue, setRadioValue] = useState("");
+  const [selectValue, setSelectValue] = useState("");
+  const [textareaValue, setTextareaValue] = useState("");
   const [toggleValue, setToggleValue] = useState(false);
   // SectionIndicator 테스트용 상태 (index 기반)
   const [sectionIndex, setSectionIndex] = useState(0);
@@ -56,10 +56,10 @@ export default function TestPage() {
         await document.fonts.ready;
         const fontFaces = Array.from(document.fonts);
         const ownglyphFont = fontFaces.find(
-          (font) => font.family === 'Ownglyph PDH',
+          (font) => font.family === "Ownglyph PDH"
         );
-        setFontLoaded(!!ownglyphFont && ownglyphFont.status === 'loaded');
-        console.log('Font loading status:', {
+        setFontLoaded(!!ownglyphFont && ownglyphFont.status === "loaded");
+        console.log("Font loading status:", {
           ready: true,
           ownglyphFound: !!ownglyphFont,
           status: ownglyphFont?.status,
@@ -69,7 +69,7 @@ export default function TestPage() {
           })),
         });
       } catch (error) {
-        console.error('Font loading check failed:', error);
+        console.error("Font loading check failed:", error);
       }
     };
 
@@ -77,17 +77,17 @@ export default function TestPage() {
   }, []);
 
   const characters = [
-    'default',
-    'excited',
-    'kidding',
-    'sad',
-    'cute',
-    'cool',
-    'crown',
-    'suit',
+    "default",
+    "excited",
+    "kidding",
+    "sad",
+    "cute",
+    "cool",
+    "crown",
+    "suit",
   ] as const;
 
-  const bubblePositions = ['top', 'bottom', 'left', 'right'] as const;
+  const bubblePositions = ["top", "bottom", "left", "right"] as const;
 
   const handleTextChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setTextValue(e.target.value);
@@ -254,8 +254,8 @@ const sections = [
             <p className="text-sm text-grey-6 mb-2">CSS 변수 사용:</p>
             <p
               style={{
-                fontFamily: 'var(--font-ownglyph-pdh)',
-                fontSize: '30px',
+                fontFamily: "var(--font-ownglyph-pdh)",
+                fontSize: "30px",
               }}
             >
               에에... 그게...
@@ -265,8 +265,6 @@ const sections = [
             <p className="text-sm text-grey-6 mb-2">CSS 클래스 사용:</p>
             <p className="text-speech-bubble">에에... 그게...</p>
           </div>
-        </div>
-      </div>
 
           {/* 사용법 예시 */}
           <details className="mt-4">
