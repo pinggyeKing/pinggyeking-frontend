@@ -7,8 +7,7 @@ import TabSection from "@/components/TabSection";
 import Message from "@/components/Message";
 import ProgressBar from "@/components/ProgressBar";
 import Radius from "@/components/Radius";
-import LoadingSpinner from "@/components/LoadingSpinner";
-import CharacterLoading from "@/components/CharacterLoading";
+import LottieLoading from "@/components/LottieLoading";
 import {
   Home,
   Users,
@@ -468,180 +467,15 @@ const stages: ProgressStage[] = [20, 40, 60, 80, 100]
           </details>
         </section>
 
-        {/* LoadingSpinner 테스트 */}
+        {/* LottieLoading 테스트 */}
         <section className="bg-white rounded-lg shadow-sm border p-6">
           <h2 className="text-xl font-semibold mb-4">
-            LoadingSpinner Component
+            LottieLoading Component
           </h2>
           <p className="text-gray-600 mb-4">
-            스핀 애니메이션을 사용하는 로딩 스피너 컴포넌트입니다. 3가지 크기와
-            선택적 텍스트 표시를 지원합니다.
-          </p>
-
-          <div className="space-y-8">
-            {/* 기본 스피너들 */}
-            <div className="bg-gray-50 p-6 rounded-lg">
-              <h3 className="text-sm font-medium mb-4">다양한 크기</h3>
-              <div className="flex items-center justify-around gap-8">
-                <div className="text-center">
-                  <LoadingSpinner size="small" />
-                  <p className="text-xs text-gray-500 mt-2">Small</p>
-                </div>
-                <div className="text-center">
-                  <LoadingSpinner size="medium" />
-                  <p className="text-xs text-gray-500 mt-2">Medium (기본)</p>
-                </div>
-                <div className="text-center">
-                  <LoadingSpinner size="large" />
-                  <p className="text-xs text-gray-500 mt-2">Large</p>
-                </div>
-              </div>
-            </div>
-
-            {/* 텍스트와 함께 */}
-            <div className="bg-gray-50 p-6 rounded-lg">
-              <h3 className="text-sm font-medium mb-4">텍스트와 함께</h3>
-              <div className="flex items-center justify-around gap-8">
-                <div className="text-center">
-                  <LoadingSpinner size="small" text="로딩 중..." />
-                </div>
-                <div className="text-center">
-                  <LoadingSpinner
-                    size="medium"
-                    text="데이터를 불러오는 중입니다"
-                  />
-                </div>
-                <div className="text-center">
-                  <LoadingSpinner size="large" text="처리 중..." />
-                </div>
-              </div>
-            </div>
-
-            {/* 실제 사용 예시 */}
-            <div className="bg-gray-50 p-6 rounded-lg">
-              <h3 className="text-sm font-medium mb-4">실제 사용 예시</h3>
-              <div className="space-y-6">
-                {/* 페이지 로딩 */}
-                <div className="bg-white p-6 rounded-lg border min-h-32 flex flex-col items-center justify-center">
-                  <LoadingSpinner
-                    size="medium"
-                    text="페이지를 불러오는 중입니다..."
-                  />
-                </div>
-
-                {/* 버튼 내 로딩 */}
-                <div className="flex gap-4">
-                  <button className="px-4 py-2 bg-blue-500 text-white rounded-lg flex items-center gap-2">
-                    <LoadingSpinner size="small" />
-                    저장 중...
-                  </button>
-                  <button className="px-4 py-2 bg-gray-500 text-white rounded-lg flex items-center gap-2">
-                    <LoadingSpinner size="small" />
-                    업로드 중...
-                  </button>
-                </div>
-
-                {/* 카드 내 로딩 */}
-                <div className="bg-white p-4 rounded-lg border">
-                  <div className="flex items-center justify-between mb-3">
-                    <h4 className="font-medium">데이터 로딩</h4>
-                    <LoadingSpinner size="small" />
-                  </div>
-                  <p className="text-sm text-gray-600">
-                    서버에서 최신 데이터를 가져오고 있습니다...
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            {/* 다양한 배경에서의 표시 */}
-            <div className="space-y-4">
-              <h3 className="text-sm font-medium">다양한 배경에서의 표시</h3>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                {/* 밝은 배경 */}
-                <div className="bg-white p-6 rounded-lg border text-center">
-                  <h4 className="text-sm font-medium mb-3">밝은 배경</h4>
-                  <LoadingSpinner size="medium" text="로딩 중..." />
-                </div>
-
-                {/* 회색 배경 */}
-                <div className="bg-gray-100 p-6 rounded-lg text-center">
-                  <h4 className="text-sm font-medium mb-3">회색 배경</h4>
-                  <LoadingSpinner size="medium" text="로딩 중..." />
-                </div>
-
-                {/* 어두운 배경 */}
-                <div className="bg-gray-800 p-6 rounded-lg text-center">
-                  <h4 className="text-sm font-medium mb-3 text-white">
-                    어두운 배경
-                  </h4>
-                  <LoadingSpinner
-                    size="medium"
-                    text="로딩 중..."
-                    className="text-white"
-                  />
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* 사용법 예시 */}
-          <details className="mt-6">
-            <summary className="cursor-pointer text-sm font-medium text-gray-700">
-              사용법 보기
-            </summary>
-            <pre className="mt-2 text-xs bg-gray-100 p-3 rounded overflow-x-scroll">
-              {`// LoadingSpinner 사용법
-import LoadingSpinner from '@/components/LoadingSpinner'
-
-// 기본 사용법
-<LoadingSpinner />
-
-// 크기 지정
-<LoadingSpinner size="small" />
-<LoadingSpinner size="medium" />
-<LoadingSpinner size="large" />
-
-// 텍스트와 함께
-<LoadingSpinner 
-  size="medium" 
-  text="로딩 중..." 
-/>
-
-// 버튼 내에서 사용
-<button className="flex items-center gap-2">
-  <LoadingSpinner size="small" />
-  처리 중...
-</button>
-
-// 페이지 전체 로딩
-<div className="min-h-screen flex items-center justify-center">
-  <LoadingSpinner 
-    size="large" 
-    text="페이지를 불러오는 중입니다..." 
-  />
-</div>
-
-// 커스텀 클래스 적용
-<LoadingSpinner 
-  size="medium"
-  text="로딩 중..."
-  className="my-4"
-/>`}
-            </pre>
-          </details>
-        </section>
-
-        {/* CharacterLoading 테스트 */}
-        <section className="bg-white rounded-lg shadow-sm border p-6">
-          <h2 className="text-xl font-semibold mb-4">
-            CharacterLoading Component
-          </h2>
-          <p className="text-gray-600 mb-4">
-            Figma 디자인 기반의 캐릭터 로딩 컴포넌트입니다. 기본 상태와 신난
-            상태를 400ms(100ms delay + 300ms duration) 간격으로 번갈아가며
-            표시하여 생동감 있는 로딩 효과를 제공합니다. 3가지 크기와 선택적
-            텍스트 표시를 지원합니다.
+            Figma 디자인에서 받은 JSON 파일을 활용한 Lottie 애니메이션 로딩
+            컴포넌트입니다. 복잡하고 부드러운 벡터 애니메이션을 제공하며, 3가지
+            크기와 선택적 텍스트 표시를 지원합니다.
           </p>
 
           <div className="space-y-8">
@@ -650,15 +484,15 @@ import LoadingSpinner from '@/components/LoadingSpinner'
               <h3 className="text-sm font-medium mb-4">다양한 크기</h3>
               <div className="flex items-center justify-around gap-8">
                 <div className="text-center">
-                  <CharacterLoading size="small" />
+                  <LottieLoading size="small" />
                   <p className="text-xs text-gray-500 mt-2">Small</p>
                 </div>
                 <div className="text-center">
-                  <CharacterLoading size="medium" />
+                  <LottieLoading size="medium" />
                   <p className="text-xs text-gray-500 mt-2">Medium (기본)</p>
                 </div>
                 <div className="text-center">
-                  <CharacterLoading size="large" />
+                  <LottieLoading size="large" />
                   <p className="text-xs text-gray-500 mt-2">Large</p>
                 </div>
               </div>
@@ -669,19 +503,16 @@ import LoadingSpinner from '@/components/LoadingSpinner'
               <h3 className="text-sm font-medium mb-4">텍스트와 함께</h3>
               <div className="flex items-center justify-around gap-8">
                 <div className="text-center">
-                  <CharacterLoading
-                    size="small"
-                    text="잠시만 기다려주세요..."
-                  />
+                  <LottieLoading size="small" text="잠시만 기다려주세요..." />
                 </div>
                 <div className="text-center">
-                  <CharacterLoading
+                  <LottieLoading
                     size="medium"
                     text="데이터를 불러오고 있어요!"
                   />
                 </div>
                 <div className="text-center">
-                  <CharacterLoading size="large" text="곧 완료됩니다!" />
+                  <LottieLoading size="large" text="곧 완료됩니다!" />
                 </div>
               </div>
             </div>
@@ -692,7 +523,7 @@ import LoadingSpinner from '@/components/LoadingSpinner'
               <div className="space-y-6">
                 {/* 페이지 전체 로딩 */}
                 <div className="bg-white p-8 rounded-lg border min-h-48 flex flex-col items-center justify-center">
-                  <CharacterLoading
+                  <LottieLoading
                     size="large"
                     text="페이지를 준비하고 있어요!"
                   />
@@ -702,15 +533,27 @@ import LoadingSpinner from '@/components/LoadingSpinner'
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="bg-white p-6 rounded-lg border text-center">
                     <h4 className="text-sm font-medium mb-4">데이터 처리 중</h4>
-                    <CharacterLoading size="small" text="분석하고 있어요..." />
+                    <LottieLoading size="small" text="분석하고 있어요..." />
                   </div>
                   <div className="bg-white p-6 rounded-lg border text-center">
                     <h4 className="text-sm font-medium mb-4">업로드 중</h4>
-                    <CharacterLoading
+                    <LottieLoading
                       size="small"
                       text="파일을 업로드하고 있어요!"
                     />
                   </div>
+                </div>
+
+                {/* 버튼 내 로딩 */}
+                <div className="flex gap-4">
+                  <button className="px-4 py-2 bg-blue-500 text-white rounded-lg flex items-center gap-2">
+                    <LottieLoading size="small" />
+                    저장 중...
+                  </button>
+                  <button className="px-4 py-2 bg-gray-500 text-white rounded-lg flex items-center gap-2">
+                    <LottieLoading size="small" />
+                    업로드 중...
+                  </button>
                 </div>
               </div>
             </div>
@@ -722,13 +565,13 @@ import LoadingSpinner from '@/components/LoadingSpinner'
                 {/* 밝은 배경 */}
                 <div className="bg-white p-6 rounded-lg border text-center">
                   <h4 className="text-sm font-medium mb-3">밝은 배경</h4>
-                  <CharacterLoading size="medium" text="로딩 중..." />
+                  <LottieLoading size="medium" text="로딩 중..." />
                 </div>
 
                 {/* 회색 배경 */}
                 <div className="bg-gray-100 p-6 rounded-lg text-center">
                   <h4 className="text-sm font-medium mb-3">회색 배경</h4>
-                  <CharacterLoading size="medium" text="로딩 중..." />
+                  <LottieLoading size="medium" text="로딩 중..." />
                 </div>
 
                 {/* 어두운 배경 */}
@@ -736,7 +579,7 @@ import LoadingSpinner from '@/components/LoadingSpinner'
                   <h4 className="text-sm font-medium mb-3 text-white">
                     어두운 배경
                   </h4>
-                  <CharacterLoading
+                  <LottieLoading
                     size="medium"
                     text="로딩 중..."
                     className="text-white"
@@ -752,25 +595,25 @@ import LoadingSpinner from '@/components/LoadingSpinner'
               사용법 보기
             </summary>
             <pre className="mt-2 text-xs bg-gray-100 p-3 rounded overflow-x-scroll">
-              {`// CharacterLoading 사용법
-import CharacterLoading from '@/components/CharacterLoading'
+              {`// LottieLoading 사용법
+import LottieLoading from '@/components/LottieLoading'
 
 // 기본 사용법
-<CharacterLoading />
+<LottieLoading />
 
 // 크기 지정
-<CharacterLoading size="small" />
-<CharacterLoading size="medium" />
-<CharacterLoading size="large" />
+<LottieLoading size="small" />
+<LottieLoading size="medium" />
+<LottieLoading size="large" />
 
 // 텍스트와 함께
-<CharacterLoading 
+<LottieLoading 
   size="medium" 
   text="데이터를 불러오고 있어요!" 
 />
 
 // 모든 옵션 조합
-<CharacterLoading 
+<LottieLoading 
   size="large"
   text="페이지를 준비하고 있어요!"
   className="my-4"
@@ -778,16 +621,15 @@ import CharacterLoading from '@/components/CharacterLoading'
 
 // 페이지 전체 로딩
 <div className="min-h-screen flex items-center justify-center">
-  <CharacterLoading 
+  <LottieLoading 
     size="large" 
     text="곧 완료됩니다!" 
   />
 </div>
 
-// 애니메이션 설정
-// - Delay: 100ms 고정
-// - Duration: 300ms 고정
-// - 전환 주기: 400ms (100ms + 300ms)`}
+// 파일 크기: JSON 1개 (~15KB) + lottie-react 라이브러리
+// 의존성: lottie-react 필요
+// 장점: 복잡한 애니메이션, After Effects 연동 가능`}
             </pre>
           </details>
         </section>
@@ -930,7 +772,7 @@ import Radius from '@/components/Radius'
         {/* 컴포넌트 상태 요약 */}
         <section className="bg-white rounded-lg shadow-sm border p-6">
           <h2 className="text-xl font-semibold mb-4">Current State Summary</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-7 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-4">
             <div className="p-4 bg-blue-50 rounded-lg">
               <h3 className="font-medium text-blue-900">SectionIndicator</h3>
               <p className="text-sm text-blue-700">
@@ -972,15 +814,10 @@ import Radius from '@/components/Radius'
                 Circular progress indicator
               </p>
             </div>
-            <div className="p-4 bg-pink-50 rounded-lg">
-              <h3 className="font-medium text-pink-900">LoadingSpinner</h3>
-              <p className="text-sm text-pink-700">Spin animation</p>
-              <p className="text-sm text-pink-700">3 sizes + optional text</p>
-            </div>
-            <div className="p-4 bg-teal-50 rounded-lg">
-              <h3 className="font-medium text-teal-900">CharacterLoading</h3>
-              <p className="text-sm text-teal-700">Figma character animation</p>
-              <p className="text-sm text-teal-700">400ms cycle (100ms+300ms)</p>
+            <div className="p-4 bg-cyan-50 rounded-lg">
+              <h3 className="font-medium text-cyan-900">LottieLoading</h3>
+              <p className="text-sm text-cyan-700">JSON Lottie animation</p>
+              <p className="text-sm text-cyan-700">Complex vector animation</p>
             </div>
           </div>
         </section>
