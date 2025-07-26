@@ -1,9 +1,23 @@
-"use client";
-import CharacterWithSpeechBubble from "@/components/icons/CharacterWithSpeechBubble";
-import { useEffect, useState } from "react";
+'use client';
+import CharacterWithSpeechBubble from '@/components/icons/CharacterWithSpeechBubble';
+import { useEffect, useState } from 'react';
+import styles from './testpage.module.scss';
+import Checkbox from '@/components/inputs/Checkbox';
+import Radio from '@/components/inputs/Radio';
+import Toggle from '@/components/inputs/Toggle';
+import TextBox from '@/components/inputs/TextBox/TextBox';
 
 function Dashboard() {
   const [fontLoaded, setFontLoaded] = useState<boolean>(false);
+  const [textValue, setTextValue] = useState(
+    '안녕하세요! 이것은 TextBox 컴포넌트 예시입니다.',
+  );
+  const [numberValue, setNumberValue] = useState('');
+  const [checkboxValue, setCheckboxValue] = useState(false);
+  const [radioValue, setRadioValue] = useState('');
+  const [selectValue, setSelectValue] = useState('');
+  const [textareaValue, setTextareaValue] = useState('');
+  const [toggleValue, setToggleValue] = useState(false);
 
   useEffect(() => {
     // 폰트 로딩 상태 확인
@@ -12,10 +26,10 @@ function Dashboard() {
         await document.fonts.ready;
         const fontFaces = Array.from(document.fonts);
         const ownglyphFont = fontFaces.find(
-          (font) => font.family === "Ownglyph PDH"
+          (font) => font.family === 'Ownglyph PDH',
         );
-        setFontLoaded(!!ownglyphFont && ownglyphFont.status === "loaded");
-        console.log("Font loading status:", {
+        setFontLoaded(!!ownglyphFont && ownglyphFont.status === 'loaded');
+        console.log('Font loading status:', {
           ready: true,
           ownglyphFound: !!ownglyphFont,
           status: ownglyphFont?.status,
@@ -25,7 +39,7 @@ function Dashboard() {
           })),
         });
       } catch (error) {
-        console.error("Font loading check failed:", error);
+        console.error('Font loading check failed:', error);
       }
     };
 
@@ -33,24 +47,43 @@ function Dashboard() {
   }, []);
 
   const characters = [
-    "default",
-    "excited",
-    "kidding",
-    "sad",
-    "cute",
-    "cool",
-    "crown",
-    "suit",
+    'default',
+    'excited',
+    'kidding',
+    'sad',
+    'cute',
+    'cool',
+    'crown',
+    'suit',
   ] as const;
 
-  const bubblePositions = ["top", "bottom", "left", "right"] as const;
+  const bubblePositions = ['top', 'bottom', 'left', 'right'] as const;
+
+  const handleTextChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setTextValue(e.target.value);
+  };
+  const handleNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setNumberValue(e.target.value);
+  };
+  const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setCheckboxValue(e.target.checked);
+  };
+  const handleRadioChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setRadioValue(e.target.value);
+  };
+  const handleSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setSelectValue(e.target.value);
+  };
+  const handleTextareaChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setTextareaValue(e.target.value);
+  };
 
   return (
     <div className="p-8 space-y-12">
       <div className="bg-blue-1 p-4 rounded">
         <h1 className="text-2xl font-bold">캐릭터 컴포넌트 테스트</h1>
         <p className="text-sm mt-2">
-          폰트 로딩 상태: {fontLoaded ? "✅ 로드됨" : "❌ 로드 안됨"}
+          폰트 로딩 상태: {fontLoaded ? '✅ 로드됨' : '❌ 로드 안됨'}
         </p>
       </div>
 
@@ -63,7 +96,7 @@ function Dashboard() {
           <div>
             <p className="text-sm text-grey-6 mb-2">Pretendard (기본 폰트):</p>
             <p
-              style={{ fontFamily: "Pretendard, sans-serif", fontSize: "30px" }}
+              style={{ fontFamily: 'Pretendard, sans-serif', fontSize: '30px' }}
             >
               에에... 그게...
             </p>
@@ -75,7 +108,7 @@ function Dashboard() {
             <p
               style={{
                 fontFamily: '"Ownglyph PDH", "Pretendard", sans-serif',
-                fontSize: "30px",
+                fontSize: '30px',
               }}
             >
               에에... 그게...
@@ -85,8 +118,8 @@ function Dashboard() {
             <p className="text-sm text-grey-6 mb-2">CSS 변수 사용:</p>
             <p
               style={{
-                fontFamily: "var(--font-ownglyph-pdh)",
-                fontSize: "30px",
+                fontFamily: 'var(--font-ownglyph-pdh)',
+                fontSize: '30px',
               }}
             >
               에에... 그게...
@@ -188,6 +221,75 @@ function Dashboard() {
         <div className="text-center space-y-2">
           <CharacterWithSpeechBubble />
           <p className="text-sm text-grey-6">모든 기본값 사용</p>
+        </div>
+      </div>
+
+      {/* input 컴포넌트 예시 (inputs 폴더 컴포넌트 활용) */}
+      <div className="mt-12 p-8 bg-slate-50 rounded-2xl shadow-md">
+        <h2 className="text-2xl font-bold mb-6">
+          Input 컴포넌트 예시 (Custom Components)
+        </h2>
+        <div className="flex flex-col gap-6">
+          {/* Checkbox 예시 */}
+          <div>
+            <Checkbox
+              checked={checkboxValue}
+              onChange={setCheckboxValue}
+              label="동의합니다"
+              size="medium"
+            />
+          </div>
+          {/* Radio 예시 */}
+          <div className="flex flex-col gap-2">
+            <span className="text-base font-medium mb-1">성별</span>
+            <div className="flex gap-6">
+              <Radio
+                checked={radioValue === 'male'}
+                onChange={() => setRadioValue('male')}
+                label="남성"
+              />
+              <Radio
+                checked={radioValue === 'female'}
+                onChange={() => setRadioValue('female')}
+                label="여성"
+              />
+            </div>
+          </div>
+          {/* Toggle 예시 */}
+          <div>
+            <Toggle
+              checked={toggleValue}
+              onChange={setToggleValue}
+              label="토글 스위치"
+            />
+          </div>
+          {/* TextBox 예시 */}
+          <div className="flex flex-col gap-4">
+            <TextBox
+              value={textValue}
+              status="default"
+              editable
+              onChange={setTextValue}
+            />
+            <TextBox value={textValue} status="clicked" />
+            <TextBox value={textValue} status="inputed" />
+            <TextBox
+              value={textValue}
+              status="error"
+              error="에러 메시지 예시"
+            />
+            <TextBox
+              value={textValue}
+              status="success"
+              success="성공 메시지 예시"
+            />
+            <TextBox
+              value={textValue}
+              status="default"
+              multiline
+              time="오후 2:30"
+            />
+          </div>
         </div>
       </div>
     </div>
