@@ -1,6 +1,12 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from 'react';
+import styles from './testpage.module.scss';
+import Checkbox from '@/components/inputs/Checkbox';
+import Radio from '@/components/inputs/Radio';
+import Toggle from '@/components/inputs/Toggle';
+import TextBox from '@/components/inputs/TextBox/TextBox';
+
 import SectionIndicator from "@/components/SectionIndicator";
 import FunctionIndicator from "@/components/FunctionIndicator";
 import TabSection from "@/components/TabSection";
@@ -20,6 +26,16 @@ import {
 } from "lucide-react";
 
 export default function TestPage() {
+  const [fontLoaded, setFontLoaded] = useState<boolean>(false);
+  const [textValue, setTextValue] = useState(
+    '안녕하세요! 이것은 TextBox 컴포넌트 예시입니다.',
+  );
+  const [numberValue, setNumberValue] = useState('');
+  const [checkboxValue, setCheckboxValue] = useState(false);
+  const [radioValue, setRadioValue] = useState('');
+  const [selectValue, setSelectValue] = useState('');
+  const [textareaValue, setTextareaValue] = useState('');
+  const [toggleValue, setToggleValue] = useState(false);
   // SectionIndicator 테스트용 상태 (index 기반)
   const [sectionIndex, setSectionIndex] = useState(0);
 
@@ -33,7 +49,64 @@ export default function TestPage() {
 
   // Radius 테스트용 상태
   const [radiusValue, setRadiusValue] = useState(80);
+  useEffect(() => {
+    // 폰트 로딩 상태 확인
+    const checkFontLoading = async () => {
+      try {
+        await document.fonts.ready;
+        const fontFaces = Array.from(document.fonts);
+        const ownglyphFont = fontFaces.find(
+          (font) => font.family === 'Ownglyph PDH',
+        );
+        setFontLoaded(!!ownglyphFont && ownglyphFont.status === 'loaded');
+        console.log('Font loading status:', {
+          ready: true,
+          ownglyphFound: !!ownglyphFont,
+          status: ownglyphFont?.status,
+          allFonts: fontFaces.map((f) => ({
+            family: f.family,
+            status: f.status,
+          })),
+        });
+      } catch (error) {
+        console.error('Font loading check failed:', error);
+      }
+    };
 
+    checkFontLoading();
+  }, []);
+
+  const characters = [
+    'default',
+    'excited',
+    'kidding',
+    'sad',
+    'cute',
+    'cool',
+    'crown',
+    'suit',
+  ] as const;
+
+  const bubblePositions = ['top', 'bottom', 'left', 'right'] as const;
+
+  const handleTextChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setTextValue(e.target.value);
+  };
+  const handleNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setNumberValue(e.target.value);
+  };
+  const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setCheckboxValue(e.target.checked);
+  };
+  const handleRadioChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setRadioValue(e.target.value);
+  };
+  const handleSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setSelectValue(e.target.value);
+  };
+  const handleTextareaChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setTextareaValue(e.target.value);
+  };
   const sectionItems = [
     { id: "dashboard", label: "Dashboard", icon: <Home size={20} /> },
     { id: "users", label: "Users", icon: <Users size={20} /> },
@@ -177,6 +250,23 @@ const sections = [
               />
             </div>
           </div>
+          <div>
+            <p className="text-sm text-grey-6 mb-2">CSS 변수 사용:</p>
+            <p
+              style={{
+                fontFamily: 'var(--font-ownglyph-pdh)',
+                fontSize: '30px',
+              }}
+            >
+              에에... 그게...
+            </p>
+          </div>
+          <div>
+            <p className="text-sm text-grey-6 mb-2">CSS 클래스 사용:</p>
+            <p className="text-speech-bubble">에에... 그게...</p>
+          </div>
+        </div>
+      </div>
 
           {/* 사용법 예시 */}
           <details className="mt-4">
