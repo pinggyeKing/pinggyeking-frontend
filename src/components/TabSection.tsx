@@ -1,30 +1,37 @@
 import React from "react";
-import SectionIndicator, { SectionIndicatorType } from "./SectionIndicator";
+import SectionIndicator from "./SectionIndicator";
+
+interface SectionItem {
+  id: string;
+  label: string;
+  icon?: React.ReactNode;
+  subtitle?: string;
+}
 
 interface TabSectionProps {
-  type?: SectionIndicatorType;
-  sections: string[];
+  sections: SectionItem[];
   activeIndex: number;
   onChange: (index: number) => void;
   className?: string;
   children?: React.ReactNode[];
+  showDropdownIcon?: boolean;
 }
 
 const TabSection: React.FC<TabSectionProps> = ({
-  type = "underline",
   sections,
   activeIndex,
   onChange,
   className,
   children,
+  showDropdownIcon = true,
 }) => {
   return (
     <div className={className}>
       <SectionIndicator
-        type={type}
         sections={sections}
         activeIndex={activeIndex}
         onChange={onChange}
+        showDropdownIcon={showDropdownIcon}
       />
       <div className="mt-8">
         {Array.isArray(children) ? children[activeIndex] : children}
