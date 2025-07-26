@@ -2,8 +2,8 @@
 
 import { usePathname } from "next/navigation";
 import Link from "next/link";
-import React from "react";
-import { Home, LayoutDashboard } from "lucide-react";
+import React, { useState } from "react";
+import { Home, LayoutDashboard, ChevronDown, ChevronUp } from "lucide-react";
 
 interface IMenuItem {
   label: string;
@@ -29,44 +29,67 @@ const menuItems: IMenuItem[] = [
 
 const Navigation = () => {
   const currentPath = usePathname();
+  const [isVisible, setIsVisible] = useState(true);
+
+  const toggleVisibility = () => {
+    setIsVisible(!isVisible);
+  };
 
   return (
     <nav
       className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[480px] p-2"
       aria-label="메인 네비게이션"
     >
-      <div className="rounded-[32px] bg-[#F0F0F0] p-2">
-        <div className="flex items-stretch justify-stretch gap-8 rounded-[24px] bg-white px-8 py-6">
-          {menuItems.map(({ label, href, ariaLabel, icon: Icon }) => {
-            const isActive = currentPath === href;
-            return (
-              <Link
-                key={href}
-                href={href}
-                aria-label={ariaLabel}
-                aria-current={isActive ? "page" : undefined}
-                className={`flex flex-1 cursor-pointer items-center justify-center gap-1 rounded-[24px] border-2 px-4 py-3 font-normal transition-colors duration-200 
-                ${
-                  isActive
-                    ? "border-[#1E1E1E] bg-[#1E1E1E] text-white"
-                    : "border-[#1E1E1E] bg-white text-[#1E1E1E] hover:bg-gray-50"
-                }`}
-                style={{
-                  fontFamily: "var(--font-ownglyph-pdh)",
-                  fontSize: "26px",
-                  lineHeight: "0.923",
-                }}
-              >
-                <Icon
-                  className="h-6 w-6"
-                  strokeWidth={isActive ? 2.5 : 2}
-                  aria-hidden="true"
-                />
-                <span className="leading-none pt-1">{label}</span>
-              </Link>
-            );
-          })}
-        </div>
+      <div className="flex flex-col items-center gap-1">
+        {/* Toggle Arrow Button */}
+        <button
+          onClick={toggleVisibility}
+          className="flex h-10 w-10 items-center justify-center transition-colors duration-200"
+          aria-label={isVisible ? "네비게이션 숨기기" : "네비게이션 보이기"}
+        >
+          {isVisible ? (
+            <ChevronDown className="h-10 w-10 text-[#1E1E1E]" strokeWidth={2} />
+          ) : (
+            <ChevronUp className="h-10 w-10 text-[#1E1E1E]" strokeWidth={2} />
+          )}
+        </button>
+
+        {/* Navigation Container */}
+        {isVisible && (
+          <div className="w-full rounded-[32px] bg-[#F0F0F0] p-2">
+            <div className="flex items-stretch justify-stretch gap-8 rounded-[24px] bg-white px-8 py-6">
+              {menuItems.map(({ label, href, ariaLabel, icon: Icon }) => {
+                const isActive = currentPath === href;
+                return (
+                  <Link
+                    key={href}
+                    href={href}
+                    aria-label={ariaLabel}
+                    aria-current={isActive ? "page" : undefined}
+                    className={`flex flex-1 cursor-pointer items-center justify-center gap-1 rounded-[24px] border-2 px-4 py-3 font-normal transition-colors duration-200 
+                    ${
+                      isActive
+                        ? "border-[#1E1E1E] bg-[#1E1E1E] text-white"
+                        : "border-[#1E1E1E] bg-white text-[#1E1E1E] hover:bg-gray-50"
+                    }`}
+                    style={{
+                      fontFamily: "var(--font-ownglyph-pdh)",
+                      fontSize: "26px",
+                      lineHeight: "0.923",
+                    }}
+                  >
+                    <Icon
+                      className="h-6 w-6"
+                      strokeWidth={isActive ? 2.5 : 2}
+                      aria-hidden="true"
+                    />
+                    <span className="leading-none pt-1">{label}</span>
+                  </Link>
+                );
+              })}
+            </div>
+          </div>
+        )}
       </div>
     </nav>
   );
