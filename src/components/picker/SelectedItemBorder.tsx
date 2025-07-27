@@ -17,14 +17,14 @@ const SelectedItemBorder: React.FC<SelectedItemBorderProps> = ({
       <svg
         width={width}
         height={height}
-        viewBox="0 0 436 80"
+        viewBox="0 0 400 48"
         className="absolute inset-0"
         preserveAspectRatio="none"
       >
         <image
           href="/icons/picker.svg"
-          width="436"
-          height="80"
+          width="400"
+          height="48"
           preserveAspectRatio="none"
         />
       </svg>
