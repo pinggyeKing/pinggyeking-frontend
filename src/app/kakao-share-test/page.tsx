@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import ShareKakaoButton from "@/components/ShareKakaoButton";
+import CopyLinkButton from "@/components/CopyLinkButton";
 
 export default function KakaoShareTestPage() {
   const [imageUrl, setImageUrl] = useState(
@@ -11,12 +12,14 @@ export default function KakaoShareTestPage() {
   const [description, setDescription] = useState(
     "AI가 만들어준 완벽한 핑계를 확인해보세요!",
   );
+  const [customLink, setCustomLink] = useState("https://example.com");
+  const [resultId, setResultId] = useState("test-result-123");
 
   return (
     <div className="min-h-screen bg-gray-50 py-8">
       <div className="max-w-2xl mx-auto px-4">
         <h1 className="text-3xl font-bold text-center mb-8">
-          카카오톡 공유하기 테스트
+          공유 기능 테스트 페이지
         </h1>
 
         {/* 환경변수 설정 안내 */}
@@ -102,6 +105,66 @@ export default function KakaoShareTestPage() {
           </div>
         </div>
 
+        {/* 링크 복사 테스트 */}
+        <div className="bg-white rounded-lg shadow-md p-6 mb-6">
+          <h2 className="text-xl font-semibold mb-4">🔗 링크 복사 테스트</h2>
+
+          <div className="space-y-4 mb-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                커스텀 링크
+              </label>
+              <input
+                type="url"
+                value={customLink}
+                onChange={(e) => setCustomLink(e.target.value)}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                placeholder="복사할 링크를 입력하세요"
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                결과 ID (결과 링크 생성용)
+              </label>
+              <input
+                type="text"
+                value={resultId}
+                onChange={(e) => setResultId(e.target.value)}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                placeholder="결과 ID를 입력하세요"
+              />
+            </div>
+          </div>
+
+          <div className="flex gap-4 flex-wrap">
+            <CopyLinkButton
+              type="custom"
+              link={customLink}
+              successMessage="커스텀 링크가 복사되었습니다!"
+            >
+              커스텀 링크 복사
+            </CopyLinkButton>
+
+            <CopyLinkButton
+              type="current"
+              className="bg-blue-100 hover:bg-blue-200 text-blue-700"
+              successMessage="현재 페이지 링크가 복사되었습니다!"
+            >
+              현재 페이지 복사
+            </CopyLinkButton>
+
+            <CopyLinkButton
+              type="result"
+              resultId={resultId}
+              className="bg-purple-100 hover:bg-purple-200 text-purple-700"
+              successMessage="결과 링크가 복사되었습니다!"
+            >
+              결과 링크 복사
+            </CopyLinkButton>
+          </div>
+        </div>
+
         {/* 미리보기 */}
         <div className="bg-white rounded-lg shadow-md p-6">
           <h2 className="text-xl font-semibold mb-4">👀 공유 미리보기</h2>
@@ -133,7 +196,9 @@ export default function KakaoShareTestPage() {
 
           <div className="space-y-4 text-sm">
             <div>
-              <h3 className="font-medium text-gray-900 mb-2">1. 기본 사용법</h3>
+              <h3 className="font-medium text-gray-900 mb-2">
+                1. 카카오톡 공유 - 컴포넌트 사용
+              </h3>
               <pre className="bg-gray-100 p-3 rounded text-xs overflow-x-auto">
                 {`import ShareKakaoButton from '@/components/ShareKakaoButton';
 
@@ -157,7 +222,7 @@ export default function KakaoShareTestPage() {
 
             <div>
               <h3 className="font-medium text-gray-900 mb-2">
-                2. 직접 함수 호출
+                2. 카카오톡 공유 - 직접 함수 호출
               </h3>
               <pre className="bg-gray-100 p-3 rounded text-xs overflow-x-auto">
                 {`import { shareImageResult, shareTextResult } from '@/app/result/create-image/utils';
@@ -174,6 +239,64 @@ const success = await shareTextResult(
   '제목',
   '설명',
   'https://example.com/thumbnail.jpg'
+);`}
+              </pre>
+            </div>
+
+            <div>
+              <h3 className="font-medium text-gray-900 mb-2">
+                3. 링크 복사 - 컴포넌트 사용
+              </h3>
+              <pre className="bg-gray-100 p-3 rounded text-xs overflow-x-auto">
+                {`import CopyLinkButton from '@/components/CopyLinkButton';
+
+// 커스텀 링크 복사 (파라미터로 링크 전달)
+<CopyLinkButton
+  type="custom"
+  link="https://example.com"
+  successMessage="링크가 복사되었습니다!"
+/>
+
+// 현재 페이지 URL 복사
+<CopyLinkButton
+  type="current"
+  successMessage="현재 페이지가 복사되었습니다!"
+/>
+
+// 결과 ID가 포함된 링크 복사
+<CopyLinkButton
+  type="result"
+  resultId="test-123"
+  baseUrl="https://example.com"
+/>`}
+              </pre>
+            </div>
+
+            <div>
+              <h3 className="font-medium text-gray-900 mb-2">
+                4. 링크 복사 - 직접 함수 호출
+              </h3>
+              <pre className="bg-gray-100 p-3 rounded text-xs overflow-x-auto">
+                {`import { 
+  copyCustomLink, 
+  copyCurrentUrl, 
+  copyResultLink 
+} from '@/app/result/create-image/utils';
+
+// 커스텀 링크 복사 (파라미터로 링크 전달)
+const success1 = await copyCustomLink(
+  'https://example.com',
+  '성공 메시지',
+  '에러 메시지'
+);
+
+// 현재 페이지 URL 복사
+const success2 = await copyCurrentUrl();
+
+// 결과 링크 생성 및 복사
+const success3 = await copyResultLink(
+  'result-id',
+  'https://base-url.com'
 );`}
               </pre>
             </div>

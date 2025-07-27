@@ -126,6 +126,115 @@ export const shareTextResult = async (
   return await shareToKakao(shareContent);
 };
 
+// 링크 복사하기 함수
+export const copyToClipboard = async (
+  text: string,
+  successMessage?: string,
+  errorMessage?: string,
+): Promise<boolean> => {
+  try {
+    // navigator.clipboard API가 지원되는지 확인
+    if (navigator.clipboard && window.isSecureContext) {
+      await navigator.clipboard.writeText(text);
+
+      // 성공 메시지 표시 (옵션)
+      if (successMessage) {
+        alert(successMessage);
+      }
+
+      return true;
+    } else {
+      // 폴백: 구식 방법 사용
+      return fallbackCopyToClipboard(text, successMessage, errorMessage);
+    }
+  } catch (error) {
+    console.error("클립보드 복사 중 오류가 발생했습니다:", error);
+
+    // 에러 메시지 표시 (옵션)
+    if (errorMessage) {
+      alert(errorMessage);
+    }
+
+    // 폴백 시도
+    return fallbackCopyToClipboard(text, successMessage, errorMessage);
+  }
+};
+
+// 구식 브라우저용 폴백 함수
+const fallbackCopyToClipboard = (
+  text: string,
+  successMessage?: string,
+  errorMessage?: string,
+): boolean => {
+  try {
+    // 임시 textarea 요소 생성
+    const textArea = document.createElement("textarea");
+    textArea.value = text;
+    textArea.style.position = "fixed";
+    textArea.style.left = "-999999px";
+    textArea.style.top = "-999999px";
+
+    document.body.appendChild(textArea);
+    textArea.focus();
+    textArea.select();
+
+    // 복사 실행
+    const successful = document.execCommand("copy");
+    document.body.removeChild(textArea);
+
+    if (successful) {
+      if (successMessage) {
+        alert(successMessage);
+      }
+      return true;
+    } else {
+      throw new Error("document.execCommand copy failed");
+    }
+  } catch (error) {
+    console.error("폴백 복사 방법도 실패했습니다:", error);
+
+    if (errorMessage) {
+      alert(errorMessage);
+    }
+
+    return false;
+  }
+};
+
+// 현재 페이지 URL 복사하기
+export const copyCurrentUrl = async (
+  successMessage: string = "링크가 복사되었습니다!",
+  errorMessage: string = "링크 복사에 실패했습니다.",
+): Promise<boolean> => {
+  return await copyToClipboard(
+    window.location.href,
+    successMessage,
+    errorMessage,
+  );
+};
+
+// 커스텀 링크 복사하기 (파라미터로 받은 링크)
+export const copyCustomLink = async (
+  link: string,
+  successMessage: string = "링크가 복사되었습니다!",
+  errorMessage: string = "링크 복사에 실패했습니다.",
+): Promise<boolean> => {
+  return await copyToClipboard(link, successMessage, errorMessage);
+};
+
+// 결과 공유용 링크 생성 및 복사
+export const copyResultLink = async (
+  resultId?: string,
+  baseUrl?: string,
+  successMessage: string = "결과 링크가 복사되었습니다!",
+  errorMessage: string = "링크 복사에 실패했습니다.",
+): Promise<boolean> => {
+  const currentUrl = baseUrl || window.location.href;
+  const shareUrl = resultId ? `${currentUrl}?result=${resultId}` : currentUrl;
+
+  return await copyToClipboard(shareUrl, successMessage, errorMessage);
+};
+
 // Window 객체에 Kakao 타입 추가
 declare global {
   interface Window {
