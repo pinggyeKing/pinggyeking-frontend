@@ -14,6 +14,8 @@ import Message from "@/components/Message";
 import ProgressBar from "@/components/ProgressBar";
 import Radius from "@/components/Radius";
 import LottieLoading from "@/components/LottieLoading";
+import Picker from "@/components/picker/Picker";
+import type { PickerOption } from "@/components/picker/Picker";
 import {
   Home,
   Users,
@@ -28,7 +30,7 @@ import {
 export default function TestPage() {
   const [fontLoaded, setFontLoaded] = useState<boolean>(false);
   const [textValue, setTextValue] = useState(
-    "안녕하세요! 이것은 TextBox 컴포넌트 예시입니다."
+    "안녕하세요! 이것은 TextBox 컴포넌트 예시입니다.",
   );
   const [numberValue, setNumberValue] = useState("");
   const [checkboxValue, setCheckboxValue] = useState(false);
@@ -44,11 +46,18 @@ export default function TestPage() {
 
   // Progress Bar 테스트용 상태 (단계별)
   const [progressStage, setProgressStage] = useState<20 | 40 | 60 | 80 | 100>(
-    60
+    60,
   );
 
   // Radius 테스트용 상태
   const [radiusValue, setRadiusValue] = useState(80);
+
+  // Picker 테스트용 상태
+  const [basicPickerValue, setBasicPickerValue] = useState("option2");
+  const [colorPickerValue, setColorPickerValue] = useState("blue");
+  const [sizePickerValue, setSizePickerValue] = useState("medium");
+  const [languagePickerValue, setLanguagePickerValue] = useState("korean");
+  const [dynamicPickerValue, setDynamicPickerValue] = useState("pizza");
   useEffect(() => {
     // 폰트 로딩 상태 확인
     const checkFontLoading = async () => {
@@ -56,7 +65,7 @@ export default function TestPage() {
         await document.fonts.ready;
         const fontFaces = Array.from(document.fonts);
         const ownglyphFont = fontFaces.find(
-          (font) => font.family === "Ownglyph PDH"
+          (font) => font.family === "Ownglyph PDH",
         );
         setFontLoaded(!!ownglyphFont && ownglyphFont.status === "loaded");
         console.log("Font loading status:", {
@@ -112,6 +121,57 @@ export default function TestPage() {
     { id: "users", label: "Users", icon: <Users size={20} /> },
     { id: "analytics", label: "Analytics", icon: <BarChart3 size={20} /> },
     { id: "settings", label: "Settings", icon: <Settings size={20} /> },
+  ];
+
+  // Picker 옵션들 정의
+  const basicOptions: PickerOption[] = [
+    { label: "첫 번째 옵션", value: "option1" },
+    { label: "두 번째 옵션", value: "option2" },
+    { label: "세 번째 옵션", value: "option3" },
+    { label: "비활성화된 옵션", value: "option4", disabled: true },
+  ];
+
+  const colorOptions: PickerOption[] = [
+    { label: "빨간색", value: "red" },
+    { label: "파란색", value: "blue" },
+    { label: "초록색", value: "green" },
+    { label: "노란색", value: "yellow" },
+    { label: "보라색", value: "purple" },
+  ];
+
+  const sizeOptions: PickerOption[] = [
+    { label: "Small", value: "small" },
+    { label: "Medium", value: "medium" },
+    { label: "Large", value: "large" },
+    { label: "Extra Large", value: "xl" },
+  ];
+
+  const languageOptions: PickerOption[] = [
+    { label: "한국어", value: "korean" },
+    { label: "English", value: "english" },
+    { label: "日本語", value: "japanese" },
+    { label: "中文", value: "chinese", disabled: true },
+    { label: "Français", value: "french" },
+    { label: "Español", value: "spanish" },
+  ];
+
+  const longTextOptions: PickerOption[] = [
+    { label: "짧은 옵션", value: "short" },
+    { label: "조금 더 긴 옵션 텍스트입니다", value: "medium" },
+    {
+      label:
+        "이것은 매우 긴 옵션 텍스트로 UI에서 어떻게 표시되는지 확인하기 위한 예시입니다",
+      value: "long",
+    },
+    { label: "일반 길이", value: "normal" },
+  ];
+
+  const dynamicOptions: PickerOption[] = [
+    { label: "🍕 피자", value: "pizza" },
+    { label: "🍔 햄버거", value: "burger" },
+    { label: "🍜 라면", value: "ramen" },
+    { label: "🍣 초밥", value: "sushi" },
+    { label: "🥗 샐러드", value: "salad", disabled: true },
   ];
 
   return (
@@ -857,10 +917,137 @@ import Radius from '@/components/Radius'
           </details>
         </section>
 
+        {/* Picker 테스트 */}
+        <section className="bg-white rounded-lg shadow-sm border p-6">
+          <h2 className="text-xl font-semibold mb-4">Picker Component</h2>
+          <p className="text-gray-600 mb-4">
+            선택형 UI를 제공하는 Picker 컴포넌트입니다. 여러 옵션 중 하나를
+            선택할 수 있으며, 선택된 항목은 특별한 테두리와 스타일로 표시됩니다.
+            비활성화된 옵션도 지원합니다.
+          </p>
+
+          <div className="space-y-8">
+            {/* 기본 사용법 */}
+            <div className="bg-gray-50 p-6 rounded-lg">
+              <h3 className="text-sm font-medium mb-4">기본 사용법</h3>
+              <div className="flex flex-col items-center space-y-4">
+                <Picker
+                  options={basicOptions}
+                  value={basicPickerValue}
+                  onChange={setBasicPickerValue}
+                />
+                <div className="p-3 bg-blue-50 rounded border-l-4 border-blue-400">
+                  <p className="text-sm text-blue-800">
+                    <strong>선택된 값:</strong> {basicPickerValue}
+                  </p>
+                  <p className="text-sm text-blue-700">
+                    선택된 옵션:{" "}
+                    {
+                      basicOptions.find((opt) => opt.value === basicPickerValue)
+                        ?.label
+                    }
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* 접근성 및 키보드 네비게이션 */}
+            <div className="bg-gray-50 p-6 rounded-lg">
+              <h3 className="text-sm font-medium mb-4">접근성 기능</h3>
+              <div className="flex flex-col items-center space-y-4">
+                <Picker
+                  options={basicOptions.slice(0, 3)}
+                  value={basicPickerValue}
+                  onChange={setBasicPickerValue}
+                />
+                <div className="p-4 bg-blue-50 rounded-lg">
+                  <h4 className="text-sm font-medium mb-2">
+                    키보드 네비게이션
+                  </h4>
+                  <ul className="text-xs text-blue-700 space-y-1">
+                    <li>• Tab: 옵션 간 이동</li>
+                    <li>• Enter/Space: 옵션 선택</li>
+                    <li>• 비활성화된 옵션은 포커스되지 않음</li>
+                    <li>• 스크린 리더에서 role="listbox" 및 aria 속성 지원</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* 사용법 예시 */}
+          <details className="mt-6">
+            <summary className="cursor-pointer text-sm font-medium text-gray-700">
+              사용법 보기
+            </summary>
+            <pre className="mt-2 text-xs bg-gray-100 p-3 rounded overflow-x-scroll">
+              {`// Picker 사용법
+import Picker from '@/components/picker/Picker'
+import type { PickerOption } from '@/components/picker/Picker'
+
+// 옵션 정의
+const options: PickerOption[] = [
+  { label: "첫 번째 옵션", value: "option1" },
+  { label: "두 번째 옵션", value: "option2" },
+  { label: "비활성화된 옵션", value: "option3", disabled: true },
+]
+
+// 상태 관리
+const [selectedValue, setSelectedValue] = useState("option1")
+
+// 기본 사용법
+<Picker
+  options={options}
+  value={selectedValue}
+  onChange={setSelectedValue}
+/>
+
+// 커스텀 클래스 적용
+<Picker
+  options={options}
+  value={selectedValue}
+  onChange={setSelectedValue}
+  className="my-4"
+/>
+
+// 이벤트 처리
+<Picker
+  options={options}
+  value={selectedValue}
+  onChange={(value) => {
+    setSelectedValue(value)
+    console.log('Selected:', value)
+  }}
+/>
+
+// 복잡한 옵션 예시
+const complexOptions: PickerOption[] = [
+  { label: "🍕 피자", value: "pizza" },
+  { label: "🍔 햄버거", value: "burger" },
+  { 
+    label: "매우 긴 옵션 텍스트 예시입니다", 
+    value: "long-text" 
+  },
+  { 
+    label: "비활성화된 옵션", 
+    value: "disabled", 
+    disabled: true 
+  },
+]
+
+// 컴포넌트 특징:
+// - 선택된 항목은 SelectedItemBorder로 감싸짐
+// - 비활성화된 옵션은 클릭 및 키보드 네비게이션 불가
+// - 완전한 접근성 지원 (ARIA, 키보드 네비게이션)
+// - 반응형 디자인`}
+            </pre>
+          </details>
+        </section>
+
         {/* 컴포넌트 상태 요약 */}
         <section className="bg-white rounded-lg shadow-sm border p-6">
           <h2 className="text-xl font-semibold mb-4">Current State Summary</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-7 gap-4">
             <div className="p-4 bg-blue-50 rounded-lg">
               <h3 className="font-medium text-blue-900">SectionIndicator</h3>
               <p className="text-sm text-blue-700">
@@ -907,6 +1094,14 @@ import Radius from '@/components/Radius'
               <p className="text-sm text-cyan-700">JSON Lottie animation</p>
               <p className="text-sm text-cyan-700">Complex vector animation</p>
             </div>
+            <div className="p-4 bg-pink-50 rounded-lg">
+              <h3 className="font-medium text-pink-900">Picker</h3>
+              <p className="text-sm text-pink-700">Basic: {basicPickerValue}</p>
+              <p className="text-sm text-pink-700">Color: {colorPickerValue}</p>
+              <p className="text-sm text-pink-700">
+                Food: {dynamicPickerValue}
+              </p>
+            </div>
           </div>
         </section>
 
@@ -914,31 +1109,163 @@ import Radius from '@/components/Radius'
         <section className="bg-white rounded-lg shadow-sm border p-6">
           <h2 className="text-xl font-semibold mb-4">Interactive Test</h2>
           <p className="text-gray-600 mb-4">
-            아래 버튼들을 클릭해서 SectionIndicator의 상태를 변경해보세요.
+            아래 버튼들을 클릭해서 컴포넌트들의 상태를 변경해보세요.
           </p>
 
-          <div className="flex flex-wrap gap-2 mb-4">
-            {sectionItems.map((item, index) => (
-              <button
-                key={item.id}
-                onClick={() => setSectionIndex(index)}
-                className={`px-4 py-2 rounded-lg border transition-colors ${
-                  sectionIndex === index
-                    ? "bg-blue-500 text-white border-blue-500"
-                    : "bg-white text-gray-700 border-gray-300 hover:bg-gray-50"
-                }`}
-              >
-                {item.label}
-              </button>
-            ))}
+          {/* SectionIndicator 테스트 */}
+          <div className="mb-6">
+            <h3 className="text-lg font-medium mb-3">SectionIndicator</h3>
+            <div className="flex flex-wrap gap-2 mb-4">
+              {sectionItems.map((item, index) => (
+                <button
+                  key={item.id}
+                  onClick={() => setSectionIndex(index)}
+                  className={`px-4 py-2 rounded-lg border transition-colors ${
+                    sectionIndex === index
+                      ? "bg-blue-500 text-white border-blue-500"
+                      : "bg-white text-gray-700 border-gray-300 hover:bg-gray-50"
+                  }`}
+                >
+                  {item.label}
+                </button>
+              ))}
+            </div>
+            <div className="p-3 bg-blue-50 rounded-lg">
+              <p className="text-sm text-blue-600">
+                현재 선택된 섹션:{" "}
+                <strong>{sectionItems[sectionIndex]?.label}</strong> (인덱스:{" "}
+                {sectionIndex})
+              </p>
+            </div>
           </div>
 
-          <div className="p-4 bg-gray-50 rounded-lg">
-            <p className="text-sm text-gray-600">
-              현재 선택된 섹션:{" "}
-              <strong>{sectionItems[sectionIndex]?.label}</strong> (인덱스:{" "}
-              {sectionIndex})
-            </p>
+          {/* Picker 테스트 */}
+          <div className="mb-6">
+            <h3 className="text-lg font-medium mb-3">Picker</h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-4">
+              {/* 색상 Picker 빠른 변경 */}
+              <div className="bg-gray-50 p-4 rounded-lg">
+                <h4 className="text-sm font-medium mb-3">색상 빠른 선택</h4>
+                <div className="flex flex-wrap gap-2">
+                  {colorOptions.map((option) => (
+                    <button
+                      key={option.value}
+                      onClick={() => setColorPickerValue(option.value)}
+                      className={`px-3 py-1 text-xs rounded border transition-colors ${
+                        colorPickerValue === option.value
+                          ? "bg-blue-500 text-white border-blue-500"
+                          : "bg-white text-gray-700 border-gray-300 hover:bg-gray-50"
+                      }`}
+                    >
+                      {option.label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* 크기 Picker 빠른 변경 */}
+              <div className="bg-gray-50 p-4 rounded-lg">
+                <h4 className="text-sm font-medium mb-3">크기 빠른 선택</h4>
+                <div className="flex flex-wrap gap-2">
+                  {sizeOptions.map((option) => (
+                    <button
+                      key={option.value}
+                      onClick={() => setSizePickerValue(option.value)}
+                      className={`px-3 py-1 text-xs rounded border transition-colors ${
+                        sizePickerValue === option.value
+                          ? "bg-green-500 text-white border-green-500"
+                          : "bg-white text-gray-700 border-gray-300 hover:bg-gray-50"
+                      }`}
+                    >
+                      {option.label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* 음식 Picker 빠른 변경 */}
+              <div className="bg-gray-50 p-4 rounded-lg">
+                <h4 className="text-sm font-medium mb-3">음식 빠른 선택</h4>
+                <div className="flex flex-wrap gap-2">
+                  {dynamicOptions
+                    .filter((option) => !option.disabled)
+                    .map((option) => (
+                      <button
+                        key={option.value}
+                        onClick={() => setDynamicPickerValue(option.value)}
+                        className={`px-3 py-1 text-xs rounded border transition-colors ${
+                          dynamicPickerValue === option.value
+                            ? "bg-purple-500 text-white border-purple-500"
+                            : "bg-white text-gray-700 border-gray-300 hover:bg-gray-50"
+                        }`}
+                      >
+                        {option.label}
+                      </button>
+                    ))}
+                </div>
+              </div>
+            </div>
+
+            <div className="p-4 bg-pink-50 rounded-lg">
+              <h4 className="text-sm font-medium mb-2">Picker 현재 상태</h4>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
+                <div>
+                  <span className="text-pink-600">색상:</span>{" "}
+                  <strong>{colorPickerValue}</strong>
+                </div>
+                <div>
+                  <span className="text-pink-600">크기:</span>{" "}
+                  <strong>{sizePickerValue}</strong>
+                </div>
+                <div>
+                  <span className="text-pink-600">음식:</span>{" "}
+                  <strong>{dynamicPickerValue}</strong>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* ProgressBar & Radius 테스트 */}
+          <div>
+            <h3 className="text-lg font-medium mb-3">ProgressBar & Radius</h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="bg-gray-50 p-4 rounded-lg">
+                <h4 className="text-sm font-medium mb-3">ProgressBar 단계</h4>
+                <div className="flex flex-wrap gap-2 mb-3">
+                  {([20, 40, 60, 80, 100] as const).map((stage) => (
+                    <button
+                      key={stage}
+                      onClick={() => setProgressStage(stage)}
+                      className={`px-3 py-1 text-xs rounded border transition-colors ${
+                        progressStage === stage
+                          ? "bg-orange-500 text-white border-orange-500"
+                          : "bg-white text-gray-700 border-gray-300 hover:bg-gray-50"
+                      }`}
+                    >
+                      {stage}%
+                    </button>
+                  ))}
+                </div>
+                <p className="text-xs text-orange-600">
+                  현재: <strong>{progressStage}%</strong>
+                </p>
+              </div>
+
+              <div className="bg-gray-50 p-4 rounded-lg">
+                <h4 className="text-sm font-medium mb-3">Radius 진행률</h4>
+                <input
+                  type="range"
+                  min="0"
+                  max="100"
+                  value={radiusValue}
+                  onChange={(e) => setRadiusValue(Number(e.target.value))}
+                  className="w-full mb-2"
+                />
+                <p className="text-xs text-indigo-600">
+                  현재: <strong>{radiusValue}%</strong>
+                </p>
+              </div>
+            </div>
           </div>
         </section>
       </div>
