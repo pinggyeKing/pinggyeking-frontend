@@ -32,7 +32,7 @@ export default function CustomButton({
     if (typeStyle === "primary") {
       return pressHold
         ? "bg-grey-8 text-grey-0 border-grey-8"
-        : "bg-grey-10 text-grey-10 border-grey-10";
+        : "bg-grey-10 text-grey-0 border-grey-10";
     }
     if (typeStyle === "outline1") {
       return pressHold
@@ -73,14 +73,16 @@ export default function CustomButton({
       if (size === "medium") return "radius-16";
       if (size === "small") return "radius-12";
       if (size === "xsmall") return "radius-8";
+      return "radius-20"; // default for standard
     }
     if (round === "pills") {
       if (size === "large") return "radius-24";
       if (size === "medium") return "radius-16";
       if (size === "small") return "radius-12";
       if (size === "xsmall") return "radius-8";
+      return "radius-24"; // default for pills
     }
-    return "";
+    return "radius-4"; // fallback
   })();
 
   return (
@@ -89,7 +91,7 @@ export default function CustomButton({
         "flex items-center justify-center font-ownglyph-pdh transition-all",
         typeClass,
         sizeClass,
-        roundClass
+        roundClass // roundClass를 마지막에 배치해서 우선순위 확보
       )}
       disabled={typeStyle === "disable"}
       {...props}

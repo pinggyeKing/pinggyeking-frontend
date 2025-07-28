@@ -614,7 +614,6 @@ body {
 
 /* 버튼 크기별 border-radius, padding */
 .button-large {
-  border-radius: 20px !important;
   padding: 12px 16px !important;
   font-size: 26px;
   font-family: "Ownglyph PDH", "Pretendard", sans-serif;
@@ -625,7 +624,6 @@ body {
   box-shadow: 0px 4px 12px 0px rgba(0, 0, 0, 0.04);
 }
 .button-medium {
-  border-radius: 16px !important;
   padding: 8px 12px !important;
   font-size: 22px;
   font-family: "Ownglyph PDH", "Pretendard", sans-serif;
@@ -636,7 +634,6 @@ body {
   box-shadow: 0px 4px 12px 0px rgba(0, 0, 0, 0.04);
 }
 .button-small {
-  border-radius: 12px !important;
   padding: 4px 8px !important;
   font-size: 18px;
   font-family: "Ownglyph PDH", "Pretendard", sans-serif;
@@ -647,7 +644,6 @@ body {
   box-shadow: 0px 4px 12px 0px rgba(0, 0, 0, 0.04);
 }
 .button-xsmall {
-  border-radius: 8px !important;
   padding: 4px 7px !important;
   font-size: 12px;
   font-family: "Ownglyph PDH", "Pretendard", sans-serif;
