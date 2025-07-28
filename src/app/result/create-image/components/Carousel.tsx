@@ -27,7 +27,7 @@ const Carousel: React.FC<CarouselProps> = ({
 
   return (
     <div className="flex flex-col items-center">
-      <div className="flex gap-4 justify-center flex-wrap max-w-full">
+      <div className="flex gap-2 justify-center max-w-[360px]">
         {carouselItems.map((item) => (
           <CarouselItem
             key={item.id}
