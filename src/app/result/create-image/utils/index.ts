@@ -1,3 +1,5 @@
+import html2canvas from "html2canvas";
+
 // 카카오톡 공유하기 관련 타입 정의
 export interface KakaoShareContent {
   title: string;
@@ -233,6 +235,187 @@ export const copyResultLink = async (
   const shareUrl = resultId ? `${currentUrl}?result=${resultId}` : currentUrl;
 
   return await copyToClipboard(shareUrl, successMessage, errorMessage);
+};
+
+// 이미지 다운로드 관련 함수들
+export const downloadImage = async (
+  imageUrl: string,
+  fileName: string = "image.jpg",
+  successMessage: string = "이미지가 저장되었어요!",
+  errorMessage: string = "이미지 저장에 실패했습니다.",
+): Promise<boolean> => {
+  try {
+    // 이미지 URL이 유효한지 확인
+    if (!imageUrl) {
+      console.error("이미지 URL이 제공되지 않았습니다.");
+      alert(errorMessage);
+      return false;
+    }
+
+    // 이미지 로드
+    const response = await fetch(imageUrl);
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    const blob = await response.blob();
+
+    // JPG 형태로 변환 (이미 JPG인 경우 그대로 사용)
+    const jpgBlob =
+      blob.type === "image/jpeg" || blob.type === "image/jpg"
+        ? blob
+        : await convertToJPG(blob);
+
+    // 다운로드 링크 생성
+    const downloadUrl = URL.createObjectURL(jpgBlob);
+    const link = document.createElement("a");
+    link.href = downloadUrl;
+    link.download = fileName.endsWith(".jpg") ? fileName : `${fileName}.jpg`;
+
+    // 다운로드 실행
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+
+    // 메모리 정리
+    URL.revokeObjectURL(downloadUrl);
+
+    // 성공 메시지 표시
+    alert(successMessage);
+
+    return true;
+  } catch (error) {
+    console.error("이미지 다운로드 중 오류가 발생했습니다:", error);
+    alert(errorMessage);
+    return false;
+  }
+};
+
+// 이미지를 JPG로 변환하는 함수
+const convertToJPG = (blob: Blob): Promise<Blob> => {
+  return new Promise((resolve, reject) => {
+    const canvas = document.createElement("canvas");
+    const ctx = canvas.getContext("2d");
+    const img = new Image();
+
+    img.onload = () => {
+      // 캔버스 크기 설정
+      canvas.width = img.width;
+      canvas.height = img.height;
+
+      // 이미지를 캔버스에 그리기
+      ctx?.drawImage(img, 0, 0);
+
+      // JPG로 변환 (품질: 0.9)
+      canvas.toBlob(
+        (jpgBlob) => {
+          if (jpgBlob) {
+            resolve(jpgBlob);
+          } else {
+            reject(new Error("JPG 변환에 실패했습니다."));
+          }
+        },
+        "image/jpeg",
+        0.9,
+      );
+    };
+
+    img.onerror = () => {
+      reject(new Error("이미지 로드에 실패했습니다."));
+    };
+
+    // Blob URL 생성하여 이미지 로드
+    const imageUrl = URL.createObjectURL(blob);
+    img.src = imageUrl;
+
+    // 이미지 로드 후 URL 정리
+    img.onload = () => {
+      URL.revokeObjectURL(imageUrl);
+    };
+  });
+};
+
+// Canvas 요소를 JPG로 다운로드하는 함수
+export const downloadCanvasAsJPG = async (
+  canvas: HTMLCanvasElement,
+  fileName: string = "image.jpg",
+  successMessage: string = "이미지가 저장되었어요!",
+  errorMessage: string = "이미지 저장에 실패했습니다.",
+): Promise<boolean> => {
+  try {
+    // Canvas를 JPG Blob으로 변환
+    const blob = await new Promise<Blob>((resolve, reject) => {
+      canvas.toBlob(
+        (jpgBlob) => {
+          if (jpgBlob) {
+            resolve(jpgBlob);
+          } else {
+            reject(new Error("Canvas를 JPG로 변환하는데 실패했습니다."));
+          }
+        },
+        "image/jpeg",
+        0.9,
+      );
+    });
+
+    // 다운로드 링크 생성
+    const downloadUrl = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = downloadUrl;
+    link.download = fileName.endsWith(".jpg") ? fileName : `${fileName}.jpg`;
+
+    // 다운로드 실행
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+
+    // 메모리 정리
+    URL.revokeObjectURL(downloadUrl);
+
+    // 성공 메시지 표시
+    alert(successMessage);
+
+    return true;
+  } catch (error) {
+    console.error("Canvas 다운로드 중 오류가 발생했습니다:", error);
+    alert(errorMessage);
+    return false;
+  }
+};
+
+// DOM 요소를 이미지로 변환하여 다운로드하는 함수
+export const downloadElementAsJPG = async (
+  element: HTMLElement,
+  fileName: string = "image.jpg",
+  successMessage: string = "이미지가 저장되었어요!",
+  errorMessage: string = "이미지 저장에 실패했습니다.",
+): Promise<boolean> => {
+  try {
+    // html2canvas 라이브러리가 필요합니다
+    // npm install html2canvas
+    // import html2canvas from 'html2canvas';
+
+    // 임시로 html2canvas 없이 Canvas API 사용
+    // 실제 사용시에는 html2canvas를 설치하고 아래 주석을 해제하세요
+
+    const canvas = await html2canvas(element, {
+      useCORS: true,
+      allowTaint: true,
+      scale: 2, // 고해상도
+      backgroundColor: "#ffffff",
+    });
+
+    return await downloadCanvasAsJPG(
+      canvas,
+      fileName,
+      successMessage,
+      errorMessage,
+    );
+  } catch (error) {
+    console.error("요소 다운로드 중 오류가 발생했습니다:", error);
+    alert(errorMessage);
+    return false;
+  }
 };
 
 // Window 객체에 Kakao 타입 추가

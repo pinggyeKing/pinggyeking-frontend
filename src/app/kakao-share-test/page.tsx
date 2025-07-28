@@ -1,8 +1,9 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import ShareKakaoButton from "@/components/ShareKakaoButton";
 import CopyLinkButton from "@/components/CopyLinkButton";
+import DownloadImageButton from "@/components/DownloadImageButton";
 
 export default function KakaoShareTestPage() {
   const [imageUrl, setImageUrl] = useState(
@@ -14,12 +15,15 @@ export default function KakaoShareTestPage() {
   );
   const [customLink, setCustomLink] = useState("https://example.com");
   const [resultId, setResultId] = useState("test-result-123");
+  const [downloadFileName, setDownloadFileName] = useState("변명연구소_결과");
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const elementRef = useRef<HTMLDivElement>(null);
 
   return (
     <div className="min-h-screen bg-gray-50 py-8">
       <div className="max-w-2xl mx-auto px-4">
         <h1 className="text-3xl font-bold text-center mb-8">
-          공유 기능 테스트 페이지
+          공유 및 다운로드 기능 테스트 페이지
         </h1>
 
         {/* 환경변수 설정 안내 */}
@@ -165,6 +169,103 @@ export default function KakaoShareTestPage() {
           </div>
         </div>
 
+        {/* 이미지 다운로드 테스트 */}
+        <div className="bg-white rounded-lg shadow-md p-6 mb-6">
+          <h2 className="text-xl font-semibold mb-4">
+            💾 이미지 다운로드 테스트
+          </h2>
+
+          <div className="space-y-4 mb-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                저장할 파일명
+              </label>
+              <input
+                type="text"
+                value={downloadFileName}
+                onChange={(e) => setDownloadFileName(e.target.value)}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                placeholder="저장할 파일명을 입력하세요 (확장자 제외)"
+              />
+            </div>
+          </div>
+
+          <div className="flex gap-4 flex-wrap mb-6">
+            <DownloadImageButton
+              type="url"
+              imageUrl={imageUrl}
+              fileName={downloadFileName}
+              successMessage="이미지가 저장되었어요!"
+            >
+              URL 이미지 저장
+            </DownloadImageButton>
+
+            <DownloadImageButton
+              type="url"
+              imageUrl="/Logo.svg"
+              fileName="로고_이미지"
+              className="bg-green-500 hover:bg-green-600"
+              successMessage="로고가 저장되었어요!"
+            >
+              로고 저장
+            </DownloadImageButton>
+          </div>
+
+          {/* Canvas 테스트용 */}
+          <div className="mb-4">
+            <h3 className="text-lg font-medium text-gray-900 mb-2">
+              Canvas 테스트
+            </h3>
+            <canvas
+              ref={canvasRef}
+              width="440"
+              height="490"
+              className="border border-gray-300 rounded"
+              style={{
+                backgroundColor: "#f0f0f0",
+                backgroundImage: "url(/Logo.svg)",
+              }}
+            />
+            <div className="mt-2">
+              <DownloadImageButton
+                type="canvas"
+                canvasRef={canvasRef}
+                fileName="canvas_테스트"
+                className="bg-purple-500 hover:bg-purple-600"
+              >
+                Canvas 저장
+              </DownloadImageButton>
+            </div>
+          </div>
+
+          {/* Element 테스트용 */}
+          <div>
+            <h3 className="text-lg font-medium text-gray-900 mb-2">
+              Element 테스트
+            </h3>
+            <div
+              ref={elementRef}
+              className="border border-gray-300 rounded p-4 bg-white"
+              style={{ width: "200px", height: "100px" }}
+            >
+              <div className="text-center">
+                <h4 className="font-bold text-gray-900">테스트 카드</h4>
+                <p className="text-sm text-gray-600">이 요소를 이미지로 저장</p>
+              </div>
+            </div>
+            <div className="mt-2">
+              <DownloadImageButton
+                type="element"
+                elementRef={elementRef}
+                fileName="element_테스트"
+                className="bg-orange-500 hover:bg-orange-600"
+              >
+                Element 저장
+              </DownloadImageButton>
+            </div>
+          </div>
+        </div>
+
         {/* 미리보기 */}
         <div className="bg-white rounded-lg shadow-md p-6">
           <h2 className="text-xl font-semibold mb-4">👀 공유 미리보기</h2>
@@ -297,6 +398,69 @@ const success2 = await copyCurrentUrl();
 const success3 = await copyResultLink(
   'result-id',
   'https://base-url.com'
+);`}
+              </pre>
+            </div>
+
+            <div>
+              <h3 className="font-medium text-gray-900 mb-2">
+                5. 이미지 다운로드 - 컴포넌트 사용
+              </h3>
+              <pre className="bg-gray-100 p-3 rounded text-xs overflow-x-auto">
+                {`import DownloadImageButton from '@/components/DownloadImageButton';
+
+// URL 이미지 다운로드
+<DownloadImageButton
+  type="url"
+  imageUrl="https://example.com/image.jpg"
+  fileName="변명연구소_결과"
+  successMessage="이미지가 저장되었어요!"
+/>
+
+// Canvas 다운로드
+<DownloadImageButton
+  type="canvas"
+  canvasRef={canvasRef}
+  fileName="canvas_이미지"
+/>
+
+// Element 다운로드 (html2canvas 필요)
+<DownloadImageButton
+  type="element"
+  elementRef={elementRef}
+  fileName="element_이미지"
+/>`}
+              </pre>
+            </div>
+
+            <div>
+              <h3 className="font-medium text-gray-900 mb-2">
+                6. 이미지 다운로드 - 직접 함수 호출
+              </h3>
+              <pre className="bg-gray-100 p-3 rounded text-xs overflow-x-auto">
+                {`import { 
+  downloadImage, 
+  downloadCanvasAsJPG, 
+  downloadElementAsJPG 
+} from '@/app/result/create-image/utils';
+
+// URL 이미지 다운로드
+const success1 = await downloadImage(
+  'https://example.com/image.jpg',
+  '변명연구소_결과.jpg',
+  '이미지가 저장되었어요!'
+);
+
+// Canvas 다운로드
+const success2 = await downloadCanvasAsJPG(
+  canvasElement,
+  'canvas_이미지.jpg'
+);
+
+// Element 다운로드 (html2canvas 필요)
+const success3 = await downloadElementAsJPG(
+  element,
+  'element_이미지.jpg'
 );`}
               </pre>
             </div>
