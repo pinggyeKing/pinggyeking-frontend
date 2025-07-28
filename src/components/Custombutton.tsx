@@ -32,23 +32,27 @@ export default function CustomButton({
     if (typeStyle === "primary") {
       return pressHold
         ? "bg-grey-8 text-grey-0 border-grey-8"
-        : "bg-white text-grey-10 border-grey-3";
+        : "bg-grey-10 text-grey-10 border-grey-10";
     }
     if (typeStyle === "outline1") {
       return pressHold
-        ? "bg-grey-8 text-grey-0 border border-grey-8"
-        : "bg-white text-grey-10 border border-grey-10";
+        ? "bg-grey-10 text-grey-0 border border-grey-10"
+        : "bg-grey-0 text-grey-10 border border-grey-10";
     }
     if (typeStyle === "outline2") {
       return pressHold
-        ? "bg-grey-8 text-grey-0 border-2 border-grey-8"
-        : "bg-white text-grey-10 border-2 border-grey-10";
+        ? "bg-grey-10 text-grey-0 border-2 border-grey-10"
+        : "bg-grey-0 text-grey-10 border-2 border-grey-10";
     }
     if (typeStyle === "ghost") {
-      return "bg-transparent text-grey-10 border-none";
+      return pressHold
+        ? "bg-grey-10 text-grey-0 border-none"
+        : "bg-grey-0 text-grey-10 border-none";
     }
     if (typeStyle === "disable") {
-      return "bg-grey-2 text-grey-5 border-grey-2 cursor-not-allowed";
+      return pressHold
+        ? "bg-grey-3 text-grey-5 border-grey-3"
+        : "bg-grey-2 text-grey-5 border-grey-2";
     }
     return "";
   })();
