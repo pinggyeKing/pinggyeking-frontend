@@ -17,17 +17,20 @@ const CarouselItem: React.FC<CarouselItemProps> = ({
   const getImageSrc = () => {
     const basePath = "/carousel";
     const selectedSuffix = isSelected ? "-selected" : "-unselected";
-    return `${basePath}/${id}${selectedSuffix}.svg`;
+    const imageSrc = `${basePath}/${id}${selectedSuffix}.svg`;
+    console.log(`Image src for ${id}: ${imageSrc}, isSelected: ${isSelected}`);
+    return imageSrc;
   };
 
   return (
     <div
       className={`
-        flex flex-col items-center justify-center cursor-pointer transition-all duration-200
+        grid grid-cols-1 place-items-center cursor-pointer transition-all duration-200 flex-shrink-0
       `}
       onClick={() => onClick(id)}
       style={{
         width: "81.23px",
+        minWidth: "81.23px",
         minHeight: "fit-content",
         borderRadius: "9.85px",
         padding: "8px",
@@ -35,7 +38,7 @@ const CarouselItem: React.FC<CarouselItemProps> = ({
       }}
     >
       <div
-        className="relative flex items-center justify-center"
+        className="relative grid place-items-center"
         style={{
           width: "62.75px",
           height: "64.31px",
@@ -47,9 +50,12 @@ const CarouselItem: React.FC<CarouselItemProps> = ({
           width={62.75}
           height={64.31}
           className="object-contain"
+          onError={(e) => {
+            console.error(`Failed to load image for ${id}:`, e);
+          }}
         />
       </div>
-      <div className="relative flex items-center justify-center">
+      <div className="relative grid place-items-center">
         <div
           className="absolute bg-white"
           style={{
