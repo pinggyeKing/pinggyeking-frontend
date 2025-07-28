@@ -4,12 +4,14 @@ interface CardProps {
   recipient: string;
   message: string;
   cardType?: "default" | "formal" | "cute" | "humorous" | "pop";
+  size?: "small" | "medium" | "large";
 }
 
 const Card: React.FC<CardProps> = ({
   recipient,
   message,
   cardType = "default",
+  size = "medium",
 }) => {
   const getCardBackground = () => {
     switch (cardType) {
@@ -22,12 +24,25 @@ const Card: React.FC<CardProps> = ({
       case "pop":
         return "/cards/pop-card.svg";
       default:
-        return "/cards/default.svg";
+        return "/cards/default-card.svg";
+    }
+  };
+
+  const getSizeClasses = () => {
+    switch (size) {
+      case "small":
+        return "w-[280px] h-[320px] py-6 px-8";
+      case "large":
+        return "w-[440px] h-[490px] py-8 px-10";
+      default:
+        return "w-[360px] h-[400px] py-7 px-9";
     }
   };
 
   return (
-    <div className="relative w-[440px] h-[490px] shadow-lg overflow-hidden rounded-[30px] py-8 px-10">
+    <div
+      className={`relative shadow-lg overflow-hidden rounded-[30px] ${getSizeClasses()}`}
+    >
       {/* Card background SVG */}
       <div className="absolute inset-0 z-0">
         <img
