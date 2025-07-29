@@ -6,11 +6,9 @@ import CustomButton from "../../Custombutton";
 
 const ModalExample: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const [modalSize, setModalSize] = useState<"large" | "medium" | "small">(
-    "medium",
-  );
+  const [modalSize, setModalSize] = useState<"large" | "medium">("medium");
 
-  const openModal = (size: "large" | "medium" | "small") => {
+  const openModal = (size: "large" | "medium") => {
     setModalSize(size);
     setIsOpen(true);
   };
@@ -19,8 +17,14 @@ const ModalExample: React.FC = () => {
     setIsOpen(false);
   };
 
-  const handleApply = () => {
+  const handleCancel = () => {
+    console.log("모달 취소 버튼 클릭");
+    setIsOpen(false);
+  };
+
+  const handleConfirm = () => {
     console.log("모달 적용 버튼 클릭");
+    setIsOpen(false);
   };
 
   return (
@@ -28,9 +32,6 @@ const ModalExample: React.FC = () => {
       <h1 className="text-2xl font-bold">모달 컴포넌트 예시</h1>
 
       <div className="flex gap-4">
-        <CustomButton onClick={() => openModal("small")} typeStyle="primary">
-          작은 모달 열기
-        </CustomButton>
         <CustomButton onClick={() => openModal("medium")} typeStyle="primary">
           중간 모달 열기
         </CustomButton>
@@ -40,12 +41,12 @@ const ModalExample: React.FC = () => {
       </div>
 
       <Modal
-        isOpen={isOpen}
+        open={isOpen}
         onClose={closeModal}
-        title="모달 제목"
+        onCancel={handleCancel}
+        onConfirm={handleConfirm}
+        confirmText="확인"
         size={modalSize}
-        applyText="확인"
-        onApply={handleApply}
       >
         <div className="space-y-4">
           <p className="text-gray-700">
@@ -55,11 +56,11 @@ const ModalExample: React.FC = () => {
           <div className="bg-gray-50 p-4 rounded-lg">
             <h3 className="font-semibold mb-2">모달 기능:</h3>
             <ul className="text-sm text-gray-600 space-y-1">
-              <li>• 배경 클릭 시 닫기</li>
-              <li>• ESC 키로 닫기</li>
-              <li>• 다양한 크기 옵션</li>
+              <li>• 오른쪽 상단 close 버튼</li>
+              <li>• 취소/적용 버튼</li>
+              <li>• 다양한 크기 옵션 (large/medium)</li>
               <li>• 커스터마이징 가능한 버튼 텍스트</li>
-              <li>• 스크롤 가능한 컨텐츠</li>
+              <li>• Figma 스타일 기반 디자인</li>
             </ul>
           </div>
         </div>
