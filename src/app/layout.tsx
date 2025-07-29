@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import Navigation from "@/components/layout/Navigation";
 import ClientLayout from "@/components/ClientLayout";
 import { SplashProvider } from "@/contexts/SplashContext";
+import { NavigationProvider } from "@/contexts/NavigationContext";
 
 export const metadata: Metadata = {
   title: "변명 연구소",
@@ -18,12 +18,16 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ko">
-      <body className={`antialiased`}>
+      <body
+        className="antialiased bg-cover bg-center bg-no-repeat bg-fixed"
+        style={{
+          backgroundImage: "url(/Background.svg)",
+        }}
+      >
         <SplashProvider>
-          <ClientLayout>
-            {children}
-            <Navigation />
-          </ClientLayout>
+          <NavigationProvider>
+            <ClientLayout>{children}</ClientLayout>
+          </NavigationProvider>
         </SplashProvider>
       </body>
     </html>
