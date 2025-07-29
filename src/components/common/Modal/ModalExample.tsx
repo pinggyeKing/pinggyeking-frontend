@@ -39,7 +39,6 @@ const ModalExample: React.FC = () => {
           큰 모달 열기
         </CustomButton>
       </div>
-
       <Modal
         open={isOpen}
         onClose={closeModal}

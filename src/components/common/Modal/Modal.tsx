@@ -3,14 +3,17 @@
 import React from "react";
 import CustomButton from "../../Custombutton";
 
+// 1. props, size, 스타일 상수 정리
 interface ModalProps {
   open: boolean;
   onClose: () => void;
   onCancel: () => void;
   onConfirm: () => void;
   confirmText?: string; // 적용 버튼 텍스트 (기본값: "적용")
-  size?: "large" | "medium"; // large: 440/490, medium: 400/552
+  size?: "large" | "medium";
   children: React.ReactNode;
+  showCloseButton?: boolean;
+  showBottomButton?: boolean;
 }
 
 const MODAL_SIZES = {
@@ -26,6 +29,8 @@ export default function Modal({
   confirmText = "적용",
   size = "large",
   children,
+  showCloseButton = true,
+  showBottomButton = true,
 }: ModalProps) {
   if (!open) return null;
   const { width, minHeight } = MODAL_SIZES[size];
@@ -45,20 +50,24 @@ export default function Modal({
           borderRadius: 24,
           boxShadow: "1px 4px 16px 0px rgba(0,0,0,0.08)",
           background: "#fff",
-          padding: "20px 20px 40px 20px",
+          padding: "32px 32px 36px 32px", // 피그마 기준 여백
           display: "flex",
           flexDirection: "column",
+          position: "relative",
         }}
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
-        <div
+        {/* <div
           style={{
             display: "flex",
             justifyContent: "flex-end",
+            alignItems: "center",
+            minHeight: 32,
             marginBottom: 16,
           }}
-        >
+        > */}
+        {showCloseButton && (
           <CustomButton
             typeStyle="ghost"
             size="xsmall"
@@ -68,28 +77,29 @@ export default function Modal({
             }
             aria-label="닫기"
             onClick={onClose}
-          >
-            {""}
-          </CustomButton>
-        </div>
+            children={""}
+          />
+        )}
+        {/* </div> */}
         {/* Contents */}
         <div style={{ flex: 1 }}>{children}</div>
         {/* Footer */}
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-            gap: 12,
-            marginTop: 32,
-          }}
-        >
-          <CustomButton typeStyle="outline1" size="medium" onClick={onCancel}>
-            취소
-          </CustomButton>
-          <CustomButton typeStyle="primary" size="medium" onClick={onConfirm}>
-            {confirmText}
-          </CustomButton>
-        </div>
+        {showBottomButton && (
+          <div
+            style={{
+              display: "flex",
+              gap: 12,
+              marginTop: 32,
+            }}
+          >
+            <CustomButton typeStyle="outline1" size="medium" onClick={onCancel}>
+              취소
+            </CustomButton>
+            <CustomButton typeStyle="primary" size="medium" onClick={onConfirm}>
+              {confirmText}
+            </CustomButton>
+          </div>
+        )}
       </div>
     </div>
   );
