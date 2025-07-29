@@ -184,6 +184,7 @@ body {
   font-size: 16px;
   font-weight: 600;
   line-height: 20px;
+  letter-spacing: 0%;
 }
 
 .text-body3-regular {
@@ -222,6 +223,7 @@ body {
   font-size: 12px;
   font-weight: 600;
   line-height: 16px;
+  letter-spacing: 0%;
 }
 
 /* 버튼, 카드 등 주요 컴포넌트 배경/테두리 예시 */
@@ -528,6 +530,41 @@ body {
 }
 .text-green-5 {
   color: var(--green-5) !important;
+}
+
+/* Border Colors */
+.border-grey-0 {
+  border-color: var(--grey-0) !important;
+}
+.border-grey-1 {
+  border-color: var(--grey-1) !important;
+}
+.border-grey-2 {
+  border-color: var(--grey-2) !important;
+}
+.border-grey-3 {
+  border-color: var(--grey-3) !important;
+}
+.border-grey-4 {
+  border-color: var(--grey-4) !important;
+}
+.border-grey-5 {
+  border-color: var(--grey-5) !important;
+}
+.border-grey-6 {
+  border-color: var(--grey-6) !important;
+}
+.border-grey-7 {
+  border-color: var(--grey-7) !important;
+}
+.border-grey-8 {
+  border-color: var(--grey-8) !important;
+}
+.border-grey-9 {
+  border-color: var(--grey-9) !important;
+}
+.border-grey-10 {
+  border-color: var(--grey-10) !important;
 }
 
 /* 기타 Figma 스타일에 따라 추가 가능 */
