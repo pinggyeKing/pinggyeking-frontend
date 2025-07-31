@@ -11,20 +11,24 @@ interface CustomButtonProps
   typeStyle?: ButtonType;
   size?: ButtonSize;
   round?: ButtonRound;
+  customRadius?: string; // 직접 radius 클래스를 지정할 수 있는 prop 추가
   pressHold?: boolean;
   leftIcon?: React.ReactNode;
   rightIcon?: React.ReactNode;
   children: React.ReactNode;
+  className?: string;
 }
 
 export default function CustomButton({
   typeStyle = "primary",
   size = "large",
   round = "standard",
+  customRadius,
   pressHold = false,
   leftIcon,
   rightIcon,
   children,
+  className,
   ...props
 }: CustomButtonProps) {
   // type + pressHold에 따른 색상/테두리
@@ -32,23 +36,27 @@ export default function CustomButton({
     if (typeStyle === "primary") {
       return pressHold
         ? "bg-grey-8 text-grey-0 border-grey-8"
-        : "bg-white text-grey-10 border-grey-3";
+        : "bg-grey-10 text-grey-0 border-grey-10";
     }
     if (typeStyle === "outline1") {
       return pressHold
-        ? "bg-grey-8 text-grey-0 border border-grey-8"
-        : "bg-white text-grey-10 border border-grey-10";
+        ? "bg-grey-10 text-grey-0 border border-grey-10"
+        : "bg-grey-0 text-grey-10 border border-grey-10";
     }
     if (typeStyle === "outline2") {
       return pressHold
-        ? "bg-grey-8 text-grey-0 border-2 border-grey-8"
-        : "bg-white text-grey-10 border-2 border-grey-10";
+        ? "bg-grey-10 text-grey-0 border-2 border-grey-10"
+        : "bg-grey-0 text-grey-10 border-2 border-grey-10";
     }
     if (typeStyle === "ghost") {
-      return "bg-transparent text-grey-10 border-none";
+      return pressHold
+        ? "bg-grey-10 text-grey-0 border-none"
+        : "bg-grey-0 text-grey-10 border-none";
     }
     if (typeStyle === "disable") {
-      return "bg-grey-2 text-grey-5 border-grey-2 cursor-not-allowed";
+      return pressHold
+        ? "bg-grey-3 text-grey-5 border-grey-3"
+        : "bg-grey-2 text-grey-5 border-grey-2";
     }
     return "";
   })();
@@ -63,29 +71,34 @@ export default function CustomButton({
   })();
 
   const roundClass = (() => {
+    // customRadius가 제공된 경우 우선적으로 사용
+    if (customRadius) return customRadius;
+
     if (round === "square") return "radius-4";
     if (round === "standard") {
       if (size === "large") return "radius-20";
       if (size === "medium") return "radius-16";
       if (size === "small") return "radius-12";
       if (size === "xsmall") return "radius-8";
+      return "radius-20"; // default for standard
     }
     if (round === "pills") {
       if (size === "large") return "radius-24";
       if (size === "medium") return "radius-16";
       if (size === "small") return "radius-12";
       if (size === "xsmall") return "radius-8";
+      return "radius-24"; // default for pills
     }
-    return "";
+    return "radius-4"; // fallback
   })();
 
   return (
     <button
       className={clsx(
-        "flex items-center justify-center font-ownglyph-pdh transition-all",
+        "flex items-center justify-center font-ownglyph-pdh transition-all w-full",
         typeClass,
         sizeClass,
-        roundClass
+        roundClass // roundClass를 마지막에 배치해서 우선순위 확보
       )}
       disabled={typeStyle === "disable"}
       {...props}

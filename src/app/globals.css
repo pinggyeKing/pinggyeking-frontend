@@ -184,6 +184,7 @@ body {
   font-size: 16px;
   font-weight: 600;
   line-height: 20px;
+  letter-spacing: 0%;
 }
 
 .text-body3-regular {
@@ -222,6 +223,7 @@ body {
   font-size: 12px;
   font-weight: 600;
   line-height: 16px;
+  letter-spacing: 0%;
 }
 
 /* 버튼, 카드 등 주요 컴포넌트 배경/테두리 예시 */
@@ -530,6 +532,41 @@ body {
   color: var(--green-5) !important;
 }
 
+/* Border Colors */
+.border-grey-0 {
+  border-color: var(--grey-0) !important;
+}
+.border-grey-1 {
+  border-color: var(--grey-1) !important;
+}
+.border-grey-2 {
+  border-color: var(--grey-2) !important;
+}
+.border-grey-3 {
+  border-color: var(--grey-3) !important;
+}
+.border-grey-4 {
+  border-color: var(--grey-4) !important;
+}
+.border-grey-5 {
+  border-color: var(--grey-5) !important;
+}
+.border-grey-6 {
+  border-color: var(--grey-6) !important;
+}
+.border-grey-7 {
+  border-color: var(--grey-7) !important;
+}
+.border-grey-8 {
+  border-color: var(--grey-8) !important;
+}
+.border-grey-9 {
+  border-color: var(--grey-9) !important;
+}
+.border-grey-10 {
+  border-color: var(--grey-10) !important;
+}
+
 /* 기타 Figma 스타일에 따라 추가 가능 */
 
 /* ---- Layout 유틸리티 (Figma Layout 가이드) ---- */
@@ -614,7 +651,6 @@ body {
 
 /* 버튼 크기별 border-radius, padding */
 .button-large {
-  border-radius: 20px !important;
   padding: 12px 16px !important;
   font-size: 26px;
   font-family: "Ownglyph PDH", "Pretendard", sans-serif;
@@ -625,7 +661,6 @@ body {
   box-shadow: 0px 4px 12px 0px rgba(0, 0, 0, 0.04);
 }
 .button-medium {
-  border-radius: 16px !important;
   padding: 8px 12px !important;
   font-size: 22px;
   font-family: "Ownglyph PDH", "Pretendard", sans-serif;
@@ -636,7 +671,6 @@ body {
   box-shadow: 0px 4px 12px 0px rgba(0, 0, 0, 0.04);
 }
 .button-small {
-  border-radius: 12px !important;
   padding: 4px 8px !important;
   font-size: 18px;
   font-family: "Ownglyph PDH", "Pretendard", sans-serif;
@@ -647,7 +681,6 @@ body {
   box-shadow: 0px 4px 12px 0px rgba(0, 0, 0, 0.04);
 }
 .button-xsmall {
-  border-radius: 8px !important;
   padding: 4px 7px !important;
   font-size: 12px;
   font-family: "Ownglyph PDH", "Pretendard", sans-serif;
@@ -688,3 +721,29 @@ body {
 }
 
 /* 예시: <button class="button-large">Large Button</button> */
+
+/* 커스텀 스크롤바 스타일 */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 8px;
+  border-radius: 100px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: var(--grey-2);
+  border-radius: 100px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: var(--grey-6);
+  border-radius: 100px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: var(--grey-7);
+}
+
+/* Firefox용 스크롤바 */
+.custom-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: var(--grey-6) var(--grey-2);
+}

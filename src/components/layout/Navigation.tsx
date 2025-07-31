@@ -4,6 +4,7 @@ import { usePathname } from "next/navigation";
 import Link from "next/link";
 import React, { useState } from "react";
 import { Home, LayoutDashboard, ChevronDown, ChevronUp } from "lucide-react";
+import { useSplash } from "@/contexts/SplashContext";
 
 interface IMenuItem {
   label: string;
@@ -30,6 +31,12 @@ const menuItems: IMenuItem[] = [
 const Navigation = () => {
   const currentPath = usePathname();
   const [isVisible, setIsVisible] = useState(true);
+  const { showSplash } = useSplash();
+
+  // Don't render navigation during splash screen
+  if (showSplash) {
+    return null;
+  }
 
   const toggleVisibility = () => {
     setIsVisible(!isVisible);
