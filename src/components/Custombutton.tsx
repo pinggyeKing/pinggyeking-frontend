@@ -11,20 +11,24 @@ interface CustomButtonProps
   typeStyle?: ButtonType;
   size?: ButtonSize;
   round?: ButtonRound;
+  customRadius?: string; // 직접 radius 클래스를 지정할 수 있는 prop 추가
   pressHold?: boolean;
   leftIcon?: React.ReactNode;
   rightIcon?: React.ReactNode;
   children: React.ReactNode;
+  className?: string;
 }
 
 export default function CustomButton({
   typeStyle = "primary",
   size = "large",
   round = "standard",
+  customRadius,
   pressHold = false,
   leftIcon,
   rightIcon,
   children,
+  className,
   ...props
 }: CustomButtonProps) {
   // type + pressHold에 따른 색상/테두리
@@ -67,6 +71,9 @@ export default function CustomButton({
   })();
 
   const roundClass = (() => {
+    // customRadius가 제공된 경우 우선적으로 사용
+    if (customRadius) return customRadius;
+
     if (round === "square") return "radius-4";
     if (round === "standard") {
       if (size === "large") return "radius-20";
@@ -88,7 +95,7 @@ export default function CustomButton({
   return (
     <button
       className={clsx(
-        "flex items-center justify-center font-ownglyph-pdh transition-all",
+        "flex items-center justify-center font-ownglyph-pdh transition-all w-full",
         typeClass,
         sizeClass,
         roundClass // roundClass를 마지막에 배치해서 우선순위 확보

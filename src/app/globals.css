@@ -721,3 +721,29 @@ body {
 }
 
 /* 예시: <button class="button-large">Large Button</button> */
+
+/* 커스텀 스크롤바 스타일 */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 8px;
+  border-radius: 100px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: var(--grey-2);
+  border-radius: 100px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: var(--grey-6);
+  border-radius: 100px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: var(--grey-7);
+}
+
+/* Firefox용 스크롤바 */
+.custom-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: var(--grey-6) var(--grey-2);
+}

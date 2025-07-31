@@ -1,9 +1,23 @@
+"use client";
+
 import CustomButton from "@/components/Custombutton";
 import FunctionIndicator from "@/components/FunctionIndicator";
+import PrivacyModal from "@/components/PrivacyModal";
 import Image from "next/image";
 import { Info } from "lucide-react";
+import Link from "next/link";
+import { useState } from "react";
 
 export default function Home() {
+  const [isPrivacyModalOpen, setIsPrivacyModalOpen] = useState(false);
+
+  const handlePrivacyClick = () => {
+    setIsPrivacyModalOpen(true);
+  };
+
+  const closePrivacyModal = () => {
+    setIsPrivacyModalOpen(false);
+  };
   return (
     <div className="flex flex-col items-center pt-[65px] min-h-screen">
       {/* 로고 타이틀 */}
@@ -34,9 +48,9 @@ export default function Home() {
         </div>
 
         {/* 버튼 */}
-        <div className="w-full flex justify-center">
-          <CustomButton round="square" size="large" typeStyle="primary">
-            핑계 만들기
+        <div className="w-[130px] h-[48px] flex justify-center">
+          <CustomButton round="square">
+            <Link href="/create">핑계 만들기</Link>
           </CustomButton>
         </div>
       </div>
@@ -47,8 +61,12 @@ export default function Home() {
           icon={<Info size={16} />}
           label="서비스 개선을 위해 익명 사용통계를 수집합니다."
           hasChild={true}
+          onClick={handlePrivacyClick}
         />
       </div>
+
+      {/* 개인정보 수집안내 모달 */}
+      <PrivacyModal isOpen={isPrivacyModalOpen} onClose={closePrivacyModal} />
     </div>
   );
 }
