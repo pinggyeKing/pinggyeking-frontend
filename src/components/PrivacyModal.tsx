@@ -10,67 +10,72 @@ interface PrivacyModalProps {
 const PrivacyInfo = {
   collectionItems: [
     {
-      title: "수집하는 정보",
-      description: "서비스 개선을 위해 다음과 같은 익명 정보를 수집합니다.",
+      title: "수집하는 개인정보",
+      description: "서비스 개선을 위한 익명 통계 정보",
       items: [
-        "이용현황: 핑계 생성 건수, 접속 시간대, 요일별 이용 패턴",
-        "서비스 선택 패턴: 관계 유형(상사/친구/연인 등), 톤 선택, 재생성 횟수",
-        "서비스 만족도: 이모티콘 평가(☺️😐😔), 이미지 카드 생성 여부",
-        "상황 키워드: 개인 식별 정보 완전 제거 후 일반화된 키워드",
+        "변명 생성 건수 및 이용 시간대",
+        "관계 유형, 톤 선택 등 서비스 이용 패턴",
+        "만족도 평가 결과",
+        "개인정보를 제거한 일반화된 키워드",
       ],
     },
     {
       title: "수집하지 않는 정보",
-      description:
-        "개인정보보호를 위해 다음과 같은 정보는 절대 수집하지 않습니다.",
       items: [
-        "개인 식별 정보: 이름, 전화번호, 이메일, 주민등록번호",
-        "민감한 개인 정보: 구체적인 개인 상황, 사생활 내용",
-        "기술적 정보: IP 주소 원본, 기기 정보, 위치 정보",
-        "추적 정보: 개인 식별 가능한 쿠기, 로그인 정보",
+        "성명, 전화번호, 이메일 주소 등 개인식별정보",
+        "작성하신 변명 내용의 원본",
+        "IP 주소, 기기 정보, 위치 정보",
+        "기타 개인을 식별할 수 있는 모든 정보",
       ],
     },
     {
-      title: "수집 목적",
+      title: "개인정보의 처리 목적",
       items: [
-        "AI 서비스 개선 및 핑계 생성 품질 향상",
-        "사용자 경험 최적화 및 UI/UX 개선",
-        "서비스 안정성 및 시스템 성능 모니터링",
-        "익명 통계를 통한 서비스 기능 확장",
+        "AI 기반 변명 생성 서비스 품질 향상",
+        "사용자 경험 개선 및 서비스 기능 최적화",
+        "서비스 안정성 향상",
       ],
     },
     {
-      title: "보유 기간",
+      title: "개인정보의 처리 및 보유 기간",
       items: [
-        "서비스 제공 기간 동안 보관 (익명 통계 데이터)",
-        "서비스 종료 시 모든 데이터 안전 삭제",
-        "목적 달성 후 불필요한 데이터 즉시 삭제",
+        "보유기간: 서비스 제공 기간",
+        "서비스 종료 시 수집된 모든 정보 즉시 파기",
+        "관련 법령에 따라 보존이 필요한 경우 해당 기간 동안 보관 후 파기",
       ],
     },
     {
-      title: "개인정보 보호 조치",
+      title: "정보주체의 권리·의무 및 행사방법",
       items: [
-        "수집 즉시 개인 식별 요소 완전 제거",
-        "수집된 데이터 암호화 보관",
-        "개발팀 내 최소 인원만 접근 권한 보유",
+        "개인정보 수집·이용에 대한 동의를 거부할 권리가 있습니다",
+        "동의 거부 시에도 서비스 이용에 제한이 없습니다",
+        "수집에 동의한 경우라도 언제든지 동의를 철회할 수 있습니다",
       ],
     },
     {
-      title: "거부권 및 선택권",
+      title: "개인정보 관련 문의",
       items: [
-        "개인정보 수집을 원하지 않는 경우 언제든 거부 가능",
-        "수집 거부시에도 기본 서비스는 정상 이용 가능",
-        "수집 동의 철회 시 즉시 데이터 수집 중단",
+        "이메일: contact@byeongmyeong-lab.com",
+        "처리기간: 문의 접수 후 7일 이내",
       ],
     },
     {
-      title: "문의 및 담당자",
+      title: "기타",
       items: [
-        "이메일: privacy@pinggyeking.com",
-        "개인정보 보호책임자: 김핑계 (CPO)",
-        "문의 시간: 평일 09:00~18:00",
-        "처리 기간: 접수 후 7일 이내 회신",
+        "본 방침은 개인정보보호법, 정보통신망 이용촉진 및 정보보호 등에 관한 법률에 따라 작성되었습니다.",
       ],
+    },
+  ],
+  postingDate: [
+    {
+      title: "공고일자",
+      Date: "2025년 7월 28일",
+    },
+  ],
+  effectiveDate: [
+    {
+      title: "시행일자",
+      Date: "2025년 7월 28일",
     },
   ],
 };
@@ -146,11 +151,17 @@ const PrivacyModal: React.FC<PrivacyModalProps> = ({ isOpen, onClose }) => {
                   </CustomButton>
                 </div>
                 <div className="flex flex-row w-[326px] gap-1 text-grey-7">
-                  <p className="text-body3-medium">
-                    최종 수정일: 2025년 7월 12일
-                  </p>
+                  {PrivacyInfo.postingDate.map((item, index) => (
+                    <p key={index} className="text-body3-medium">
+                      {item.title}: {item.Date}
+                    </p>
+                  ))}
                   <div className="text-body3-regular">/</div>
-                  <p className="text-body3-medium">시행일: 2025년 7월 12일</p>
+                  {PrivacyInfo.effectiveDate.map((item, index) => (
+                    <p key={index} className="text-body3-medium">
+                      {item.title}: {item.Date}
+                    </p>
+                  ))}
                 </div>
                 <p className="text-body3-medium text-grey-8">
                   궁금한 사항이 있으시면 언제든 문의해 주세요!
@@ -161,7 +172,11 @@ const PrivacyModal: React.FC<PrivacyModalProps> = ({ isOpen, onClose }) => {
 
           {/* 푸터 */}
           <div className="px-3 py-2 flex flex-col items-center gap-2">
-            <CustomButton className="w-full" customRadius="radius-12">
+            <CustomButton
+              className="w-full"
+              customRadius="radius-12"
+              onClick={handleOverlayClick}
+            >
               확인
             </CustomButton>
           </div>
