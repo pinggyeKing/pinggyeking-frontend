@@ -2,6 +2,8 @@
 
 import React from "react";
 import CustomButton from "../../Custombutton";
+import ButtonFilledIcon from "@/components/icons/ButtonFilledIcon";
+import ButtonOutlinedIcon from "@/components/icons/ButtonOutlinedIcon";
 
 // 1. props, size, 스타일 상수 정리
 interface ModalProps {
@@ -58,15 +60,6 @@ export default function Modal({
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
-        {/* <div
-          style={{
-            display: "flex",
-            justifyContent: "flex-end",
-            alignItems: "center",
-            minHeight: 32,
-            marginBottom: 16,
-          }}
-        > */}
         {showCloseButton && (
           <CustomButton
             typeStyle="ghost"
@@ -80,24 +73,33 @@ export default function Modal({
             children={""}
           />
         )}
-        {/* </div> */}
+
         {/* Contents */}
         <div style={{ flex: 1 }}>{children}</div>
+
         {/* Footer */}
         {showBottomButton && (
           <div
             style={{
               display: "flex",
               gap: 12,
-              marginTop: 32,
             }}
           >
-            <CustomButton typeStyle="outline1" size="medium" onClick={onCancel}>
-              취소
-            </CustomButton>
-            <CustomButton typeStyle="primary" size="medium" onClick={onConfirm}>
-              {confirmText}
-            </CustomButton>
+            {/* 확인 버튼 - filled 스타일 (파란색 계열) */}
+            <ButtonFilledIcon
+              width={174}
+              text={confirmText}
+              fill="#3B82F6"
+              onClick={onConfirm}
+              className="transition-opacity hover:opacity-80"
+            />
+            {/* 취소 버튼 - outlined 스타일 (회색 계열) */}
+            <ButtonOutlinedIcon
+              width={174}
+              text="취소"
+              onClick={onCancel}
+              className="transition-opacity hover:opacity-80"
+            />
           </div>
         )}
       </div>

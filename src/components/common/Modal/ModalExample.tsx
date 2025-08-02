@@ -44,7 +44,7 @@ const ModalExample: React.FC = () => {
         onClose={closeModal}
         onCancel={handleCancel}
         onConfirm={handleConfirm}
-        confirmText="확인"
+        confirmText="평가 제출하기"
         size={modalSize}
       >
         <div className="space-y-4">
