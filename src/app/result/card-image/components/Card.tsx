@@ -4,14 +4,12 @@ interface CardProps {
   recipient: string;
   message: string;
   cardType?: "default" | "formal" | "cute" | "humorous" | "pop";
-  size?: "small" | "medium" | "large";
 }
 
 const Card: React.FC<CardProps> = ({
   recipient,
   message,
   cardType = "default",
-  size = "medium",
 }) => {
   const getCardBackground = () => {
     switch (cardType) {
@@ -24,18 +22,7 @@ const Card: React.FC<CardProps> = ({
       case "pop":
         return "/cards/pop-card.svg";
       default:
-        return "/cards/default-card-card.svg";
-    }
-  };
-
-  const getSizeClasses = () => {
-    switch (size) {
-      case "small":
-        return "w-[280px] h-[320px] py-6 px-8";
-      case "large":
-        return "w-[440px] h-[490px] py-8 px-10";
-      default:
-        return "w-[360px] h-[400px] py-7 px-9";
+        return "/cards/default-card.svg";
     }
   };
 

@@ -40,7 +40,7 @@ export default function Page() {
 
   return (
     <div className="min-h-screen bg-grey-1 p-4">
-      <div className="max-w-[400px] mx-auto bg-white rounded-[24px] border-2 border-grey-7 p-4 pb-6 shadow-[1px_4px_16px_0px_rgba(0,0,0,0.08)]">
+      <div className="max-w-[400px] mx-auto bg-white rounded-6 border-2 border-grey-7 p-4 pb-6 shadow-[1px_4px_16px_0px_rgba(0,0,0,0.08)]">
         {/* Header Section */}
         <div className="flex flex-col items-center gap-4 mb-5">
           {/* Back Button */}
