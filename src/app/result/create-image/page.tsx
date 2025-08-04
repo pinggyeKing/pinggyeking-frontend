@@ -5,6 +5,8 @@ import Card from "../card-image/components/Card";
 import ButtonFilledIcon from "@/components/icons/ButtonFilledIcon";
 import { Carousel } from "./components";
 
+import ShareKakaoButton from "@/components/ShareKakaoButton";
+
 export default function Page() {
   const [selectedCardType, setSelectedCardType] = useState<
     "default" | "formal" | "cute" | "humorous" | "pop"
