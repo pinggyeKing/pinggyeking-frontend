@@ -33,7 +33,7 @@ const CarouselItem: React.FC<CarouselItemProps> = ({
         alt={`${name} character`}
         width={82}
         height={86}
-        className="object-contain"
+        className="w-auto h-[86px] object-contain"
         onError={(e) => {
           console.error(`Failed to load image for ${id}:`, e);
         }}
