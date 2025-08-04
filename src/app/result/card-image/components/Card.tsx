@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 
 interface CardProps {
   recipient: string;
@@ -11,6 +11,12 @@ const Card: React.FC<CardProps> = ({
   message,
   cardType = "default",
 }) => {
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
   const getCardBackground = () => {
     switch (cardType) {
       case "formal":
@@ -25,6 +31,17 @@ const Card: React.FC<CardProps> = ({
         return "/cards/default-card.svg";
     }
   };
+
+  // 서버와 클라이언트 렌더링을 동일하게 만들기 위한 로딩 상태
+  if (!isMounted) {
+    return (
+      <div className="relative w-[440px] h-[490px] shadow-lg overflow-hidden bg-gray-100">
+        <div className="absolute inset-0 flex items-center justify-center">
+          <div className="text-gray-400">Loading...</div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="relative w-[440px] h-[490px] shadow-lg overflow-hidden">
