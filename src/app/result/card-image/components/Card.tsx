@@ -24,7 +24,7 @@ const Card: React.FC<CardProps> = ({
       case "pop":
         return "/cards/pop-card.svg";
       default:
-        return "/cards/default-card.svg";
+        return "/cards/default-card-card.svg";
     }
   };
 
@@ -40,20 +40,20 @@ const Card: React.FC<CardProps> = ({
   };
 
   return (
-    <div
-      className={`relative shadow-lg overflow-hidden rounded-[30px] ${getSizeClasses()}`}
-    >
+    <div className="relative w-[440px] h-[490px] shadow-lg overflow-hidden">
       {/* Card background SVG */}
-      <div className="absolute inset-0 z-0">
-        <img
-          src={getCardBackground()}
-          alt="Card background"
-          className="w-full h-full object-cover"
-        />
-      </div>
+      <div
+        className="absolute inset-0 w-full h-full"
+        style={{
+          backgroundImage: `url(${getCardBackground()})`,
+          backgroundSize: "contain",
+          backgroundRepeat: "no-repeat",
+          backgroundPosition: "center",
+        }}
+      />
 
       {/* Content overlay */}
-      <div className="relative z-10 flex flex-col gap-4 h-full">
+      <div className="relative z-10 flex flex-col gap-4 h-full py-8 px-10">
         {/* Element 1: Recipient */}
         <div className="text-section-title">To. {recipient}</div>
 

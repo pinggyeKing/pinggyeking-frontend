@@ -17,32 +17,26 @@ const CarouselItem: React.FC<CarouselItemProps> = ({
   const getImageSrc = () => {
     const basePath = "/carousel";
     const selectedSuffix = isSelected ? "-selected" : "-unselected";
-    const imageSrc = `${basePath}/${id}${selectedSuffix}.svg`;
-    console.log(`Image src for ${id}: ${imageSrc}, isSelected: ${isSelected}`);
-    return imageSrc;
+    return `${basePath}/${id}${selectedSuffix}.svg`;
   };
 
   return (
     <div
-      className={`
-        grid grid-cols-1 place-items-center cursor-pointer transition-all duration-200 flex-shrink-0
-      `}
       onClick={() => onClick(id)}
-      style={{
-        width: "81.23px",
-        minWidth: "81.23px",
-        minHeight: "fit-content",
-        borderRadius: "9.85px",
-        padding: "8px",
-        gap: "4px",
-      }}
+      role="option"
+      aria-selected={isSelected}
+      aria-label={`${name} 스타일`}
+      tabIndex={-1}
     >
       <div
-        className="relative grid place-items-center"
-        style={{
-          width: "62.75px",
-          height: "64.31px",
-        }}
+        // className="relative place-items-center"
+        className="w-fit"
+        style={
+          {
+            // width: "62.75px",
+            // height: "64.31px",
+          }
+        }
       >
         <Image
           src={getImageSrc()}
@@ -55,7 +49,7 @@ const CarouselItem: React.FC<CarouselItemProps> = ({
           }}
         />
       </div>
-      <div className="relative grid place-items-center">
+      {/* <div className="relative place-items-center">
         <div
           className="absolute bg-white"
           style={{
@@ -65,7 +59,7 @@ const CarouselItem: React.FC<CarouselItemProps> = ({
             top: "4.6px",
           }}
         />
-      </div>
+      </div> */}
     </div>
   );
 };
