@@ -44,7 +44,7 @@ const Card: React.FC<CardProps> = ({
   }
 
   return (
-    <div className="relative w-[440px] h-[490px] shadow-lg overflow-hidden">
+    <div className="relative w-[440px] h-[490px] shadow-lg overflow-hidden rounded-[30px]">
       {/* Card background SVG */}
       <div
         className="absolute inset-0 w-full h-full"
