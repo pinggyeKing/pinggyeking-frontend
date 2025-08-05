@@ -44,7 +44,9 @@ const Navigation = () => {
 
   return (
     <nav
-      className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[480px] p-2"
+      className={`fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[480px] p-2 ${
+        !isVisible ? "pb-10" : ""
+      }`}
       aria-label="메인 네비게이션"
     >
       <div className="flex flex-col items-center gap-1">
