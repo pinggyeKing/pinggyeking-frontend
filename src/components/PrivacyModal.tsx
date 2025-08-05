@@ -112,7 +112,7 @@ const PrivacyModal: React.FC<PrivacyModalProps> = ({ isOpen, onClose }) => {
           </div>
 
           {/* 메인 콘텐츠 영역 */}
-          <div className="flex flex-1 gap-2 px-3 pt-2 overflow-hidden">
+          <div className="flex flex-1 gap-2 pl-3 pr-1 pt-2 overflow-hidden">
             {/* 스크롤 가능한 컨텐츠 영역 */}
             <div className="flex-1 overflow-y-auto max-h-full pr-2 custom-scrollbar">
               <div className="flex flex-col gap-2 pb-4">
