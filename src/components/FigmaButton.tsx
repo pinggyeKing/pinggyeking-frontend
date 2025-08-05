@@ -77,7 +77,7 @@ const FigmaButton: React.FC<FigmaButtonProps> = ({
       case "primary":
         return {
           ...baseStyle,
-          backgroundColor: active ? "#4E4E4E" : "#1E1E1E",
+          // backgroundColor: active ? "#4E4E4E" : "#1E1E1E",
           color: "#FFFFFF",
           filter: active ? "brightness(0.8)" : "none",
         };
@@ -85,7 +85,7 @@ const FigmaButton: React.FC<FigmaButtonProps> = ({
       case "outline1":
         return {
           ...baseStyle,
-          backgroundColor: active ? "#1E1E1E" : "#FFFFFF",
+          // backgroundColor: active ? "#1E1E1E" : "#FFFFFF",
           color: active ? "#FFFFFF" : "#1E1E1E",
           border: "1px solid #1E1E1E",
         };
@@ -93,7 +93,7 @@ const FigmaButton: React.FC<FigmaButtonProps> = ({
       case "outline2":
         return {
           ...baseStyle,
-          backgroundColor: active ? "#1E1E1E" : "#FFFFFF",
+          // backgroundColor: active ? "#1E1E1E" : "#FFFFFF",
           color: active ? "#FFFFFF" : "#1E1E1E",
           border: "2px solid #1E1E1E",
         };

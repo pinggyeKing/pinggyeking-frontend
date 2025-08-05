@@ -9,6 +9,24 @@ export interface KakaoShareContent {
   buttonTitle?: string;
 }
 
+// 상대 경로를 절대 URL로 변환하는 함수
+const getAbsoluteUrl = (relativePath: string): string => {
+  if (relativePath.startsWith("http")) {
+    // 이미 완전한 URL인 경우
+    return relativePath;
+  }
+
+  // 상대 경로를 절대 URL로 변환
+  const baseUrl =
+    typeof window !== "undefined"
+      ? `${window.location.protocol}//${window.location.host}`
+      : "";
+
+  return `${baseUrl}${
+    relativePath.startsWith("/") ? relativePath : "/" + relativePath
+  }`;
+};
+
 // 카카오 SDK 초기화 함수
 export const initKakaoSDK = (appKey: string): Promise<boolean> => {
   return new Promise((resolve) => {
@@ -103,7 +121,7 @@ export const shareImageResult = async (
   const shareContent: KakaoShareContent = {
     title: resultTitle,
     description: resultDescription,
-    imageUrl: imageUrl,
+    imageUrl: getAbsoluteUrl(imageUrl),
     linkUrl: window.location.href,
     buttonTitle: "나도 핑계 만들기",
   };
@@ -120,7 +138,9 @@ export const shareTextResult = async (
   const shareContent: KakaoShareContent = {
     title: title,
     description: description,
-    imageUrl: thumbnailUrl || "/Logo.svg", // 기본 로고 사용
+    imageUrl: thumbnailUrl
+      ? getAbsoluteUrl(thumbnailUrl)
+      : getAbsoluteUrl("/Logo.svg"), // 기본 로고 사용
     linkUrl: window.location.href,
     buttonTitle: "변명 연구소 바로가기",
   };
@@ -424,3 +444,185 @@ declare global {
     Kakao: any;
   }
 }
+
+// Card 컴포넌트 다운로드 관련 함수들
+
+// Card 컴포넌트를 JPG 이미지로 다운로드하는 함수
+export const downloadCardAsJPG = async (
+  cardElement: HTMLElement,
+  recipient: string = "card",
+  cardType: "default" | "formal" | "cute" | "humorous" | "pop" = "default",
+  successMessage: string = "카드가 저장되었어요!",
+  errorMessage: string = "카드 저장에 실패했습니다.",
+): Promise<boolean> => {
+  try {
+    // 파일명 생성 (한글 제거, 공백을 언더스코어로 변경)
+    const sanitizedRecipient = recipient
+      .replace(/[^a-zA-Z0-9가-힣\s]/g, "")
+      .replace(/\s+/g, "_")
+      .substring(0, 20); // 최대 20자로 제한
+
+    const fileName = `pinggyeking_card_${cardType}_${sanitizedRecipient}_${Date.now()}`;
+
+    // html2canvas 설정을 Card에 맞게 최적화
+    const canvas = await html2canvas(cardElement, {
+      useCORS: true,
+      allowTaint: true,
+      scale: 3, // 카드를 위한 고해상도
+      backgroundColor: "#ffffff",
+      width: 440, // Card 컴포넌트의 고정 너비
+      height: 490, // Card 컴포넌트의 고정 높이
+      logging: false, // 로깅 비활성화
+      imageTimeout: 15000, // 이미지 로드 타임아웃
+      removeContainer: true,
+    });
+
+    return await downloadCanvasAsJPG(
+      canvas,
+      fileName,
+      successMessage,
+      errorMessage,
+    );
+  } catch (error) {
+    console.error("Card 다운로드 중 오류가 발생했습니다:", error);
+    alert(errorMessage);
+    return false;
+  }
+};
+
+// Card의 ref를 이용한 다운로드 함수
+export const downloadCardByRef = async (
+  cardRef: React.RefObject<HTMLDivElement | null>,
+  recipient: string = "card",
+  cardType: "default" | "formal" | "cute" | "humorous" | "pop" = "default",
+  successMessage: string = "카드가 저장되었어요!",
+  errorMessage: string = "카드 저장에 실패했습니다.",
+): Promise<boolean> => {
+  if (!cardRef.current) {
+    console.error("Card 요소를 찾을 수 없습니다.");
+    alert(errorMessage);
+    return false;
+  }
+
+  return await downloadCardAsJPG(
+    cardRef.current,
+    recipient,
+    cardType,
+    successMessage,
+    errorMessage,
+  );
+};
+
+// Card ID나 클래스명으로 찾아서 다운로드하는 함수
+export const downloadCardById = async (
+  cardId: string,
+  recipient: string = "card",
+  cardType: "default" | "formal" | "cute" | "humorous" | "pop" = "default",
+  successMessage: string = "카드가 저장되었어요!",
+  errorMessage: string = "카드 저장에 실패했습니다.",
+): Promise<boolean> => {
+  const cardElement = document.getElementById(cardId);
+
+  if (!cardElement) {
+    console.error(`ID "${cardId}"인 Card 요소를 찾을 수 없습니다.`);
+    alert(errorMessage);
+    return false;
+  }
+
+  return await downloadCardAsJPG(
+    cardElement,
+    recipient,
+    cardType,
+    successMessage,
+    errorMessage,
+  );
+};
+
+// Card 클래스명으로 찾아서 다운로드하는 함수 (첫 번째 요소)
+export const downloadCardByClassName = async (
+  className: string,
+  recipient: string = "card",
+  cardType: "default" | "formal" | "cute" | "humorous" | "pop" = "default",
+  successMessage: string = "카드가 저장되었어요!",
+  errorMessage: string = "카드 저장에 실패했습니다.",
+): Promise<boolean> => {
+  const cardElement = document.querySelector(`.${className}`) as HTMLElement;
+
+  if (!cardElement) {
+    console.error(`클래스명 "${className}"인 Card 요소를 찾을 수 없습니다.`);
+    alert(errorMessage);
+    return false;
+  }
+
+  return await downloadCardAsJPG(
+    cardElement,
+    recipient,
+    cardType,
+    successMessage,
+    errorMessage,
+  );
+};
+
+// 고화질 PNG로 Card 다운로드하는 함수 (선택적)
+export const downloadCardAsPNG = async (
+  cardElement: HTMLElement,
+  recipient: string = "card",
+  cardType: "default" | "formal" | "cute" | "humorous" | "pop" = "default",
+  successMessage: string = "카드가 저장되었어요!",
+  errorMessage: string = "카드 저장에 실패했습니다.",
+): Promise<boolean> => {
+  try {
+    const sanitizedRecipient = recipient
+      .replace(/[^a-zA-Z0-9가-힣\s]/g, "")
+      .replace(/\s+/g, "_")
+      .substring(0, 20);
+
+    const fileName = `pinggyeking_card_${cardType}_${sanitizedRecipient}_${Date.now()}.png`;
+
+    const canvas = await html2canvas(cardElement, {
+      useCORS: true,
+      allowTaint: true,
+      scale: 3,
+      backgroundColor: "#ffffff",
+      width: 440,
+      height: 490,
+      logging: false,
+      imageTimeout: 15000,
+      removeContainer: true,
+    });
+
+    // PNG Blob 생성
+    const blob = await new Promise<Blob>((resolve, reject) => {
+      canvas.toBlob((pngBlob) => {
+        if (pngBlob) {
+          resolve(pngBlob);
+        } else {
+          reject(new Error("Canvas를 PNG로 변환하는데 실패했습니다."));
+        }
+      }, "image/png");
+    });
+
+    // 다운로드 링크 생성
+    const downloadUrl = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = downloadUrl;
+    link.download = fileName;
+
+    // 다운로드 실행
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+
+    // 메모리 정리
+    URL.revokeObjectURL(downloadUrl);
+
+    // 성공 메시지 표시
+    alert(successMessage);
+
+    return true;
+  } catch (error) {
+    console.error("Card PNG 다운로드 중 오류가 발생했습니다:", error);
+    alert(errorMessage);
+    return false;
+  }
+};
