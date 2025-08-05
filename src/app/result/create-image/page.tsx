@@ -62,9 +62,6 @@ export default function Page() {
             <h1 className="text-section-title text-grey-10 uppercase">
               탬플릿을 선택해주세요
             </h1>
-            <p className="text-body3-medium text-grey-7">
-              아래 생성된 핑계를 확인해주세요
-            </p>
           </div>
         </div>
 
