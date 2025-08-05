@@ -68,14 +68,14 @@ const PrivacyInfo = {
   ],
   postingDate: [
     {
-      title: "공고일자",
-      Date: "2025년 7월 28일",
+      title: "최종 수정일",
+      Date: "2025.07.12",
     },
   ],
   effectiveDate: [
     {
-      title: "시행일자",
-      Date: "2025년 7월 28일",
+      title: "시행일",
+      Date: "2025.07.12",
     },
   ],
 };
@@ -97,11 +97,11 @@ const PrivacyModal: React.FC<PrivacyModalProps> = ({ isOpen, onClose }) => {
         onClick={handleOverlayClick}
       >
         {/* 모달 컨테이너 */}
-        <div className="w-[400px] h-[900px] bg-white radius-20 shadow-lg overflow-hidden flex flex-col">
+        <div className="w-[87%] h-[91%] bg-white radius-20 shadow-lg overflow-hidden flex flex-col">
           {/* 헤더 */}
           <div className="flex items-center justify-between bg-grey-10 p-4">
             <h2 className="text-section-title text-grey-0">
-              핑계킹 개인정보 수집 안내
+              변명연구소 개인정보 수집 안내
             </h2>
             <button
               onClick={onClose}
@@ -112,7 +112,7 @@ const PrivacyModal: React.FC<PrivacyModalProps> = ({ isOpen, onClose }) => {
           </div>
 
           {/* 메인 콘텐츠 영역 */}
-          <div className="flex flex-1 gap-2 px-3 pt-2 overflow-hidden">
+          <div className="flex flex-1 gap-2 pl-3 pr-1 pt-2 overflow-hidden">
             {/* 스크롤 가능한 컨텐츠 영역 */}
             <div className="flex-1 overflow-y-auto max-h-full pr-2 custom-scrollbar">
               <div className="flex flex-col gap-2 pb-4">
@@ -144,19 +144,20 @@ const PrivacyModal: React.FC<PrivacyModalProps> = ({ isOpen, onClose }) => {
                   </div>
                 ))}
               </div>
-              <div className="flex flex-col items-center w-full p-6 border-t border-grey-4 gap-1">
-                <div className="w-[231px]">
-                  <CustomButton size="xsmall" leftIcon={<FileUser size={10} />}>
+              <div className="flex flex-col items-center w-full p-6 border-t border-grey-4 gap-1 text-center">
+                <div className="flex flex-row items-center px-1 py-2.5 gap-1 radius-16">
+                  <FileUser size={10} className="text-grey-10" />
+                  <p className="text-body3-semibold text-grey-10 text-center">
                     개인정보보호법ㆍ정보통신망법 준수
-                  </CustomButton>
+                  </p>
                 </div>
-                <div className="flex flex-row w-[326px] gap-1 text-grey-7">
+                <div className="flex flex-row items-center gap-2 text-grey-7">
                   {PrivacyInfo.postingDate.map((item, index) => (
                     <p key={index} className="text-body3-medium">
                       {item.title}: {item.Date}
                     </p>
                   ))}
-                  <div className="text-body3-regular">/</div>
+                  <div className="text-body3-regular">|</div>
                   {PrivacyInfo.effectiveDate.map((item, index) => (
                     <p key={index} className="text-body3-medium">
                       {item.title}: {item.Date}

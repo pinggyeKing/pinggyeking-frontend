@@ -124,15 +124,15 @@ body {
 }
 .text-section-title {
   font-family: "Ownglyph RDO ballpen", "Pretendard", sans-serif !important;
-  font-size: 26px;
+  font-size: 30px;
   font-weight: 400;
-  line-height: 24px;
+  line-height: 28px;
 }
 .text-section-subtitle {
   font-family: "Ownglyph RDO ballpen", "Pretendard", sans-serif !important;
-  font-size: 18px;
+  font-size: 24px;
   font-weight: 400;
-  line-height: 18px;
+  line-height: 26px;
 }
 .text-group-title {
   font-family: var(--font-pretendard);
