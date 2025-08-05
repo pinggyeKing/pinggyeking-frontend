@@ -67,7 +67,10 @@ export default function Page() {
 
         {/* Card Style Selection */}
         {/* Original Carousel */}
-        <Carousel />
+        <Carousel
+          onSelectionChange={handleSelectionChange}
+          initialSelected={selectedCardType}
+        />
 
         {/* Card Preview */}
         <div className="mb-5 flex justify-center">
