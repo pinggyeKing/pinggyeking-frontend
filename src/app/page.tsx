@@ -26,7 +26,15 @@ export default function Home() {
       </div>
 
       {/* 메인 카드 */}
-      <div className="w-[400px] h-[410px] bg-white bg-opacity-60 border-2 border-grey-7 radius-24 flex flex-col items-center justify-between py-10 px-5 mb-[123px]">
+      <div
+        className="w-[400px] h-[410px] radius-24 flex flex-col items-center justify-between py-10 px-5 mb-[123px]"
+        style={{
+          backgroundImage: "url(/maincard.svg)",
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          backgroundRepeat: "no-repeat",
+        }}
+      >
         {/* 상단 텍스트 */}
         <div className="flex flex-col items-center gap-1 text-center">
           <div className="text-section-title text-grey-10 leading-6">
