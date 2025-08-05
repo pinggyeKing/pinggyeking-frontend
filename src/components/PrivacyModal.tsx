@@ -68,14 +68,14 @@ const PrivacyInfo = {
   ],
   postingDate: [
     {
-      title: "공고일자",
-      Date: "2025년 7월 28일",
+      title: "최종 수정일",
+      Date: "2025.07.12",
     },
   ],
   effectiveDate: [
     {
-      title: "시행일자",
-      Date: "2025년 7월 28일",
+      title: "시행일",
+      Date: "2025.07.12",
     },
   ],
 };
@@ -145,18 +145,19 @@ const PrivacyModal: React.FC<PrivacyModalProps> = ({ isOpen, onClose }) => {
                 ))}
               </div>
               <div className="flex flex-col items-center w-full p-6 border-t border-grey-4 gap-1">
-                <div className="w-[231px]">
-                  <CustomButton size="xsmall" leftIcon={<FileUser size={10} />}>
+                <div className="flex flex-row items-center px-1 py-2.5 gap-1 radius-16">
+                  <FileUser size={10} className="text-grey-10" />
+                  <p className="text-body3-semibold text-grey-10">
                     개인정보보호법ㆍ정보통신망법 준수
-                  </CustomButton>
+                  </p>
                 </div>
-                <div className="flex flex-row w-[326px] gap-1 text-grey-7">
+                <div className="flex flex-row items-center gap-2 text-grey-7">
                   {PrivacyInfo.postingDate.map((item, index) => (
                     <p key={index} className="text-body3-medium">
                       {item.title}: {item.Date}
                     </p>
                   ))}
-                  <div className="text-body3-regular">/</div>
+                  <div className="text-body3-regular">|</div>
                   {PrivacyInfo.effectiveDate.map((item, index) => (
                     <p key={index} className="text-body3-medium">
                       {item.title}: {item.Date}
