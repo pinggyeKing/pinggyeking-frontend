@@ -101,7 +101,7 @@ const PrivacyModal: React.FC<PrivacyModalProps> = ({ isOpen, onClose }) => {
           {/* 헤더 */}
           <div className="flex items-center justify-between bg-grey-10 p-4">
             <h2 className="text-section-title text-grey-0">
-              핑계킹 개인정보 수집 안내
+              변명연구소 개인정보 수집 안내
             </h2>
             <button
               onClick={onClose}
