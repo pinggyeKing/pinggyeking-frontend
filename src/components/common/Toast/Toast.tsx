@@ -28,7 +28,7 @@ const Toast: React.FC<ToastProps> = ({ toast, onRemove }) => {
     <div
       className={clsx(
         "flex items-center gap-1 px-3 py-2 rounded-xl transition-all duration-300 ease-in-out",
-        "bg-black bg-opacity-50 backdrop-blur-sm",
+        "backdrop-blur-sm",
         "transform",
         {
           "translate-y-0 opacity-100": isVisible && !isLeaving,
@@ -38,6 +38,7 @@ const Toast: React.FC<ToastProps> = ({ toast, onRemove }) => {
       style={{
         width: "308px",
         padding: "8px 12px",
+        backgroundColor: "rgba(31, 31, 31, 0.5)", // UIColor(red: 0.12, green: 0.12, blue: 0.12, alpha: 0.5)
       }}
     >
       {/* Message Container */}
