@@ -21,13 +21,13 @@ const trendData: TrendData[] = [
 export default function TrendChart() {
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
 
-  // Chart dimensions - adjusted for proper container fit
-  const chartWidth = 360;
-  const chartHeight = 180;
-  const marginLeft = 24;
-  const marginRight = 16;
-  const marginTop = 35;
-  const marginBottom = 20;
+  // Chart dimensions - increased height for comfortable spacing
+  const chartWidth = 350;
+  const chartHeight = 200;
+  const marginLeft = 22;
+  const marginRight = 14;
+  const marginTop = 30;
+  const marginBottom = 18;
 
   const plotWidth = chartWidth - marginLeft - marginRight;
   const plotHeight = chartHeight - marginTop - marginBottom;
@@ -36,19 +36,19 @@ export default function TrendChart() {
   const gridValues = [10, 20, 30, 40, 50, 60, 70, 80, 90, 100];
   const maxValue = 100;
 
-  // Bar dimensions
+  // Bar dimensions with fixed 8px spacing
   const barHeight = 14;
-  const barSpacing = plotHeight / trendData.length;
+  const barGap = 8;
 
   return (
     <div className="bg-white border border-[#4E4E4E] rounded-3xl p-4 sm:p-6 w-full h-[200px] sm:h-[241px] flex items-center justify-center">
       <svg width={chartWidth} height={chartHeight} className="overflow-visible">
         {/* Legend at top */}
         <g>
-          <rect x="16" y="10" width="20" height="8" fill="#8E8E8E" rx="2" />
+          <rect x="14" y="8" width="18" height="7" fill="#8E8E8E" rx="2" />
           <text
-            x="40"
-            y="18"
+            x="36"
+            y="15"
             className="text-xs fill-[#1E1E1E]"
             style={{ fontFamily: "inherit", fontWeight: "600" }}
           >
@@ -98,17 +98,16 @@ export default function TrendChart() {
 
         {/* Bars and labels */}
         {trendData.map((data, index) => {
-          const barWidth = (data.value / maxValue) * plotWidth; // Now starts from 0
+          const barWidth = (data.value / maxValue) * plotWidth;
           const x = marginLeft;
-          const y =
-            marginTop + barSpacing * index + (barSpacing - barHeight) / 2;
+          const y = marginTop + index * (barHeight + barGap);
           const isHovered = hoveredIndex === index;
 
           return (
             <g key={index}>
-              {/* Day label with 11px gap */}
+              {/* Day label with 10px gap */}
               <text
-                x={marginLeft - 11}
+                x={marginLeft - 10}
                 y={y + barHeight / 2 + 3}
                 textAnchor="middle"
                 className="text-xs fill-[#1E1E1E]"
@@ -137,15 +136,15 @@ export default function TrendChart() {
                   <g>
                     {/* Main tooltip rectangle */}
                     <rect
-                      x={x + barWidth - 22}
-                      y={y - 28}
-                      width="44"
-                      height="22"
+                      x={x + barWidth - 20}
+                      y={y - 26}
+                      width="40"
+                      height="20"
                       fill="white"
                       stroke="#333333"
                       strokeWidth="0.65"
-                      rx="6"
-                      filter="drop-shadow(0px 2px 6px rgba(30, 30, 30, 0.3))"
+                      rx="5"
+                      filter="drop-shadow(0px 2px 5px rgba(30, 30, 30, 0.3))"
                     />
                     {/* Arrow pointing down */}
                     <polygon
