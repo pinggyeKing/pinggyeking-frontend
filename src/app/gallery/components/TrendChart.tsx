@@ -132,35 +132,20 @@ export default function TrendChart() {
               {/* Tooltip */}
               {isHovered && (
                 <g>
-                  {/* Tooltip background with arrow */}
-                  <g>
-                    {/* Main tooltip rectangle */}
-                    <rect
-                      x={x + barWidth - 20}
-                      y={y - 26}
-                      width="40"
-                      height="20"
-                      fill="white"
-                      stroke="#333333"
-                      strokeWidth="0.65"
-                      rx="5"
-                      filter="drop-shadow(0px 2px 5px rgba(30, 30, 30, 0.3))"
-                    />
-                    {/* Arrow pointing down */}
-                    <polygon
-                      points={`${x + barWidth - 2},${y - 6} ${
-                        x + barWidth + 2
-                      },${y - 6} ${x + barWidth},${y - 2}`}
-                      fill="white"
-                      stroke="#333333"
-                      strokeWidth="0.65"
-                    />
-                  </g>
-
-                  {/* Tooltip text */}
+                  <rect
+                    x={x + barWidth - 20}
+                    y={y - 30}
+                    width="40"
+                    height="20"
+                    fill="white"
+                    stroke="#333333"
+                    strokeWidth="1"
+                    rx="4"
+                    ry="4"
+                  />
                   <text
                     x={x + barWidth}
-                    y={y - 12}
+                    y={y - 16}
                     textAnchor="middle"
                     className="text-xs fill-[#1E1E1E]"
                     style={{ fontFamily: "inherit", fontWeight: "500" }}
