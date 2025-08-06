@@ -14,7 +14,7 @@ const ToastContainer: React.FC = () => {
   return (
     <div
       className="fixed left-1/2 transform -translate-x-1/2 z-50 space-y-2"
-      style={{ top: "32px" }}
+      style={{ top: "30vh" }}
     >
       {toasts.map((toast) => (
         <Toast key={toast.id} toast={toast} onRemove={removeToast} />
