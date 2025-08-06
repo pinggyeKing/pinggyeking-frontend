@@ -12,7 +12,7 @@ interface ModalProps {
   onCancel: () => void;
   onConfirm: () => void;
   confirmText?: string; // 적용 버튼 텍스트 (기본값: "적용")
-  size?: "large" | "medium";
+  size?: "large" | "medium" | "small";
   children: React.ReactNode;
   showCloseButton?: boolean;
   showBottomButton?: boolean;
@@ -21,6 +21,7 @@ interface ModalProps {
 const MODAL_SIZES = {
   large: { width: 440, minHeight: 490 },
   medium: { width: 400, minHeight: 552 },
+  small: { width: 400, minHeight: 446 },
 };
 
 export default function Modal({
@@ -56,23 +57,24 @@ export default function Modal({
           display: "flex",
           flexDirection: "column",
           position: "relative",
+          gap: 36,
         }}
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
-        {showCloseButton && (
-          <CustomButton
-            typeStyle="ghost"
-            size="xsmall"
-            round="square"
-            leftIcon={
-              <img src="/icons/close.svg" alt="close" width={20} height={20} />
-            }
-            aria-label="닫기"
-            onClick={onClose}
-            children={""}
-          />
-        )}
+        <div className="w-full h-[36px] flex justify-end items-center">
+          {showCloseButton && (
+            <div className="w-[44px] flex justify-end">
+              <CustomButton
+                size="medium"
+                round="pills"
+                aria-label="닫기"
+                onClick={onClose}
+                children={"X"}
+              />
+            </div>
+          )}
+        </div>
 
         {/* Contents */}
         <div style={{ flex: 1 }}>{children}</div>
