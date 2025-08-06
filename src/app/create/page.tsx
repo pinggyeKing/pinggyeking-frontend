@@ -89,59 +89,53 @@ export default function Page() {
       : "핑계의 말투와 느낌을 선택해주세요";
   };
   return (
-    <div className="flex flex-col items-center pt-[65px] min-h-screen">
-      {/* 로고 타이틀 */}
-      <div className="text-extra-title text-grey-8 text-center leading-[68px] mb-[51px]">
-        변명연구소
-      </div>
+    <div className="flex flex-col items-center min-h-full">
       {/* 메인 카드 */}
-      <div className="w-[400px] h-[726px] radius-24 flex flex-col items-center gap-5 px-5 pt-5 pb-10 border-2 border-grey-7 bg-grey-0">
-        <div className="flex flex-col gap-4 items-center">
-          <ProgressBar stage={currentStep === 1 ? 20 : 40} style="curved" />
-          <div className="flex flex-col gap-10">
-            <div className="flex flex-col gap-1">
-              <p className="text-section-title text-grey-10 text-center">
-                {getCurrentTitle()}
-              </p>
-              <p className="text-section-subtitle text-grey-10 text-center">
-                {getCurrentSubtitle()}
-              </p>
-            </div>
-            <div className="flex justify-center items-center w-full">
-              <Image
-                src="/characters/default.svg"
-                alt="기본 캐릭터"
-                width={135}
-                height={119}
-              />
-            </div>
-            <Picker
-              options={getCurrentOptions()}
-              value={getCurrentValue()}
-              onChange={getCurrentOnChange()}
+      <div className="flex flex-col gap-4 items-center">
+        <ProgressBar stage={currentStep === 1 ? 20 : 40} style="curved" />
+        <div className="flex flex-col gap-10">
+          <div className="flex flex-col gap-1">
+            <p className="text-section-title text-grey-10 text-center">
+              {getCurrentTitle()}
+            </p>
+            <p className="text-section-subtitle text-grey-10 text-center">
+              {getCurrentSubtitle()}
+            </p>
+          </div>
+          <div className="flex justify-center items-center w-full">
+            <Image
+              src="/characters/default.svg"
+              alt="기본 캐릭터"
+              width={135}
+              height={119}
             />
           </div>
+          <Picker
+            options={getCurrentOptions()}
+            value={getCurrentValue()}
+            onChange={getCurrentOnChange()}
+          />
         </div>
-        <div className="w-full flex flex-row justify-between px-5">
-          <div className="w-[80px] h-[48px]">
-            <CustomButton
-              typeStyle="outline2"
-              round="square"
-              onClick={handlePrevious}
-            >
-              이전
-            </CustomButton>
-          </div>
-          <div className="w-[80px] h-[48px]">
-            <CustomButton
-              typeStyle={canProceed() ? "primary" : "disable"}
-              round="square"
-              onClick={handleNext}
-              disabled={!canProceed()}
-            >
-              {currentStep === 2 ? "완료" : "다음"}
-            </CustomButton>
-          </div>
+      </div>
+      <div className="w-full flex flex-row justify-between px-5">
+        <div className="w-[80px] h-[48px]">
+          <CustomButton
+            typeStyle="outline2"
+            round="square"
+            onClick={handlePrevious}
+          >
+            이전
+          </CustomButton>
+        </div>
+        <div className="w-[80px] h-[48px]">
+          <CustomButton
+            typeStyle={canProceed() ? "primary" : "disable"}
+            round="square"
+            onClick={handleNext}
+            disabled={!canProceed()}
+          >
+            {currentStep === 2 ? "완료" : "다음"}
+          </CustomButton>
         </div>
       </div>
 
