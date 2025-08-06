@@ -26,7 +26,7 @@ export default function SharePage() {
       </div>
 
       {/* FigmaButton Component */}
-      <div className="w-full max-w-sm">
+      <div style={{ width: "361px" }}>
         <div
           style={{
             backgroundColor: "#1E1E1E",
