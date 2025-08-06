@@ -21,7 +21,7 @@ export const metadata: Metadata = {
     description:
       "완벽한 핑계를 찾고 있나요? AI가 상황에 맞는 완벽한 핑계를 만들어 드려요",
     type: "website",
-    url: "https://yourdomain.com",
+    url: "https://excuselab.com",
     locale: "ko_KR",
     images: ["/favicon.png"],
   },

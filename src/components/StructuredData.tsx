@@ -6,18 +6,7 @@ export default function StructuredData() {
     "@type": "WebApplication",
     name: "변명 연구소",
     description: "AI가 상황에 맞는 완벽한 핑계를 만들어주는 웹 애플리케이션",
-    url: "https://your-domain.com", // 실제 도메인으로 변경해주세요
-    applicationCategory: "Entertainment",
-    operatingSystem: "Any",
-    offers: {
-      "@type": "Offer",
-      price: "0",
-      priceCurrency: "KRW",
-    },
-    creator: {
-      "@type": "Organization",
-      name: "변명 연구소",
-    },
+    url: "https://excuselab.com",
   };
 
   return (
