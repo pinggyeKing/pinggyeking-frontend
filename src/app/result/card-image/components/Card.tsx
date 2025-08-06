@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useState, useEffect, forwardRef } from "react";
 
 interface CardProps {
@@ -71,7 +73,7 @@ const Card = forwardRef<HTMLDivElement, CardProps>(
         </div>
       </div>
     );
-  },
+  }
 );
 
 Card.displayName = "Card";
