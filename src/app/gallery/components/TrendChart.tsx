@@ -21,79 +21,159 @@ const trendData: TrendData[] = [
 export default function TrendChart() {
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
 
+  // Chart dimensions - adjusted for proper container fit
+  const chartWidth = 360;
+  const chartHeight = 180;
+  const marginLeft = 24;
+  const marginRight = 16;
+  const marginTop = 35;
+  const marginBottom = 20;
+
+  const plotWidth = chartWidth - marginLeft - marginRight;
+  const plotHeight = chartHeight - marginTop - marginBottom;
+
+  // Grid values from 10 to 100 (0 baseline exists but not labeled)
+  const gridValues = [10, 20, 30, 40, 50, 60, 70, 80, 90, 100];
+  const maxValue = 100;
+
+  // Bar dimensions
+  const barHeight = 14;
+  const barSpacing = plotHeight / trendData.length;
+
   return (
-    <div className="bg-white border border-[#4E4E4E] rounded-3xl p-4 sm:p-6 w-full h-[200px] sm:h-[241px]">
-      {/* Legend */}
-      <div className="flex items-center gap-1 mb-4">
-        <div className="w-6 h-2.5 bg-[#8E8E8E] rounded"></div>
-        <span className="text-xs font-semibold text-[#1E1E1E]">%</span>
-      </div>
+    <div className="bg-white border border-[#4E4E4E] rounded-3xl p-4 sm:p-6 w-full h-[200px] sm:h-[241px] flex items-center justify-center">
+      <svg width={chartWidth} height={chartHeight} className="overflow-visible">
+        {/* Legend at top */}
+        <g>
+          <rect x="16" y="10" width="20" height="8" fill="#8E8E8E" rx="2" />
+          <text
+            x="40"
+            y="18"
+            className="text-xs fill-[#1E1E1E]"
+            style={{ fontFamily: "inherit", fontWeight: "600" }}
+          >
+            %
+          </text>
+        </g>
 
-      <div className="relative h-[160px]">
-        {/* Grid lines */}
-        <div className="absolute top-0 left-16 right-4 h-full">
-          {[10, 20, 30, 40, 50, 60, 70, 80, 90, 100].map((value) => (
-            <div
-              key={value}
-              className="absolute flex flex-col items-center"
-              style={{ left: `${((value - 10) / 90) * 100}%` }}
-            >
-              <div className="w-px h-full bg-[#F0F0F0]"></div>
-              <span className="text-xs text-[#8E8E8E] mt-1">{value}</span>
-            </div>
-          ))}
-          <div className="absolute bottom-0 left-0 right-0 h-px bg-[#F0F0F0]"></div>
-        </div>
+        {/* Grid lines and labels */}
+        {gridValues.map((value) => {
+          const x = marginLeft + (value / maxValue) * plotWidth;
 
-        {/* Chart bars */}
-        <div className="relative h-full flex flex-col justify-between py-2">
-          {trendData.map((data, index) => {
-            const barWidth = (data.value / 100) * 100;
-            const isHovered = hoveredIndex === index;
+          return (
+            <g key={value}>
+              {/* Vertical grid line */}
+              <line
+                x1={x}
+                y1={marginTop}
+                x2={x}
+                y2={marginTop + plotHeight}
+                stroke="#F0F0F0"
+                strokeWidth="1"
+              />
 
-            return (
-              <div
-                key={index}
-                className="relative flex items-center gap-3 h-5"
+              {/* Grid label at bottom */}
+              <text
+                x={x}
+                y={marginTop + plotHeight + 12}
+                textAnchor="middle"
+                className="text-[10px] fill-[#8E8E8E]"
+                style={{ fontFamily: "inherit" }}
+              >
+                {value}
+              </text>
+            </g>
+          );
+        })}
+
+        {/* Horizontal baseline */}
+        <line
+          x1={marginLeft}
+          y1={marginTop + plotHeight}
+          x2={marginLeft + plotWidth}
+          y2={marginTop + plotHeight}
+          stroke="#F0F0F0"
+          strokeWidth="1"
+        />
+
+        {/* Bars and labels */}
+        {trendData.map((data, index) => {
+          const barWidth = (data.value / maxValue) * plotWidth; // Now starts from 0
+          const x = marginLeft;
+          const y =
+            marginTop + barSpacing * index + (barSpacing - barHeight) / 2;
+          const isHovered = hoveredIndex === index;
+
+          return (
+            <g key={index}>
+              {/* Day label with 11px gap */}
+              <text
+                x={marginLeft - 11}
+                y={y + barHeight / 2 + 3}
+                textAnchor="middle"
+                className="text-xs fill-[#1E1E1E]"
+                style={{ fontFamily: "inherit", fontWeight: "600" }}
+              >
+                {data.label}
+              </text>
+
+              {/* Bar */}
+              <rect
+                x={x}
+                y={y}
+                width={Math.max(barWidth, 4)}
+                height={barHeight}
+                fill={data.isTop ? "#4E4E4E" : "#8E8E8E"}
+                rx="4"
+                className="transition-all duration-200 cursor-pointer"
                 onMouseEnter={() => setHoveredIndex(index)}
                 onMouseLeave={() => setHoveredIndex(null)}
-              >
-                {/* Label */}
-                <div className="text-xs font-semibold text-[#1E1E1E] w-4 text-center">
-                  {data.label}
-                </div>
+              />
 
-                {/* Bar container */}
-                <div className="relative flex-1 h-3.5">
-                  {/* Tooltip */}
-                  {isHovered && (
-                    <div
-                      className="absolute -top-8 bg-white border border-[#333333] rounded-lg px-3 py-1 shadow-lg z-10"
-                      style={{
-                        left: `${barWidth}%`,
-                        transform: "translateX(-50%)",
-                      }}
-                    >
-                      <div className="text-xs font-medium text-[#1E1E1E]">
-                        {data.value}%
-                      </div>
-                      <div className="absolute top-full left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-2 border-r-2 border-t-2 border-transparent border-t-[#333333]"></div>
-                    </div>
-                  )}
+              {/* Tooltip */}
+              {isHovered && (
+                <g>
+                  {/* Tooltip background with arrow */}
+                  <g>
+                    {/* Main tooltip rectangle */}
+                    <rect
+                      x={x + barWidth - 22}
+                      y={y - 28}
+                      width="44"
+                      height="22"
+                      fill="white"
+                      stroke="#333333"
+                      strokeWidth="0.65"
+                      rx="6"
+                      filter="drop-shadow(0px 2px 6px rgba(30, 30, 30, 0.3))"
+                    />
+                    {/* Arrow pointing down */}
+                    <polygon
+                      points={`${x + barWidth - 2},${y - 6} ${
+                        x + barWidth + 2
+                      },${y - 6} ${x + barWidth},${y - 2}`}
+                      fill="white"
+                      stroke="#333333"
+                      strokeWidth="0.65"
+                    />
+                  </g>
 
-                  {/* Bar */}
-                  <div
-                    className={`h-full rounded transition-colors duration-200 ${
-                      data.isTop ? "bg-[#4E4E4E]" : "bg-[#8E8E8E]"
-                    }`}
-                    style={{ width: `${barWidth}%` }}
-                  ></div>
-                </div>
-              </div>
-            );
-          })}
-        </div>
-      </div>
+                  {/* Tooltip text */}
+                  <text
+                    x={x + barWidth}
+                    y={y - 12}
+                    textAnchor="middle"
+                    className="text-xs fill-[#1E1E1E]"
+                    style={{ fontFamily: "inherit", fontWeight: "500" }}
+                  >
+                    {data.value}%
+                  </text>
+                </g>
+              )}
+            </g>
+          );
+        })}
+      </svg>
     </div>
   );
 }
