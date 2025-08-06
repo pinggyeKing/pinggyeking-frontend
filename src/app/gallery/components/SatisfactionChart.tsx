@@ -19,97 +19,160 @@ const satisfactionData: SatisfactionData[] = [
 export default function SatisfactionChart() {
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
 
+  // Chart dimensions
+  const chartWidth = 400;
+  const chartHeight = 200;
+  const marginLeft = 40;
+  const marginRight = 20;
+  const marginTop = 20;
+  const marginBottom = 40;
+
+  const plotWidth = chartWidth - marginLeft - marginRight;
+  const plotHeight = chartHeight - marginTop - marginBottom;
+
+  // Y-axis values
+  const yValues = [60, 45, 30, 15, 0];
+  const maxValue = 60;
+
+  // Bar dimensions
+  const barWidth = 30;
+  const barSpacing = plotWidth / satisfactionData.length;
+
   return (
-    <div className="bg-white border-[1.5px] border-[#4E4E4E] rounded-3xl p-4 sm:p-6 w-full h-[180px] sm:h-[210px]">
-      <div className="relative h-full w-full">
-        {/* Y-axis labels and horizontal grid lines */}
-        <div className="absolute left-0 top-0 h-full w-full">
-          {[60, 45, 30, 15, 0].map((value, index) => (
-            <div
-              key={value}
-              className="absolute flex items-center w-full"
-              style={{ top: `${(index / 4) * 100}%` }}
-            >
-              <span className="text-xs text-[#8E8E8E] w-6 text-right mr-2">
+    <div className="bg-white border-[1.5px] border-[#4E4E4E] rounded-3xl p-4 sm:p-6 w-full h-[180px] sm:h-[210px] flex items-center justify-center">
+      <svg width={chartWidth} height={chartHeight} className="overflow-visible">
+        {/* Horizontal grid lines and Y-axis labels */}
+        {yValues.map((value, index) => {
+          const y = marginTop + (index / (yValues.length - 1)) * plotHeight;
+          const isXAxis = value === 0;
+
+          return (
+            <g key={value}>
+              {/* Y-axis label */}
+              <text
+                x={marginLeft - 10}
+                y={y + 4}
+                textAnchor="end"
+                className="text-xs fill-[#8E8E8E]"
+                style={{ fontFamily: "inherit" }}
+              >
                 {value}
-              </span>
-              {/* Short connecting line from Y-axis label */}
-              <div className="w-2 h-px bg-[#8E8E8E]"></div>
-              {/* Horizontal grid line */}
-              <div className="flex-1 h-px bg-[#F0F0F0]"></div>
-            </div>
-          ))}
-        </div>
+              </text>
 
-        {/* Chart area with grid system */}
-        <div className="absolute left-8 right-0 top-4 bottom-8">
-          <div className="relative h-full w-full">
-            {/* Vertical grid lines */}
-            <div className="absolute inset-0 flex justify-between">
-              {satisfactionData.map((_, index) => (
-                <div
-                  key={`vertical-${index}`}
-                  className="w-px bg-[#F0F0F0] h-full"
-                  style={{
-                    left: `${(index / (satisfactionData.length - 1)) * 100}%`,
-                  }}
-                ></div>
-              ))}
-            </div>
+              {/* Short connecting line */}
+              <line
+                x1={marginLeft - 8}
+                y1={y}
+                x2={marginLeft}
+                y2={y}
+                stroke="#8E8E8E"
+                strokeWidth="1"
+              />
 
-            {/* Y-axis (thick line) */}
-            <div className="absolute left-0 top-0 w-[2px] h-full bg-[#8E8E8E]"></div>
+              {/* Grid line */}
+              <line
+                x1={marginLeft}
+                y1={y}
+                x2={marginLeft + plotWidth}
+                y2={y}
+                stroke={isXAxis ? "#8E8E8E" : "#F0F0F0"}
+                strokeWidth={isXAxis ? "2" : "1"}
+              />
+            </g>
+          );
+        })}
 
-            {/* X-axis (thick line) */}
-            <div className="absolute left-0 bottom-0 w-full h-[2px] bg-[#8E8E8E]"></div>
+        {/* Vertical grid lines */}
+        {satisfactionData.map((_, index) => {
+          const x = marginLeft + barSpacing * index + barSpacing / 2;
 
-            {/* Bars container */}
-            <div className="relative h-full flex items-end justify-between gap-2 sm:gap-4">
-              {satisfactionData.map((data, index) => {
-                const barHeight = (data.value / 60) * 100; // 60을 최대값으로 설정
-                const isHovered = hoveredIndex === index;
+          return (
+            <line
+              key={`vertical-${index}`}
+              x1={x}
+              y1={marginTop}
+              x2={x}
+              y2={marginTop + plotHeight}
+              stroke="#F0F0F0"
+              strokeWidth="1"
+            />
+          );
+        })}
 
-                return (
-                  <div
-                    key={index}
-                    className="relative flex flex-col items-center gap-2 flex-1"
-                    onMouseEnter={() => setHoveredIndex(index)}
-                    onMouseLeave={() => setHoveredIndex(null)}
+        {/* Y-axis (thick vertical line) */}
+        <line
+          x1={marginLeft}
+          y1={marginTop}
+          x2={marginLeft}
+          y2={marginTop + plotHeight}
+          stroke="#8E8E8E"
+          strokeWidth="2"
+        />
+
+        {/* Bars */}
+        {satisfactionData.map((data, index) => {
+          const barHeight = (data.value / maxValue) * plotHeight;
+          const x =
+            marginLeft + barSpacing * index + barSpacing / 2 - barWidth / 2;
+          const y = marginTop + plotHeight - barHeight;
+          const isHovered = hoveredIndex === index;
+
+          return (
+            <g key={index}>
+              {/* Bar */}
+              <rect
+                x={x}
+                y={y}
+                width={barWidth}
+                height={barHeight}
+                fill={data.isTop ? "#4E4E4E" : "#8E8E8E"}
+                rx="2"
+                ry="2"
+                className="transition-all duration-200 cursor-pointer"
+                onMouseEnter={() => setHoveredIndex(index)}
+                onMouseLeave={() => setHoveredIndex(null)}
+              />
+
+              {/* Tooltip */}
+              {isHovered && (
+                <g>
+                  <rect
+                    x={x + barWidth / 2 - 20}
+                    y={y - 30}
+                    width="40"
+                    height="20"
+                    fill="white"
+                    stroke="#333333"
+                    strokeWidth="1"
+                    rx="4"
+                    ry="4"
+                  />
+                  <text
+                    x={x + barWidth / 2}
+                    y={y - 16}
+                    textAnchor="middle"
+                    className="text-xs fill-[#1E1E1E]"
+                    style={{ fontFamily: "inherit", fontWeight: "500" }}
                   >
-                    {/* Tooltip */}
-                    {isHovered && (
-                      <div className="absolute -top-10 left-1/2 transform -translate-x-1/2 bg-white border border-[#333333] rounded-lg px-3 py-1 shadow-lg z-10">
-                        <div className="text-xs font-medium text-[#1E1E1E]">
-                          {data.value}%
-                        </div>
-                        <div className="absolute top-full left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-[3px] border-r-[3px] border-t-[4px] border-transparent border-t-[#333333]"></div>
-                      </div>
-                    )}
+                    {data.value}%
+                  </text>
+                </g>
+              )}
 
-                    {/* Bar */}
-                    <div className="relative w-full max-w-12 flex justify-center">
-                      <div
-                        className={`w-8 sm:w-12 rounded-t-[4px] transition-all duration-200 ${
-                          data.isTop ? "bg-[#4E4E4E]" : "bg-[#8E8E8E]"
-                        }`}
-                        style={{
-                          height: `${Math.max(barHeight, 2)}px`,
-                          maxHeight: "120px",
-                        }}
-                      ></div>
-                    </div>
-
-                    {/* Label */}
-                    <div className="text-xs font-semibold text-[#1E1E1E] text-center whitespace-nowrap">
-                      {data.label}
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-        </div>
-      </div>
+              {/* Label */}
+              <text
+                x={x + barWidth / 2}
+                y={marginTop + plotHeight + 20}
+                textAnchor="middle"
+                className="text-xs fill-[#1E1E1E]"
+                style={{ fontFamily: "inherit", fontWeight: "600" }}
+              >
+                {data.label}
+              </text>
+            </g>
+          );
+        })}
+      </svg>
     </div>
   );
 }
