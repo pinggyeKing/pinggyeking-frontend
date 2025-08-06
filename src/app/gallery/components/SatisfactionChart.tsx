@@ -39,8 +39,14 @@ export default function SatisfactionChart() {
   const barSpacing = plotWidth / satisfactionData.length;
 
   return (
-    <div className="bg-white border-[1.5px] border-[#4E4E4E] rounded-3xl p-4 sm:p-6 w-full h-[180px] sm:h-[210px] flex items-center justify-center">
-      <svg width={chartWidth} height={chartHeight} className="overflow-visible">
+    <div className="bg-white border-[1.5px] border-[#4E4E4E] rounded-3xl pt-4 w-full flex items-center justify-center">
+      <svg
+        width="100%"
+        height="100%"
+        viewBox={`0 0 ${chartWidth} ${chartHeight}`}
+        className="max-w-full max-h-full"
+        preserveAspectRatio="xMidYMid meet"
+      >
         {/* Horizontal grid lines and Y-axis labels */}
         {yValues.map((value, index) => {
           const y = marginTop + (index / (yValues.length - 1)) * plotHeight;
