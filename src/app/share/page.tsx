@@ -2,11 +2,12 @@
 
 import Card from "@/app/result/card-image/components/Card";
 import FigmaButton from "@/components/FigmaButton";
+import { useRouter } from "next/navigation";
 
 export default function SharePage() {
+  const router = useRouter();
   const handleGenerateClick = () => {
-    // TODO: 핑계 생성 페이지로 이동 또는 기능 구현
-    console.log("핑계 생성하기 클릭됨");
+    router.push("/create");
   };
 
   const message = `부장님, 정말 죄송합니다만....내일 회식에 참석하지 못할 것 같습니다... 
