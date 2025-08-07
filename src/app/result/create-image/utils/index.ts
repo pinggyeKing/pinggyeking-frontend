@@ -301,7 +301,7 @@ export const downloadImage = async (
     URL.revokeObjectURL(downloadUrl);
 
     // 성공 메시지 표시
-    alert(successMessage);
+    // alert(successMessage);
 
     return true;
   } catch (error) {
@@ -393,7 +393,7 @@ export const downloadCanvasAsJPG = async (
     URL.revokeObjectURL(downloadUrl);
 
     // 성공 메시지 표시
-    alert(successMessage);
+    // alert(successMessage);
 
     return true;
   } catch (error) {
