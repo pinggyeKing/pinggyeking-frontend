@@ -102,7 +102,7 @@ const PrivacyModal: React.FC<PrivacyModalProps> = ({ isOpen, onClose }) => {
         onClick={handleOverlayClick}
       >
         {/* 모달 컨테이너 */}
-        <div className="w-full h-[75%] bg-white radius-20 shadow-lg overflow-hidden flex flex-col">
+        <div className="max-w-[375px] h-[75%] bg-white radius-20 shadow-lg overflow-hidden flex flex-col">
           {/* 헤더 */}
           <div className="flex items-center justify-between bg-grey-10 p-4">
             <h2 className="text-section-title text-grey-0">

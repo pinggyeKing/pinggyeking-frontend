@@ -56,7 +56,7 @@ export default function Home() {
         </div>
 
         {/* 버튼 */}
-        <div className="w-[130px] h-[48px] flex justify-center overflow-x-hidden">
+        <div className="w-[130px] h-[48px] flex justify-center">
           <CustomButton round="square">
             <Link href="/create">핑계 만들기</Link>
           </CustomButton>
