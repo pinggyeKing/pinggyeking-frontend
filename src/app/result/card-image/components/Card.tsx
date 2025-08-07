@@ -13,11 +13,24 @@ const Card = forwardRef<HTMLDivElement, CardProps>(
   ({ recipient, message, cardType = "default", scale = 1 }, ref) => {
     const [isMounted, setIsMounted] = useState(false);
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isDesktop, setIsDesktop] = useState(false);
     const height = 490;
     const width = 440;
 
     useEffect(() => {
       setIsMounted(true);
+
+      // 데스크탑 여부 체크 함수
+      const checkIsDesktop = () => {
+        setIsDesktop(window.innerWidth >= 768); // md breakpoint (768px) - layout.tsx와 동일한 기준
+      };
+
+      checkIsDesktop();
+      window.addEventListener("resize", checkIsDesktop);
+
+      return () => {
+        window.removeEventListener("resize", checkIsDesktop);
+      };
     }, []);
 
     const getCardBackground = () => {
@@ -56,8 +69,12 @@ const Card = forwardRef<HTMLDivElement, CardProps>(
 
     // Card 컴포넌트 렌더링 함수
     const renderCard = (isInModal = false) => {
-      // 모달에서는 원본 크기(scale=1) 사용, 일반 표시에서는 props의 scale 사용
-      const currentScale = isInModal ? 1 : scale;
+      // 모달에서는 데스크탑일 때 0.74배, 모바일일 때 1배 사용
+      // 일반 표시에서는 props의 scale 사용
+      let currentScale = scale;
+      if (isInModal) {
+        currentScale = isDesktop ? 0.74 : 1;
+      }
 
       return (
         <div
