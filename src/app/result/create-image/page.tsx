@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import Card from "../card-image/components/Card";
 import { Carousel } from "./components";
 import FigmaButton from "@/components/FigmaButton";
@@ -15,6 +15,7 @@ export default function Page() {
   const [selectedCardType, setSelectedCardType] = useState<
     "default" | "formal" | "cute" | "humorous" | "pop"
   >("default");
+  const [cardScale, setCardScale] = useState<number>(0.65);
   const cardRef = useRef<HTMLDivElement>(null);
 
   const handleSelectionChange = (selectedId: string) => {
@@ -27,6 +28,26 @@ export default function Page() {
   const handleBackClick = () => {
     console.log("Back button clicked");
   };
+
+  // 화면 너비에 따른 카드 스케일 조정 (데스크탑: 0.65, 모바일: 0.82)
+  useEffect(() => {
+    const updateCardScale = () => {
+      const windowWidth = window.innerWidth;
+      // Tailwind의 md 브레이크포인트는 768px
+      setCardScale(windowWidth >= 768 ? 0.65 : 0.82);
+    };
+
+    // 초기 스케일 설정
+    updateCardScale();
+
+    // 리사이즈 이벤트 리스너 추가
+    window.addEventListener("resize", updateCardScale);
+
+    // 클린업
+    return () => {
+      window.removeEventListener("resize", updateCardScale);
+    };
+  }, []);
 
   const getCharacterImage = (type: string) => {
     switch (type) {
@@ -78,7 +99,7 @@ export default function Page() {
 
       {/* Card Preview */}
       <div className="mb-5 flex justify-center">
-        <div className="transform scale-[0.82] origin-center">
+        <div className="transform origin-center">
           <Card
             ref={cardRef}
             recipient="부장님"
@@ -89,6 +110,7 @@ export default function Page() {
 
 ,,,,`}
             cardType={selectedCardType}
+            scale={cardScale}
           />
         </div>
       </div>
