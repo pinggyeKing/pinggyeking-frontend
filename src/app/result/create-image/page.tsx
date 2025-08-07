@@ -5,6 +5,11 @@ import Card from "../card-image/components/Card";
 import { Carousel } from "./components";
 import FigmaButton from "@/components/FigmaButton";
 import { copyCurrentUrl, downloadCardByRef, shareToKakao } from "./utils";
+import {
+  Toast,
+  ToastContainer,
+  useToastContext,
+} from "@/components/common/Toast";
 
 export default function Page() {
   const [selectedCardType, setSelectedCardType] = useState<
@@ -41,7 +46,7 @@ export default function Page() {
   };
 
   return (
-    <div className="flex flex-col items-center min-h-full w-full">
+    <div className="flex flex-col items-center min-h-full w-[327px]">
       {/* Header Section */}
       <div className="flex flex-col gap-4 mb-5 w-full">
         {/* Back Button */}
