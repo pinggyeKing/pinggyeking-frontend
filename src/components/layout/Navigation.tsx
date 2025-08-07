@@ -7,7 +7,7 @@ import { Home, LayoutDashboard, ChevronDown, ChevronUp } from "lucide-react";
 import { useSplash } from "@/contexts/SplashContext";
 
 interface IMenuItem {
-  label: string;
+  label?: string;
   href: string;
   ariaLabel: string;
   icon: React.ElementType;
@@ -21,7 +21,6 @@ const menuItems: IMenuItem[] = [
     icon: Home,
   },
   {
-    label: "핑계 갤러리",
     href: "/gallery",
     ariaLabel: "핑계 갤러리 페이지로 이동",
     icon: LayoutDashboard,
@@ -44,7 +43,7 @@ const Navigation = () => {
 
   return (
     <nav
-      className={`fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[480px] p-2 ${
+      className={`md:absolute md:bottom-40 md:left-1/2 md:-translate-x-1/2 fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[450px] p-2 ${
         !isVisible ? "pb-10" : ""
       }`}
       aria-label="메인 네비게이션"

@@ -41,18 +41,42 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ko">
-      <body
-        className="antialiased bg-cover bg-center bg-no-repeat bg-fixed"
-        style={{
-          backgroundImage: "url(/Background.svg)",
-        }}
-      >
-        <StructuredData />
-        <SplashProvider>
-          <NavigationProvider>
-            <ClientLayout>{children}</ClientLayout>
-          </NavigationProvider>
-        </SplashProvider>
+      <body className="antialiased">
+        {/* Desktop background with frame */}
+        <div className="hidden md:block fixed inset-0 bg-gray-50">
+          <div className="min-h-screen flex items-center justify-center p-8">
+            <div
+              className="w-[463px] h-[1002px] bg-cover bg-center bg-no-repeat rounded-[31px] border-[5.8711px] border-[#000000] shadow-lg"
+              style={{
+                backgroundImage: "url(/Background.svg)",
+              }}
+            >
+              <div className="w-full h-full overflow-hidden rounded-[28px]">
+                <StructuredData />
+                <SplashProvider>
+                  <NavigationProvider>
+                    <ClientLayout>{children}</ClientLayout>
+                  </NavigationProvider>
+                </SplashProvider>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Mobile background - full screen */}
+        <div
+          className="md:hidden bg-cover bg-center bg-no-repeat bg-fixed min-h-screen"
+          style={{
+            backgroundImage: "url(/Background.svg)",
+          }}
+        >
+          <StructuredData />
+          <SplashProvider>
+            <NavigationProvider>
+              <ClientLayout>{children}</ClientLayout>
+            </NavigationProvider>
+          </SplashProvider>
+        </div>
       </body>
     </html>
   );
