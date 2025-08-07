@@ -16,6 +16,7 @@ import Radius from "@/components/Radius";
 import LottieLoading from "@/components/LottieLoading";
 import Picker from "@/components/picker/Picker";
 import type { PickerOption } from "@/components/picker/Picker";
+import TestEvalModal from "@/components/testpage/TestEvalModal";
 import {
   Home,
   Users,
@@ -1267,6 +1268,11 @@ const complexOptions: PickerOption[] = [
               </div>
             </div>
           </div>
+        </section>
+
+        {/* FeedbackModal 테스트 */}
+        <section className="bg-white rounded-lg shadow-sm border p-6">
+          <TestEvalModal />
         </section>
       </div>
     </div>
