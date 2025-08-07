@@ -51,7 +51,7 @@ const FunctionIndicator: React.FC<FunctionIndicatorProps> = ({
       )}
 
       {/* 중앙 라벨 */}
-      <span className="flex-1 text-left text-body3-semibold whitespace-nowrap">
+      <span className="flex-1 text-left text-body2-semibold whitespace-normal">
         {label}
       </span>
 
