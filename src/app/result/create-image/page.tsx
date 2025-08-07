@@ -136,8 +136,11 @@ export default function Page() {
           </button>
           <button
             className="flex-1 border-2 border-grey-10 rounded-[24px] py-3 flex justify-center items-center bg-white hover:bg-grey-1 transition-colors"
-            onClick={() => {
-              copyCurrentUrl();
+            onClick={async () => {
+              const success = await copyCurrentUrl("", ""); // 빈 메시지로 alert 방지
+              if (success) {
+                showSuccessToast("링크가 복사되었어요!");
+              }
             }}
           >
             <img src="/icons/li-link.svg" alt="Link" className="w-6 h-6" />
