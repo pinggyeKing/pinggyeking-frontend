@@ -66,7 +66,7 @@ export default function Page() {
   return (
     <>
       <ToastContainer />
-      <div className="flex flex-col items-center min-h-full w-[327px]">
+      <div className="flex flex-col items-center min-h-full w-[375px]">
         {/* Header Section */}
         <div className="flex flex-col gap-4 mb-5 w-full">
           {/* Back Button */}
