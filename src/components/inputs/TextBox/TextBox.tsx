@@ -1,5 +1,5 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { TextBoxStatusProps } from './types';
+import React, { useState, useRef, useEffect } from "react";
+import { TextBoxStatusProps } from "./types";
 
 interface EditableTextBoxProps extends TextBoxStatusProps {
   editable?: boolean;
@@ -7,11 +7,11 @@ interface EditableTextBoxProps extends TextBoxStatusProps {
 }
 
 const statusStyle = {
-  default: 'text-gray-900',
-  clicked: 'text-gray-900',
-  inputed: 'text-gray-900',
-  error: 'text-red-600',
-  success: 'text-green-600',
+  default: "text-gray-900",
+  clicked: "text-gray-900",
+  inputed: "text-gray-900",
+  error: "text-red-600",
+  success: "text-green-600",
 };
 
 const borderStyle =
@@ -19,20 +19,20 @@ const borderStyle =
 
 const TextBox: React.FC<EditableTextBoxProps> = ({
   value,
-  author = 'you',
+  author = "you",
   multiline = false,
   time,
-  status = 'default',
+  status = "default",
   error,
   success,
-  className = '',
+  className = "",
   editable = false,
   onChange,
 }) => {
-  const isMe = author === 'me';
+  const isMe = author === "me";
   const [isFocused, setIsFocused] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
-  const [internalValue, setInternalValue] = useState(value || '');
+  const [internalValue, setInternalValue] = useState(value || "");
   const inputRef = useRef<HTMLInputElement | HTMLTextAreaElement>(null);
 
   useEffect(() => {
@@ -42,7 +42,7 @@ const TextBox: React.FC<EditableTextBoxProps> = ({
   }, [isEditing]);
 
   useEffect(() => {
-    setInternalValue(value || '');
+    setInternalValue(value || "");
   }, [value]);
 
   // 읽기 모드에서 클릭/엔터/스페이스로 입력 모드 전환
@@ -53,7 +53,7 @@ const TextBox: React.FC<EditableTextBoxProps> = ({
   };
   const handleReadKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
     if (!editable) return;
-    if (e.key === 'Enter' || e.key === ' ') {
+    if (e.key === "Enter" || e.key === " ") {
       e.preventDefault();
       setIsEditing(true);
       setIsFocused(true);
@@ -67,9 +67,9 @@ const TextBox: React.FC<EditableTextBoxProps> = ({
     if (onChange) onChange(internalValue);
   };
   const handleInputKeyDown = (
-    e: React.KeyboardEvent<HTMLInputElement | HTMLTextAreaElement>,
+    e: React.KeyboardEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
-    if (!multiline && e.key === 'Enter') {
+    if (!multiline && e.key === "Enter") {
       e.preventDefault();
       setIsEditing(false);
       setIsFocused(false);
@@ -78,7 +78,7 @@ const TextBox: React.FC<EditableTextBoxProps> = ({
   };
 
   return (
-    <div className={`max-w-[80%] ${isMe ? 'items-end' : 'items-start'}`}>
+    <div className={`${isMe ? "items-end" : "items-start"}`}>
       {time && (
         <span className="text-xs text-gray-400 mb-1" aria-label="메시지 시간">
           {time}
@@ -86,7 +86,7 @@ const TextBox: React.FC<EditableTextBoxProps> = ({
       )}
       <div
         className={`relative ${borderStyle} w-[339px] h-[64px] pt-[20px] pb-[20px] pl-[24px] pr-[24px]`}
-        style={{ boxSizing: 'border-box' }}
+        style={{ boxSizing: "border-box" }}
       >
         {isEditing ? (
           multiline ? (
@@ -101,7 +101,7 @@ const TextBox: React.FC<EditableTextBoxProps> = ({
               onKeyDown={handleInputKeyDown}
               placeholder="메시지를 입력하세요"
               tabIndex={0}
-              style={{ boxSizing: 'border-box' }}
+              style={{ boxSizing: "border-box" }}
             />
           ) : (
             <input
@@ -115,7 +115,7 @@ const TextBox: React.FC<EditableTextBoxProps> = ({
               onKeyDown={handleInputKeyDown}
               placeholder="메시지를 입력하세요"
               tabIndex={0}
-              style={{ boxSizing: 'border-box' }}
+              style={{ boxSizing: "border-box" }}
             />
           )
         ) : (
@@ -126,18 +126,18 @@ const TextBox: React.FC<EditableTextBoxProps> = ({
             role="textbox"
             onClick={handleReadClick}
             onKeyDown={handleReadKeyDown}
-            style={{ boxSizing: 'border-box' }}
+            style={{ boxSizing: "border-box" }}
           >
             {internalValue}
           </div>
         )}
       </div>
-      {error && status === 'error' && (
+      {error && status === "error" && (
         <span className="text-xs text-red-500 mt-1" aria-live="polite">
           {error}
         </span>
       )}
-      {success && status === 'success' && (
+      {success && status === "success" && (
         <span className="text-xs text-green-500 mt-1" aria-live="polite">
           {success}
         </span>
