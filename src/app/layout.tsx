@@ -3,6 +3,7 @@ import "./globals.css";
 import ClientLayout from "@/components/ClientLayout";
 import { SplashProvider } from "@/contexts/SplashContext";
 import { NavigationProvider } from "@/contexts/NavigationContext";
+import { ToastProvider, ToastContainer } from "@/components/common/Toast";
 import StructuredData from "@/components/StructuredData";
 
 export const metadata: Metadata = {
@@ -73,7 +74,10 @@ export default function RootLayout({
           <StructuredData />
           <SplashProvider>
             <NavigationProvider>
-              <ClientLayout>{children}</ClientLayout>
+              <ToastProvider>
+                <ClientLayout>{children}</ClientLayout>
+                <ToastContainer />
+              </ToastProvider>
             </NavigationProvider>
           </SplashProvider>
         </div>
