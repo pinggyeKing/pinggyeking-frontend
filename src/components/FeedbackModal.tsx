@@ -2,8 +2,8 @@
 
 import React, { useState } from "react";
 import Modal from "./common/Modal/Modal";
-import EvalInputBalloon from "./inputs/EvalInputBalloon";
 import Image from "next/image";
+import FeedbackInputBalloon from "./inputs/FeedbackInputBalloon";
 
 export type CharacterType =
   | "default"
@@ -118,7 +118,7 @@ const FeedbackModal: React.FC<FeedbackModalProps> = ({
 
         {/* 입력 말풍선 */}
         <div className="w-full">
-          <EvalInputBalloon
+          <FeedbackInputBalloon
             value={feedback}
             onChange={setFeedback}
             placeholder={placeholder}

@@ -16,7 +16,6 @@ import Radius from "@/components/Radius";
 import LottieLoading from "@/components/LottieLoading";
 import Picker from "@/components/picker/Picker";
 import type { PickerOption } from "@/components/picker/Picker";
-import TestEvalModal from "@/components/testpage/TestEvalModal";
 import {
   Home,
   Users,
@@ -27,6 +26,7 @@ import {
   Mail,
   Bell,
 } from "lucide-react";
+import TestFeedbackModal from "@/components/testpage/TestFeedbackModal";
 
 export default function TestPage() {
   const [fontLoaded, setFontLoaded] = useState<boolean>(false);
@@ -1272,7 +1272,7 @@ const complexOptions: PickerOption[] = [
 
         {/* FeedbackModal 테스트 */}
         <section className="bg-white rounded-lg shadow-sm border p-6">
-          <TestEvalModal />
+          <TestFeedbackModal />
         </section>
       </div>
     </div>
