@@ -167,7 +167,7 @@ const Carousel: React.FC<CarouselProps> = ({
   return (
     <div
       ref={carouselRef}
-      className="w-full cursor-grab active:cursor-grabbing overflow-x-auto focus:outline-none rounded-lg"
+      className="cursor-grab active:cursor-grabbing overflow-x-auto focus:outline-none rounded-lg"
       onTouchStart={handlePointerStart}
       onMouseDown={handlePointerStart}
       onKeyDown={handleKeyDown}
@@ -178,9 +178,12 @@ const Carousel: React.FC<CarouselProps> = ({
         userSelect: "none",
         WebkitUserSelect: "none",
         msUserSelect: "none",
+        width: "calc(100% + 2rem)",
+        marginLeft: "-1rem",
+        marginRight: "-1rem",
       }}
     >
-      <div className="flex gap-2 py-2" style={{ minWidth: "max-content" }}>
+      <div className="flex gap-2 pl-4 py-2" style={{ minWidth: "max-content" }}>
         {carouselItems.map((item) => (
           <CarouselItem
             key={item.id}
