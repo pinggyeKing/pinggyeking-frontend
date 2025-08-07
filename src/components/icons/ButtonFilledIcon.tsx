@@ -22,8 +22,9 @@ export default function ButtonFilledIcon({
   onClick,
 }: ButtonFilledIconProps) {
   // 원본 비율: 178x52
-  const originalWidth = 178;
-  const originalHeight = 52;
+  // 수정: 136x48
+  const originalWidth = 136;
+  const originalHeight = 48;
   const height = (width * originalHeight) / originalWidth;
 
   // 기본 텍스트 스타일
@@ -48,9 +49,9 @@ export default function ButtonFilledIcon({
           filter:
             fill !== "#1E1E1E"
               ? `hue-rotate(${getHueRotation(
-                  fill,
+                  fill
                 )}deg) saturate(${getSaturation(
-                  fill,
+                  fill
                 )}) brightness(${getBrightness(fill)})`
               : "none",
         }}
