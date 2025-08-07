@@ -7,7 +7,7 @@ import { Home, LayoutDashboard, ChevronDown, ChevronUp } from "lucide-react";
 import { useSplash } from "@/contexts/SplashContext";
 
 interface IMenuItem {
-  label: string;
+  label?: string;
   href: string;
   ariaLabel: string;
   icon: React.ElementType;
@@ -21,7 +21,6 @@ const menuItems: IMenuItem[] = [
     icon: Home,
   },
   {
-    label: "핑계 갤러리",
     href: "/gallery",
     ariaLabel: "핑계 갤러리 페이지로 이동",
     icon: LayoutDashboard,
@@ -44,8 +43,8 @@ const Navigation = () => {
 
   return (
     <nav
-      className={`fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[480px] p-2 ${
-        !isVisible ? "pb-10" : ""
+      className={`md:absolute md:bottom-2 md:left-1/2 md:-translate-x-1/2 md:w-[431px] fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[450px] ${
+        !isVisible ? "pb-5" : ""
       }`}
       aria-label="메인 네비게이션"
     >
@@ -65,8 +64,8 @@ const Navigation = () => {
 
         {/* Navigation Container */}
         {isVisible && (
-          <div className="w-full rounded-[32px] bg-[#F0F0F0] p-2">
-            <div className="flex items-stretch justify-stretch gap-8 rounded-[24px] bg-white px-8 py-6">
+          <div className="w-full border-2 border-grey-2 rounded-[32px] bg-grey-2 p-2">
+            <div className="flex items-stretch justify-stretch gap-8 rounded-[24px] bg-white px-6 py-4">
               {menuItems.map(({ label, href, ariaLabel, icon: Icon }) => {
                 const isActive = currentPath === href;
                 return (
@@ -84,7 +83,8 @@ const Navigation = () => {
                     style={{
                       fontFamily: "var(--font-ownglyph-pdh)",
                       fontSize: "26px",
-                      lineHeight: "0.923",
+                      lineHeight: "24px",
+                      fontWeight: "400",
                     }}
                   >
                     <Icon
@@ -92,7 +92,7 @@ const Navigation = () => {
                       strokeWidth={isActive ? 2.5 : 2}
                       aria-hidden="true"
                     />
-                    <span className="leading-none pt-1">{label}</span>
+                    <span className="leading-none">{label}</span>
                   </Link>
                 );
               })}

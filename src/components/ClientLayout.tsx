@@ -35,16 +35,16 @@ const ClientLayout: React.FC<ClientLayoutProps> = ({ children }) => {
   // 다른 페이지들은 공통 레이아웃 적용
   return (
     <>
-      <div className="flex flex-col items-center pt-[65px] min-h-screen">
+      <div className="flex flex-col items-center pt-[35px] min-h-screen">
         {/* 공통 타이틀 */}
-        <div className="text-extra-title text-grey-8 text-center leading-[68px] mb-[51px]">
+        <div className="text-extra-title text-grey-8 text-center leading-[60px] mb-[24px]">
           변명연구소
         </div>
 
         {/* 페이지별 콘텐츠 */}
-        <div className="w-full flex-1">
-          <div className="flex flex-col items-center min-h-full">
-            <div className="w-[400px] radius-24 flex flex-col items-center justify-center gap-5 p-5 border-2 border-grey-7 bg-grey-0">
+        <div className="flex-1">
+          <div className="flex flex-col items-center">
+            <div className="min-w-[327px] min-h-[622px] radius-24 flex flex-col items-center justify-between py-2 px-4 border-2 border-grey-7 bg-grey-0">
               {children}
             </div>
           </div>
