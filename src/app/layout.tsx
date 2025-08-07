@@ -44,9 +44,9 @@ export default function RootLayout({
       <body className="antialiased">
         {/* Desktop background with frame */}
         <div className="hidden md:block fixed inset-0 bg-gray-50">
-          <div className="min-h-screen flex items-center justify-center p-8">
+          <div className="h-svh flex items-center justify-center mx-8 my-1/2">
             <div
-              className="w-[463px] h-[1002px] bg-cover bg-center bg-no-repeat rounded-[31px] border-[5.8711px] border-[#000000] shadow-lg"
+              className="w-[463px] h-full bg-cover bg-center bg-no-repeat rounded-[31px] border-[5.8711px] border-[#000000] shadow-lg"
               style={{
                 backgroundImage: "url(/Background.svg)",
               }}

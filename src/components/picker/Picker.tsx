@@ -22,7 +22,7 @@ const Picker: React.FC<PickerProps> = ({
 }) => {
   return (
     <div
-      className={`w-[360px] bg-white rounded-[24px] p-[5px] flex flex-col gap-[5px] ${className}`}
+      className={`w-full bg-white rounded-[24px] flex flex-col gap-[5px] ${className}`}
       role="listbox"
     >
       {options.map((option) => {

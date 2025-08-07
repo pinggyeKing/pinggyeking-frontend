@@ -43,8 +43,8 @@ const Navigation = () => {
 
   return (
     <nav
-      className={`md:absolute md:bottom-40 md:left-1/2 md:-translate-x-1/2 fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[450px] ${
-        !isVisible ? "pb-10" : ""
+      className={`md:absolute md:bottom-2 md:left-1/2 md:-translate-x-1/2 md:w-[431px] fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[450px] ${
+        !isVisible ? "pb-5" : ""
       }`}
       aria-label="메인 네비게이션"
     >
