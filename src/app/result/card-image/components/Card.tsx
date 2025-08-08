@@ -14,8 +14,9 @@ const Card = forwardRef<HTMLDivElement, CardProps>(
     const [isMounted, setIsMounted] = useState(false);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isDesktop, setIsDesktop] = useState(false);
-    const height = 490;
-    const width = 440;
+    // SVG viewBox와 동일한 크기로 설정 (viewBox="0 0 444 494")
+    const height = 494;
+    const width = 444;
 
     useEffect(() => {
       setIsMounted(true);
@@ -48,14 +49,23 @@ const Card = forwardRef<HTMLDivElement, CardProps>(
       }
     };
 
-    // Scale에 따른 폰트 크기 계산
-    const getScaledFontSize = (baseFontSize: number) => {
-      return `${baseFontSize * scale}px`;
+    // Scale에 따른 폰트 크기 계산 - 최소값 보장
+    const getScaledFontSize = (baseFontSize: number, minSize: number = 12) => {
+      return Math.max(baseFontSize * scale, minSize);
     };
 
-    // Scale에 따른 간격 계산
-    const getScaledSpacing = (baseSpacing: number) => {
-      return `${baseSpacing * scale}px`;
+    // Scale에 따른 간격 계산 - 최소값 보장
+    const getScaledSpacing = (baseSpacing: number, minSpacing: number = 8) => {
+      return Math.max(baseSpacing * scale, minSpacing);
+    };
+
+    // Scale에 따른 라인 높이 계산 - 가독성 보장
+    const getScaledLineHeight = (
+      baseFontSize: number,
+      minSize: number = 14,
+    ) => {
+      const fontSize = getScaledFontSize(baseFontSize, minSize);
+      return fontSize * 1.2; // 폰트 크기의 1.2배로 라인 높이 설정
     };
 
     // 모달 핸들러 함수들
@@ -82,15 +92,15 @@ const Card = forwardRef<HTMLDivElement, CardProps>(
             !isInModal ? "cursor-pointer hover:shadow-xl transition-shadow" : ""
           }`}
           style={{
-            width: `${width * currentScale}px`,
-            height: `${height * currentScale}px`,
+            // width: `${width * currentScale}px`,
+            // height: `${height * currentScale}px`,
             borderRadius: `${30 * currentScale}px`,
           }}
           onClick={!isInModal ? handleCardClick : undefined}
         >
           {/* Card background SVG */}
           <div
-            className="absolute inset-0 w-full h-full"
+            className="absolute inset-0"
             style={{
               backgroundImage: `url(${getCardBackground()})`,
               backgroundSize: "100% 100%", // SVG를 컨테이너에 정확히 맞춤
@@ -101,22 +111,23 @@ const Card = forwardRef<HTMLDivElement, CardProps>(
 
           {/* Content overlay */}
           <div
-            className="relative z-10 flex flex-col h-full"
+            className="relative z-10 flex flex-col"
             style={{
-              gap: `${16 * currentScale}px`,
-              paddingTop: `${32 * currentScale}px`,
-              paddingBottom: `${32 * currentScale}px`,
-              paddingLeft: `${40 * currentScale}px`,
-              paddingRight: `${40 * currentScale}px`,
+              gap: `${getScaledSpacing(16, 8)}px`,
+              paddingTop: `${getScaledSpacing(32, 16)}px`,
+              paddingBottom: `${getScaledSpacing(32, 16)}px`,
+              paddingLeft: `${getScaledSpacing(40, 20)}px`,
+              paddingRight: `${getScaledSpacing(40, 20)}px`,
             }}
           >
             {/* Element 1: Recipient */}
             <div
               style={{
                 fontFamily: '"Ownglyph RDO ballpen", "Pretendard", sans-serif',
-                fontSize: `${30 * currentScale}px`,
+                fontSize: `${getScaledFontSize(28, 16)}px`,
                 fontWeight: 400,
-                lineHeight: `${28 * currentScale}px`,
+                lineHeight: `${getScaledLineHeight(28, 16)}px`,
+                marginBottom: `${getScaledSpacing(8, 4)}px`,
               }}
             >
               To. {recipient}
@@ -124,12 +135,14 @@ const Card = forwardRef<HTMLDivElement, CardProps>(
 
             {/* Element 2: Message */}
             <div
-              className="flex-1 whitespace-pre-line break-all"
+              className="flex-1 whitespace-pre-line break-words"
               style={{
                 fontFamily: "var(--font-pretendard)",
-                fontSize: `${18 * currentScale}px`,
+                fontSize: `${getScaledFontSize(16, 12)}px`,
                 fontWeight: 500,
-                lineHeight: `${24 * currentScale}px`,
+                lineHeight: `${getScaledLineHeight(16, 12)}px`,
+                wordBreak: "keep-all",
+                overflowWrap: "break-word",
               }}
             >
               {message}
@@ -146,8 +159,8 @@ const Card = forwardRef<HTMLDivElement, CardProps>(
           ref={ref}
           className="relative shadow-lg overflow-hidden bg-gray-100"
           style={{
-            width: `${width * scale}px`,
-            height: `${height * scale}px`,
+            // width: `${width * scale}px`,
+            // height: `${height * scale}px`,
             borderRadius: `${30 * scale}px`,
           }}
         >
