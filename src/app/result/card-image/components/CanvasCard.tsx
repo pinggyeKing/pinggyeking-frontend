@@ -2,11 +2,31 @@
 
 import React, { useRef, useEffect, useState, forwardRef } from "react";
 
+interface TextPosition {
+  x: number;
+  y: number;
+  maxWidth?: number;
+  maxHeight?: number;
+}
+
+interface TextPositions {
+  recipient: TextPosition;
+  message: TextPosition;
+}
+
+interface FontSizes {
+  recipient: number;
+  message: number;
+}
+
 interface CanvasCardProps {
   recipient: string;
   message: string;
   cardType?: "default" | "formal" | "cute" | "humorous" | "pop";
   scale?: number;
+  // 텍스트 위치 커스터마이징 옵션
+  textPositions?: Partial<TextPositions>;
+  fontSizes?: Partial<FontSizes>;
 }
 
 interface CanvasCardRef extends HTMLCanvasElement {
@@ -15,7 +35,17 @@ interface CanvasCardRef extends HTMLCanvasElement {
 }
 
 const CanvasCard = forwardRef<CanvasCardRef, CanvasCardProps>(
-  ({ recipient, message, cardType = "default", scale = 1 }, ref) => {
+  (
+    {
+      recipient,
+      message,
+      cardType = "default",
+      scale = 1,
+      textPositions = {},
+      fontSizes = {},
+    },
+    ref,
+  ) => {
     const canvasRef = useRef<HTMLCanvasElement>(null);
     const [isLoaded, setIsLoaded] = useState(false);
     const [svgImage, setSvgImage] = useState<HTMLImageElement | null>(null);
@@ -24,8 +54,12 @@ const CanvasCard = forwardRef<CanvasCardRef, CanvasCardProps>(
     const CANVAS_WIDTH = 444;
     const CANVAS_HEIGHT = 494;
 
-    // 텍스트 위치 비율 정의
-    const TEXT_POSITIONS = {
+    // 실제 렌더링 크기 (scale 적용)
+    const actualWidth = CANVAS_WIDTH * scale;
+    const actualHeight = CANVAS_HEIGHT * scale;
+
+    // 기본 텍스트 위치 비율 정의 (props로 오버라이드 가능)
+    const defaultTextPositions: TextPositions = {
       recipient: {
         x: 0.09, // 카드 너비의 9%
         y: 0.15, // 카드 높이의 15%
@@ -38,10 +72,24 @@ const CanvasCard = forwardRef<CanvasCardRef, CanvasCardProps>(
       },
     };
 
-    // 폰트 크기 비율 정의
-    const FONT_SIZES = {
+    // 기본 폰트 크기 비율 정의 (props로 오버라이드 가능)
+    const defaultFontSizes: FontSizes = {
       recipient: 0.063, // 카드 높이의 6.3% (약 31px at 494px height)
       message: 0.032, // 카드 높이의 3.2% (약 16px at 494px height)
+    };
+
+    // 최종 텍스트 위치와 폰트 크기 (기본값 + 커스텀 값 병합)
+    const finalTextPositions: TextPositions = {
+      recipient: {
+        ...defaultTextPositions.recipient,
+        ...textPositions.recipient,
+      },
+      message: { ...defaultTextPositions.message, ...textPositions.message },
+    };
+
+    const finalFontSizes: FontSizes = {
+      recipient: fontSizes.recipient ?? defaultFontSizes.recipient,
+      message: fontSizes.message ?? defaultFontSizes.message,
     };
 
     const getCardBackground = () => {
@@ -94,17 +142,26 @@ const CanvasCard = forwardRef<CanvasCardRef, CanvasCardProps>(
       const ctx = canvas.getContext("2d");
       if (!ctx) return;
 
-      // Canvas 크기 설정
-      canvas.width = CANVAS_WIDTH;
-      canvas.height = CANVAS_HEIGHT;
+      // Canvas 실제 크기 설정 (scale 적용)
+      canvas.width = actualWidth;
+      canvas.height = actualHeight;
 
-      // 고해상도 렌더링을 위한 스케일링
+      // CSS 크기도 실제 크기로 설정 (레이아웃 문제 해결)
+      canvas.style.width = `${actualWidth}px`;
+      canvas.style.height = `${actualHeight}px`;
+
+      // 고해상도 렌더링을 위한 추가 스케일링
       const devicePixelRatio = window.devicePixelRatio || 1;
-      canvas.width = CANVAS_WIDTH * devicePixelRatio;
-      canvas.height = CANVAS_HEIGHT * devicePixelRatio;
-      canvas.style.width = `${CANVAS_WIDTH}px`;
-      canvas.style.height = `${CANVAS_HEIGHT}px`;
-      ctx.scale(devicePixelRatio, devicePixelRatio);
+      if (devicePixelRatio > 1) {
+        canvas.width = actualWidth * devicePixelRatio;
+        canvas.height = actualHeight * devicePixelRatio;
+        canvas.style.width = `${actualWidth}px`;
+        canvas.style.height = `${actualHeight}px`;
+        ctx.scale(devicePixelRatio, devicePixelRatio);
+      }
+
+      // Canvas 좌표계를 scale에 맞게 조정
+      ctx.scale(scale, scale);
 
       // 배경 클리어
       ctx.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
@@ -126,21 +183,23 @@ const CanvasCard = forwardRef<CanvasCardRef, CanvasCardProps>(
       ctx.fillStyle = "#000000";
 
       // 수신자 텍스트 렌더링
-      const recipientFontSize = CANVAS_HEIGHT * FONT_SIZES.recipient;
+      const recipientFontSize = CANVAS_HEIGHT * finalFontSizes.recipient;
       ctx.font = `400 ${recipientFontSize}px "Ownglyph RDO ballpen", "Pretendard", sans-serif`;
 
-      const recipientX = CANVAS_WIDTH * TEXT_POSITIONS.recipient.x;
-      const recipientY = CANVAS_HEIGHT * TEXT_POSITIONS.recipient.y;
+      const recipientX = CANVAS_WIDTH * finalTextPositions.recipient.x;
+      const recipientY = CANVAS_HEIGHT * finalTextPositions.recipient.y;
       ctx.fillText(`To. ${recipient}`, recipientX, recipientY);
 
       // 메시지 텍스트 렌더링
-      const messageFontSize = CANVAS_HEIGHT * FONT_SIZES.message;
+      const messageFontSize = CANVAS_HEIGHT * finalFontSizes.message;
       ctx.font = `500 ${messageFontSize}px "Pretendard", sans-serif`;
 
-      const messageX = CANVAS_WIDTH * TEXT_POSITIONS.message.x;
-      const messageY = CANVAS_HEIGHT * TEXT_POSITIONS.message.y;
-      const maxWidth = CANVAS_WIDTH * TEXT_POSITIONS.message.maxWidth;
-      const maxHeight = CANVAS_HEIGHT * TEXT_POSITIONS.message.maxHeight;
+      const messageX = CANVAS_WIDTH * finalTextPositions.message.x;
+      const messageY = CANVAS_HEIGHT * finalTextPositions.message.y;
+      const maxWidth =
+        CANVAS_WIDTH * (finalTextPositions.message.maxWidth || 0.82);
+      const maxHeight =
+        CANVAS_HEIGHT * (finalTextPositions.message.maxHeight || 0.6);
       const lineHeight = messageFontSize * 1.2;
 
       // 메시지를 줄바꿈하여 렌더링
@@ -153,7 +212,16 @@ const CanvasCard = forwardRef<CanvasCardRef, CanvasCardProps>(
         maxHeight,
         lineHeight,
       );
-    }, [isLoaded, svgImage, recipient, message, cardType]);
+    }, [
+      isLoaded,
+      svgImage,
+      recipient,
+      message,
+      cardType,
+      scale,
+      finalTextPositions,
+      finalFontSizes,
+    ]);
 
     // 여러 줄 텍스트 렌더링 함수
     const renderMultilineText = (
@@ -258,17 +326,18 @@ const CanvasCard = forwardRef<CanvasCardRef, CanvasCardProps>(
       <div className="relative inline-block">
         <canvas
           ref={canvasRef}
-          className="shadow-lg overflow-hidden"
+          className="shadow-lg"
           style={{
-            transform: `scale(${scale})`,
-            transformOrigin: "top left",
             borderRadius: `${30 * scale}px`,
+            // transform 제거 - 실제 크기로 렌더링
           }}
         />
         {!isLoaded && (
           <div
             className="absolute inset-0 flex items-center justify-center bg-gray-100"
             style={{
+              width: `${actualWidth}px`,
+              height: `${actualHeight}px`,
               borderRadius: `${30 * scale}px`,
             }}
           >
