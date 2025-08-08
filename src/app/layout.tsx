@@ -55,9 +55,11 @@ export default function RootLayout({
               <div className="w-full h-full overflow-hidden rounded-[28px]">
                 <StructuredData />
                 <SplashProvider>
-                  <NavigationProvider>
-                    <ClientLayout>{children}</ClientLayout>
-                  </NavigationProvider>
+                  <ToastProvider>
+                    <NavigationProvider>
+                      <ClientLayout>{children}</ClientLayout>
+                    </NavigationProvider>
+                  </ToastProvider>
                 </SplashProvider>
               </div>
             </div>
