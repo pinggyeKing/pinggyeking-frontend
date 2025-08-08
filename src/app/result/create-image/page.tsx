@@ -6,6 +6,7 @@ import { Carousel } from "./components";
 import FigmaButton from "@/components/FigmaButton";
 import { copyCurrentUrl, downloadCardByRef, shareToKakao } from "./utils";
 import { ToastContainer, useToast } from "@/components/common/Toast";
+import CanvasCard from "../card-image/components/CanvasCard";
 
 export default function Page() {
   const [selectedCardType, setSelectedCardType] = useState<
@@ -119,7 +120,7 @@ export default function Page() {
         {/* Card Preview */}
         <div className="mb-5 flex justify-center w-full">
           <div className="transform origin-center max-w-full overflow-hidden">
-            <Card
+            {/* <Card
               ref={cardRef}
               recipient="부장님"
               message={`부장님, 정말 죄송합니다만....내일 회식에 참석하지 못할 것 같습니다... 
@@ -130,6 +131,18 @@ export default function Page() {
 ,,,,`}
               cardType={selectedCardType}
               scale={cardScale}
+            /> */}
+            <CanvasCard
+              // ref={canvasCardRef}
+              recipient="부장님"
+              message={`부장님, 정말 죄송합니다만....내일 회식에 참석하지 못할 것 같습니다... 
+
+
+이유,,,, 
+
+,,,,`}
+              cardType={selectedCardType}
+              scale={0.65}
             />
           </div>
         </div>
