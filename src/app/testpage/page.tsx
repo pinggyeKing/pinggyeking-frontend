@@ -26,6 +26,7 @@ import {
   Mail,
   Bell,
 } from "lucide-react";
+import TestFeedbackModal from "@/components/testpage/TestFeedbackModal";
 
 export default function TestPage() {
   const [fontLoaded, setFontLoaded] = useState<boolean>(false);
@@ -1267,6 +1268,11 @@ const complexOptions: PickerOption[] = [
               </div>
             </div>
           </div>
+        </section>
+
+        {/* FeedbackModal 테스트 */}
+        <section className="bg-white rounded-lg shadow-sm border p-6">
+          <TestFeedbackModal />
         </section>
       </div>
     </div>
