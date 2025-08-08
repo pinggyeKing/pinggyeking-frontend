@@ -34,7 +34,7 @@ interface CanvasCardRef extends HTMLCanvasElement {
   getCanvasAsDataURL: (type?: string, quality?: number) => string;
 }
 
-const CanvasCard = forwardRef<CanvasCardRef, CanvasCardProps>(
+const CanvasCard = forwardRef<HTMLDivElement, CanvasCardProps>(
   (
     {
       recipient,
@@ -47,8 +47,12 @@ const CanvasCard = forwardRef<CanvasCardRef, CanvasCardProps>(
     ref,
   ) => {
     const canvasRef = useRef<HTMLCanvasElement>(null);
+    const modalCanvasRef = useRef<HTMLCanvasElement>(null);
     const [isLoaded, setIsLoaded] = useState(false);
     const [svgImage, setSvgImage] = useState<HTMLImageElement | null>(null);
+    const [isMounted, setIsMounted] = useState(false);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isDesktop, setIsDesktop] = useState(false);
 
     // Canvas 기본 크기 (SVG viewBox와 동일)
     const CANVAS_WIDTH = 444;
@@ -92,6 +96,22 @@ const CanvasCard = forwardRef<CanvasCardRef, CanvasCardProps>(
       message: fontSizes.message ?? defaultFontSizes.message,
     };
 
+    useEffect(() => {
+      setIsMounted(true);
+
+      // 데스크탑 여부 체크 함수
+      const checkIsDesktop = () => {
+        setIsDesktop(window.innerWidth >= 768); // md breakpoint (768px) - layout.tsx와 동일한 기준
+      };
+
+      checkIsDesktop();
+      window.addEventListener("resize", checkIsDesktop);
+
+      return () => {
+        window.removeEventListener("resize", checkIsDesktop);
+      };
+    }, []);
+
     const getCardBackground = () => {
       switch (cardType) {
         case "formal":
@@ -105,6 +125,15 @@ const CanvasCard = forwardRef<CanvasCardRef, CanvasCardProps>(
         default:
           return "/cards/default-card.svg";
       }
+    };
+
+    // 모달 핸들러 함수들
+    const handleCardClick = () => {
+      setIsModalOpen(true);
+    };
+
+    const handleModalClose = () => {
+      setIsModalOpen(false);
     };
 
     // SVG 이미지 로드
@@ -134,34 +163,37 @@ const CanvasCard = forwardRef<CanvasCardRef, CanvasCardProps>(
       loadSvgImage();
     }, [cardType]);
 
-    // Canvas 렌더링
-    useEffect(() => {
-      if (!isLoaded || !canvasRef.current) return;
-
-      const canvas = canvasRef.current;
+    // Canvas 렌더링 함수
+    const renderCanvasContent = (
+      canvas: HTMLCanvasElement,
+      renderScale: number,
+    ) => {
       const ctx = canvas.getContext("2d");
       if (!ctx) return;
 
+      const canvasWidth = CANVAS_WIDTH * renderScale;
+      const canvasHeight = CANVAS_HEIGHT * renderScale;
+
       // Canvas 실제 크기 설정 (scale 적용)
-      canvas.width = actualWidth;
-      canvas.height = actualHeight;
+      canvas.width = canvasWidth;
+      canvas.height = canvasHeight;
 
       // CSS 크기도 실제 크기로 설정 (레이아웃 문제 해결)
-      canvas.style.width = `${actualWidth}px`;
-      canvas.style.height = `${actualHeight}px`;
+      canvas.style.width = `${canvasWidth}px`;
+      canvas.style.height = `${canvasHeight}px`;
 
       // 고해상도 렌더링을 위한 추가 스케일링
       const devicePixelRatio = window.devicePixelRatio || 1;
       if (devicePixelRatio > 1) {
-        canvas.width = actualWidth * devicePixelRatio;
-        canvas.height = actualHeight * devicePixelRatio;
-        canvas.style.width = `${actualWidth}px`;
-        canvas.style.height = `${actualHeight}px`;
+        canvas.width = canvasWidth * devicePixelRatio;
+        canvas.height = canvasHeight * devicePixelRatio;
+        canvas.style.width = `${canvasWidth}px`;
+        canvas.style.height = `${canvasHeight}px`;
         ctx.scale(devicePixelRatio, devicePixelRatio);
       }
 
       // Canvas 좌표계를 scale에 맞게 조정
-      ctx.scale(scale, scale);
+      ctx.scale(renderScale, renderScale);
 
       // 배경 클리어
       ctx.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
@@ -212,6 +244,12 @@ const CanvasCard = forwardRef<CanvasCardRef, CanvasCardProps>(
         maxHeight,
         lineHeight,
       );
+    };
+
+    // 메인 Canvas 렌더링
+    useEffect(() => {
+      if (!isLoaded || !canvasRef.current || !isMounted) return;
+      renderCanvasContent(canvasRef.current, scale);
     }, [
       isLoaded,
       svgImage,
@@ -221,6 +259,27 @@ const CanvasCard = forwardRef<CanvasCardRef, CanvasCardProps>(
       scale,
       finalTextPositions,
       finalFontSizes,
+      isMounted,
+    ]);
+
+    // 모달 Canvas 렌더링
+    useEffect(() => {
+      if (!isModalOpen || !isLoaded || !modalCanvasRef.current || !isMounted)
+        return;
+
+      const modalScale = isDesktop ? 0.74 : 1;
+      renderCanvasContent(modalCanvasRef.current, modalScale);
+    }, [
+      isModalOpen,
+      isLoaded,
+      svgImage,
+      recipient,
+      message,
+      cardType,
+      finalTextPositions,
+      finalFontSizes,
+      isMounted,
+      isDesktop,
     ]);
 
     // 여러 줄 텍스트 렌더링 함수
@@ -307,34 +366,19 @@ const CanvasCard = forwardRef<CanvasCardRef, CanvasCardProps>(
 
     // ref에 메서드들 노출
     React.useImperativeHandle(ref, () => {
-      const canvas = canvasRef.current;
-      if (!canvas) {
-        // fallback 객체 반환
-        return {
-          getCanvasAsBlob,
-          getCanvasAsDataURL,
-        } as CanvasCardRef;
-      }
-
-      return Object.assign(canvas, {
+      const div = document.createElement("div");
+      return Object.assign(div, {
         getCanvasAsBlob,
         getCanvasAsDataURL,
-      }) as CanvasCardRef;
+      });
     });
 
-    return (
-      <div className="relative inline-block">
-        <canvas
-          ref={canvasRef}
-          className="shadow-lg"
-          style={{
-            borderRadius: `${30 * scale}px`,
-            // transform 제거 - 실제 크기로 렌더링
-          }}
-        />
-        {!isLoaded && (
+    // 서버와 클라이언트 렌더링을 동일하게 만들기 위한 로딩 상태
+    if (!isMounted) {
+      return (
+        <div ref={ref} className="relative inline-block">
           <div
-            className="absolute inset-0 flex items-center justify-center bg-gray-100"
+            className="shadow-lg bg-gray-100 flex items-center justify-center"
             style={{
               width: `${actualWidth}px`,
               height: `${actualHeight}px`,
@@ -343,8 +387,58 @@ const CanvasCard = forwardRef<CanvasCardRef, CanvasCardProps>(
           >
             <div className="text-gray-400">Loading...</div>
           </div>
+        </div>
+      );
+    }
+
+    return (
+      <>
+        <div ref={ref} className="relative inline-block">
+          <canvas
+            ref={canvasRef}
+            className="shadow-lg cursor-pointer hover:shadow-xl transition-shadow"
+            style={{
+              borderRadius: `${30 * scale}px`,
+            }}
+            onClick={handleCardClick}
+          />
+          {!isLoaded && (
+            <div
+              className="absolute inset-0 flex items-center justify-center bg-gray-100"
+              style={{
+                width: `${actualWidth}px`,
+                height: `${actualHeight}px`,
+                borderRadius: `${30 * scale}px`,
+              }}
+            >
+              <div className="text-gray-400">Loading...</div>
+            </div>
+          )}
+        </div>
+
+        {/* Simple Modal with overlay - only canvas preview */}
+        {isModalOpen && (
+          <div
+            className="fixed inset-0 z-50 flex items-center justify-center"
+            style={{
+              background: "rgba(0, 0, 0, 0.6)",
+              backdropFilter: "blur(8px)",
+              WebkitBackdropFilter: "blur(8px)",
+            }}
+            onClick={handleModalClose}
+          >
+            <div onClick={(e) => e.stopPropagation()} className="relative">
+              <canvas
+                ref={modalCanvasRef}
+                className="shadow-lg"
+                style={{
+                  borderRadius: `${30 * (isDesktop ? 0.74 : 1)}px`,
+                }}
+              />
+            </div>
+          </div>
         )}
-      </div>
+      </>
     );
   },
 );
