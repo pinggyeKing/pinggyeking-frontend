@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import CustomButton from "@/components/Custombutton";
 import Balloon from "@/components/inputs/Balloon";
@@ -12,6 +12,7 @@ import {
   ThumbsDown,
   ThumbsUp,
 } from "lucide-react";
+import { useToast } from "@/components/common/Toast";
 
 export default function ResultPage() {
   const router = useRouter();
@@ -24,6 +25,54 @@ export default function ResultPage() {
 
   // 서버에서 받아올 캐릭터 정보 (임시로 state로 설정)
   const [characterType, setCharacterType] = useState<string>("default");
+
+  // localStorage에서 초기값 로드하는 함수들
+  const getInitialLikeStatus = (): "none" | "like" | "dislike" => {
+    if (typeof window !== "undefined") {
+      const saved = localStorage.getItem("result_like_status");
+      return saved ? (saved as "none" | "like" | "dislike") : "none";
+    }
+    return "none";
+  };
+
+  const getInitialRegenerateOption = (): "구체적으로" | "간결하게" | null => {
+    if (typeof window !== "undefined") {
+      const saved = localStorage.getItem("result_regenerate_option");
+      return saved ? (saved as "구체적으로" | "간결하게") : null;
+    }
+    return null;
+  };
+
+  // 좋아요/싫어요 상태 관리
+  const [likeStatus, setLikeStatus] = useState<"none" | "like" | "dislike">(
+    getInitialLikeStatus
+  );
+
+  // 재생성 드롭다운 상태 관리
+  const [isRegenerateOpen, setIsRegenerateOpen] = useState(false);
+
+  // 선택된 재생성 옵션 상태 관리
+  const [selectedRegenerateOption, setSelectedRegenerateOption] = useState<
+    "구체적으로" | "간결하게" | null
+  >(getInitialRegenerateOption);
+
+  // localStorage에 상태 저장하는 useEffect들
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      localStorage.setItem("result_like_status", likeStatus);
+    }
+  }, [likeStatus]);
+
+  useEffect(() => {
+    if (typeof window !== "undefined" && selectedRegenerateOption) {
+      localStorage.setItem(
+        "result_regenerate_option",
+        selectedRegenerateOption
+      );
+    }
+  }, [selectedRegenerateOption]);
+
+  const { showInfoToast } = useToast();
 
   // 캐릭터 타입에 따른 이미지 경로 매핑
   const getCharacterImage = (type: string) => {
@@ -44,12 +93,23 @@ export default function ResultPage() {
 
   const handleCopyText = () => {
     navigator.clipboard.writeText(resultText);
+    showInfoToast("복사되었어요!");
     // TODO: 복사 완료 토스트 메시지
   };
 
   const handleRegenerate = () => {
-    // TODO: 재생성 로직
-    router.push("/loading");
+    setIsRegenerateOpen(!isRegenerateOpen);
+  };
+
+  const handleRegenerateOption = async (option: "구체적으로" | "간결하게") => {
+    setSelectedRegenerateOption(option);
+    setIsRegenerateOpen(false);
+    if (option === "구체적으로") {
+      // TODO: 구체적으로 재생성 로직
+    } else {
+      // TODO: 간결하게 재생성 로직 (설정 페이지로 이동)
+    }
+    await router.push("/loading");
   };
 
   const handleCreateImage = () => {
@@ -57,11 +117,13 @@ export default function ResultPage() {
   };
 
   const handleThumbsUp = () => {
-    // TODO: 좋아요 처리
+    setLikeStatus(likeStatus === "like" ? "none" : "like");
+    // TODO: 서버에 좋아요 전송
   };
 
   const handleThumbsDown = () => {
-    // TODO: 싫어요 처리
+    setLikeStatus(likeStatus === "dislike" ? "none" : "dislike");
+    // TODO: 서버에 싫어요 전송
   };
 
   return (
@@ -117,6 +179,7 @@ export default function ResultPage() {
                 typeStyle="outline2"
                 size="medium"
                 round="pills"
+                pressHold={likeStatus === "like"}
                 onClick={handleThumbsUp}
                 leftIcon={<ThumbsUp size={20} />}
               />
@@ -126,6 +189,7 @@ export default function ResultPage() {
                 typeStyle="outline2"
                 size="medium"
                 round="pills"
+                pressHold={likeStatus === "dislike"}
                 onClick={handleThumbsDown}
                 leftIcon={<ThumbsDown size={20} />}
               />
@@ -139,7 +203,7 @@ export default function ResultPage() {
                 leftIcon={<Copy size={20} />}
               />
             </div>
-            <div className="flex-1">
+            <div className="flex-1 relative">
               <CustomButton
                 typeStyle="outline2"
                 size="medium"
@@ -150,6 +214,34 @@ export default function ResultPage() {
               >
                 재생성
               </CustomButton>
+
+              {/* 재생성 옵션 드롭다운 */}
+              {isRegenerateOpen && (
+                <div className="absolute top-full left-0 right-0 z-10">
+                  <div className="flex flex-col p-1 gap-0.5">
+                    <CustomButton
+                      typeStyle="outline2"
+                      size="medium"
+                      round="pills"
+                      pressHold={selectedRegenerateOption === "구체적으로"}
+                      onClick={() => handleRegenerateOption("구체적으로")}
+                      className="justify-start text-left"
+                    >
+                      구체적으로
+                    </CustomButton>
+                    <CustomButton
+                      typeStyle="outline2"
+                      size="medium"
+                      round="pills"
+                      pressHold={selectedRegenerateOption === "간결하게"}
+                      onClick={() => handleRegenerateOption("간결하게")}
+                      className="justify-start text-left"
+                    >
+                      간결하게
+                    </CustomButton>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         </div>
