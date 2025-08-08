@@ -82,25 +82,27 @@ export default function Modal({
           <div
             style={{
               display: "flex",
-              gap: 16,
+              justifyContent: "space-between",
+              gap: 6,
             }}
           >
-            {/* 임시로 Custom Button 사용 */}
             {/* 확인 버튼 - filled 스타일 (파란색 계열) */}
-            <div className="w-[136px] h-[48px]">
+            <div className="w-full h-[48px]">
               <CustomButton
                 children={confirmText}
                 round="pills"
                 onClick={onConfirm}
+                style={{ whiteSpace: "nowrap" }}
               />
             </div>
             {/* 취소 버튼 - outlined 스타일 (회색 계열) */}
-            <div className="w-[136px] h-[48px]">
+            <div className="w-full h-[48px]">
               <CustomButton
                 children="취소"
                 round="pills"
                 typeStyle="outline2"
                 onClick={onCancel}
+                style={{ whiteSpace: "nowrap" }}
               />
             </div>
           </div>

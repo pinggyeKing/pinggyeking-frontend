@@ -14,6 +14,7 @@ import {
 } from "lucide-react";
 import { useToast } from "@/components/common/Toast";
 import Modal from "@/components/common/Modal";
+import FigmaTextBox from "@/components/FigmaTextBox";
 
 export default function ResultPage() {
   const router = useRouter();
@@ -59,6 +60,11 @@ export default function ResultPage() {
 
   // 홈으로 이동 모달 상태 관리
   const [showExitModal, setShowExitModal] = useState(false);
+
+  // 피드백 모달 상태 관리
+  const [showFeedbackModal, setShowFeedbackModal] = useState(false);
+
+  const [feedback, setFeedback] = useState("");
 
   // localStorage에 상태 저장하는 useEffect들
   useEffect(() => {
@@ -125,6 +131,17 @@ export default function ResultPage() {
   };
 
   const handleCreateImage = () => {
+    setShowFeedbackModal(true);
+  };
+
+  const handleFeedbackConfirm = () => {
+    setShowFeedbackModal(false);
+    // TODO: 이미지 생성 페이지로 이동
+    router.push("/result/create-image");
+  };
+
+  const handleFeedbackCancel = () => {
+    setShowFeedbackModal(false);
     // TODO: 이미지 생성 페이지로 이동
     router.push("/result/create-image");
   };
@@ -297,6 +314,44 @@ export default function ResultPage() {
               alt="처음으로 돌아갈까?"
               width={287}
               height={164}
+            />
+          </div>
+        </Modal>
+      )}
+
+      {/* 피드백 모달 */}
+      {showFeedbackModal && (
+        <Modal
+          open={showFeedbackModal}
+          onClose={handleFeedbackCancel}
+          onCancel={handleFeedbackCancel}
+          onConfirm={handleFeedbackConfirm}
+          confirmText="평가 제출하기"
+          size="small"
+          showCloseButton={true}
+        >
+          <div className="flex flex-col justify-center items-center gap-4">
+            <div className="flex flex-col gap-1">
+              <p className="text-section-title text-grey-10 text-center">
+                생성된 핑계는 어땠나요?
+              </p>
+              <p className="text-section-subtitle text-grey-10 text-center">
+                핑계를 평가해주세요! (선택사항)
+              </p>
+            </div>
+            <Image
+              src="/characters/suit.svg"
+              alt="피드백 캐릭터"
+              width={287}
+              height={164}
+              className="pt-[41px] pr-[80.725px] pb-[4.295px] pl-[71px]"
+            />
+            <FigmaTextBox
+              value={feedback}
+              multiline={true}
+              placeholder="어떤 점이 만족스럽나요?"
+              editable={true}
+              onChange={setFeedback}
             />
           </div>
         </Modal>
