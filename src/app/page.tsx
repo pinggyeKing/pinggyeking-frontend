@@ -19,7 +19,7 @@ export default function Home() {
     setIsPrivacyModalOpen(false);
   };
   return (
-    <div className="flex flex-col items-center pt-[65px] min-h-screen">
+    <div className="flex flex-col items-center pt-[35px] min-h-screen">
       {/* 로고 타이틀 */}
       <div className="text-extra-title text-grey-8 text-center leading-[68px] mb-[55px]">
         변명연구소
@@ -27,10 +27,10 @@ export default function Home() {
 
       {/* 메인 카드 */}
       <div
-        className="w-[400px] h-[410px] radius-24 flex flex-col items-center justify-between py-10 px-5 mb-[123px]"
+        className="w-[327px] h-[376px] radius-24 flex flex-col justify-center items-center py-8 px-5 mb-7"
         style={{
           backgroundImage: "url(/maincard.svg)",
-          backgroundSize: "cover",
+          backgroundSize: "contain",
           backgroundPosition: "center",
           backgroundRepeat: "no-repeat",
         }}
@@ -46,7 +46,7 @@ export default function Home() {
         </div>
 
         {/* 캐릭터 이미지 */}
-        <div className="w-[135px] h-[119px] flex justify-center items-center">
+        <div className="w-[135px] h-[119px] flex justify-center items-center mb-4">
           <Image
             src="/characters/default.svg"
             alt="기본 캐릭터"

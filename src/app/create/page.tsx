@@ -158,7 +158,7 @@ export default function Page() {
     }
   };
   return (
-    <div className="flex flex-col items-center min-h-full">
+    <div className="w-full flex flex-col items-center gap-4">
       {/* 메인 카드 */}
       <div className="flex flex-col gap-4 items-center">
         <ProgressBar stage={getProgressStage()} style="curved" />
@@ -280,6 +280,7 @@ export default function Page() {
           onConfirm={handleExitConfirm}
           confirmText="확인"
           size="small"
+          showCloseButton={false}
         >
           <div className="flex flex-col justify-center items-center gap-4">
             <p className="text-section-title text-grey-10 text-center">
@@ -288,9 +289,9 @@ export default function Page() {
             <Image
               src="/characters/default.svg"
               alt="기본 캐릭터"
-              width={360}
+              width={287}
               height={164}
-              className="pt-[41px] pr-[117.73px] pb-[4.29px] pl-[107px]"
+              className="pt-[41px] pr-[80.725px] pb-[4.295px] pl-[71px]"
             />
           </div>
         </Modal>

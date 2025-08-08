@@ -2,8 +2,6 @@
 
 import React from "react";
 import CustomButton from "../../Custombutton";
-import ButtonFilledIcon from "@/components/icons/ButtonFilledIcon";
-import ButtonOutlinedIcon from "@/components/icons/ButtonOutlinedIcon";
 
 // 1. props, size, 스타일 상수 정리
 interface ModalProps {
@@ -21,7 +19,7 @@ interface ModalProps {
 const MODAL_SIZES = {
   large: { width: 440, minHeight: 490 },
   medium: { width: 400, minHeight: 552 },
-  small: { width: 400, minHeight: 446 },
+  small: { width: 327, minHeight: 332 },
 };
 
 export default function Modal({
@@ -53,7 +51,7 @@ export default function Modal({
           borderRadius: 24,
           boxShadow: "1px 4px 16px 0px rgba(0,0,0,0.08)",
           background: "#fff",
-          padding: "32px 32px 36px 32px", // 피그마 기준 여백
+          padding: "24px 20px 24px 20px", // 피그마 기준 여백
           display: "flex",
           flexDirection: "column",
           position: "relative",
@@ -62,8 +60,8 @@ export default function Modal({
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
-        <div className="w-full h-[36px] flex justify-end items-center">
-          {showCloseButton && (
+        {showCloseButton && (
+          <div className="w-full h-[36px] flex justify-end items-center">
             <div className="w-[44px] flex justify-end">
               <CustomButton
                 size="medium"
@@ -73,8 +71,8 @@ export default function Modal({
                 children={"X"}
               />
             </div>
-          )}
-        </div>
+          </div>
+        )}
 
         {/* Contents */}
         <div style={{ flex: 1 }}>{children}</div>
@@ -84,24 +82,27 @@ export default function Modal({
           <div
             style={{
               display: "flex",
-              gap: 12,
+              gap: 16,
             }}
           >
+            {/* 임시로 Custom Button 사용 */}
             {/* 확인 버튼 - filled 스타일 (파란색 계열) */}
-            <ButtonFilledIcon
-              width={174}
-              text={confirmText}
-              fill="#3B82F6"
-              onClick={onConfirm}
-              className="transition-opacity hover:opacity-80"
-            />
+            <div className="w-[136px] h-[48px]">
+              <CustomButton
+                children={confirmText}
+                round="pills"
+                onClick={onConfirm}
+              />
+            </div>
             {/* 취소 버튼 - outlined 스타일 (회색 계열) */}
-            <ButtonOutlinedIcon
-              width={174}
-              text="취소"
-              onClick={onCancel}
-              className="transition-opacity hover:opacity-80"
-            />
+            <div className="w-[136px] h-[48px]">
+              <CustomButton
+                children="취소"
+                round="pills"
+                typeStyle="outline2"
+                onClick={onCancel}
+              />
+            </div>
           </div>
         )}
       </div>

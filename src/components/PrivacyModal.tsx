@@ -93,11 +93,16 @@ const PrivacyModal: React.FC<PrivacyModalProps> = ({ isOpen, onClose }) => {
     <>
       {/* 배경 오버레이 */}
       <div
-        className="fixed inset-0 backdrop-blur-md z-50 flex items-center justify-center p-10"
+        className="fixed inset-0 z-50 flex items-center justify-center p-6"
+        style={{
+          backgroundColor: "rgba(0, 0, 0, 0.5)",
+          backdropFilter: "blur(10px)",
+          WebkitBackdropFilter: "blur(10px)",
+        }}
         onClick={handleOverlayClick}
       >
         {/* 모달 컨테이너 */}
-        <div className="w-[87%] h-[91%] bg-white radius-20 shadow-lg overflow-hidden flex flex-col">
+        <div className="max-w-[375px] h-[75%] bg-white radius-20 shadow-lg overflow-hidden flex flex-col">
           {/* 헤더 */}
           <div className="flex items-center justify-between bg-grey-10 p-4">
             <h2 className="text-section-title text-grey-0">
@@ -144,9 +149,9 @@ const PrivacyModal: React.FC<PrivacyModalProps> = ({ isOpen, onClose }) => {
                   </div>
                 ))}
               </div>
-              <div className="flex flex-col items-center w-full p-6 border-t border-grey-4 gap-1 text-center">
-                <div className="flex flex-row items-center px-1 py-2.5 gap-1 radius-16">
-                  <FileUser size={10} className="text-grey-10" />
+              <div className="flex flex-col items-center w-full px-4 py-6 border-t border-grey-4 gap-1 text-center">
+                <div className="w-full flex flex-row items-center px-2.5 py-1 gap-1 radius-16 bg-grey-2">
+                  <FileUser size={18} className="text-grey-10" />
                   <p className="text-body3-semibold text-grey-10 text-center">
                     개인정보보호법ㆍ정보통신망법 준수
                   </p>

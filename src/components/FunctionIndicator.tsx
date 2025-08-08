@@ -35,7 +35,7 @@ const FunctionIndicator: React.FC<FunctionIndicatorProps> = ({
       onClick={!isDisabled ? onClick : undefined}
       disabled={isDisabled}
       className={clsx(
-        "flex items-center gap-2 px-2 py-3 w-full transition-all duration-200",
+        "flex items-center gap-2 px-2 py-3 min-w-[287px] transition-all duration-200",
         isSelected
           ? "bg-white text-grey-10 shadow-sm border border-grey-3"
           : "bg-transparent text-grey-10 hover:bg-grey-1",
@@ -51,7 +51,7 @@ const FunctionIndicator: React.FC<FunctionIndicatorProps> = ({
       )}
 
       {/* 중앙 라벨 */}
-      <span className="flex-1 text-left text-body3-semibold whitespace-nowrap">
+      <span className="flex-1 text-left text-body2-semibold whitespace-normal">
         {label}
       </span>
 
