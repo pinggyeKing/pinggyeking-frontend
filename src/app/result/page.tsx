@@ -13,6 +13,7 @@ import {
   ThumbsUp,
 } from "lucide-react";
 import { useToast } from "@/components/common/Toast";
+import Modal from "@/components/common/Modal";
 
 export default function ResultPage() {
   const router = useRouter();
@@ -56,6 +57,9 @@ export default function ResultPage() {
     "구체적으로" | "간결하게" | null
   >(getInitialRegenerateOption);
 
+  // 홈으로 이동 모달 상태 관리
+  const [showExitModal, setShowExitModal] = useState(false);
+
   // localStorage에 상태 저장하는 useEffect들
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -88,7 +92,15 @@ export default function ResultPage() {
   };
 
   const handleGoHome = () => {
+    setShowExitModal(true);
+  };
+
+  const handleExitConfirm = () => {
     router.push("/");
+  };
+
+  const handleExitCancel = () => {
+    setShowExitModal(false);
   };
 
   const handleCopyText = () => {
@@ -114,6 +126,7 @@ export default function ResultPage() {
 
   const handleCreateImage = () => {
     // TODO: 이미지 생성 페이지로 이동
+    router.push("/result/create-image");
   };
 
   const handleThumbsUp = () => {
@@ -258,6 +271,36 @@ export default function ResultPage() {
           이미지 만들기
         </CustomButton>
       </div>
+
+      {/* 홈으로 이동 확인 모달 */}
+      {showExitModal && (
+        <Modal
+          open={showExitModal}
+          onClose={handleExitCancel}
+          onCancel={handleExitCancel}
+          onConfirm={handleExitConfirm}
+          confirmText="확인"
+          size="small"
+          showCloseButton={false}
+        >
+          <div className="flex flex-col justify-center items-center gap-4">
+            <div className="flex flex-col gap-1">
+              <p className="text-section-title text-grey-10 text-center">
+                홈으로 이동하시겠습니까?
+              </p>
+              <p className="text-section-subtitle text-grey-10 text-center">
+                생성된 핑계를 다시 볼 수 없습니다.
+              </p>
+            </div>
+            <Image
+              src="/characters/error.svg"
+              alt="처음으로 돌아갈까?"
+              width={287}
+              height={164}
+            />
+          </div>
+        </Modal>
+      )}
     </div>
   );
 }
