@@ -267,7 +267,7 @@ export default function Page() {
             onClick={handleNext}
             disabled={!canProceed()}
           >
-            {currentStep === 5 ? "완료" : "다음"}
+            {currentStep === 5 ? "제출" : "다음"}
           </CustomButton>
         </div>
       </div>
