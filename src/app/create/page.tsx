@@ -45,7 +45,7 @@ export default function Page() {
     } else if (currentStep === 4) {
       setCurrentStep(5);
     } else if (currentStep === 5) {
-      // 완료 처리 - result 페이지로 이동
+      // 완료 처리 - 로딩 페이지로 먼저 이동
       console.log("모든 선택 완료:", {
         relation: selectedValue1,
         tone: selectedValue2,
@@ -53,7 +53,7 @@ export default function Page() {
         reason: textInput4,
         additionalInfo: textInput5,
       });
-      router.push("/result");
+      router.push("/loading");
     }
   };
 
