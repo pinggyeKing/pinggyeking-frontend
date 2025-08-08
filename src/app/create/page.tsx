@@ -158,14 +158,14 @@ export default function Page() {
     }
   };
   return (
-    <div className="w-full flex flex-col items-center gap-4">
+    <div className="w-full h-full flex flex-col items-center gap-4">
       {/* 메인 카드 */}
-      <div className="flex flex-col gap-4 items-center">
+      <div className="w-full h-full flex flex-col gap-4 items-center">
         <ProgressBar stage={getProgressStage()} style="curved" />
 
         {/* 1, 2단계: 선택형 */}
         {(currentStep === 1 || currentStep === 2) && (
-          <div className="flex flex-col gap-[10px]">
+          <div className="w-full h-full flex flex-col gap-[10px]">
             <div className="flex flex-col gap-1">
               <p className="text-section-title text-grey-10 text-center">
                 {getCurrentTitle()}
@@ -192,7 +192,7 @@ export default function Page() {
 
         {/* 3, 4, 5단계: 텍스트 입력형 */}
         {(currentStep === 3 || currentStep === 4 || currentStep === 5) && (
-          <div className="flex flex-col gap-[10px]">
+          <div className="w-full h-full flex flex-col gap-[10px]">
             <div className="flex flex-col gap-1">
               <p className="text-section-title text-grey-10 text-center">
                 {getCurrentTitle()}
@@ -217,7 +217,7 @@ export default function Page() {
             </div>
 
             {/* 사용자 입력 말풍선 */}
-            <div className="w-full flex justify-center">
+            <div className="w-full h-full flex justify-center">
               <FigmaTextBox
                 value={
                   currentStep === 3

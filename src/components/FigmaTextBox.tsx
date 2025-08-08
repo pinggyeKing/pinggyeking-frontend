@@ -90,16 +90,16 @@ const FigmaTextBox: React.FC<TextInputProps> = ({
   };
 
   return (
-    <div className={`w-[335px] ${className}`}>
+    <div className={`w-full h-full ${className}`}>
       <div
         className={`
-        relative rounded-[24px] border-2 transition-all duration-200
+        relative rounded-[24px] border-2 transition-all duration-200 h-full
         ${styles.border} ${styles.background}
         ${editable ? "cursor-text" : "cursor-default"}
       `}
       >
         {/* 입력 영역 */}
-        <div className="px-6 py-5">
+        <div className="px-6 py-5 h-full">
           {multiline ? (
             <textarea
               ref={inputRef as React.RefObject<HTMLTextAreaElement>}
@@ -114,13 +114,10 @@ const FigmaTextBox: React.FC<TextInputProps> = ({
               className={`
                 w-full min-h-[24px] max-h-[160px] resize-none 
                 bg-transparent border-none outline-none
-                text-base ${
-                  internalValue ? "text-grey-10 font-semibold" : styles.text
-                }
-                placeholder:text-grey-4 placeholder:font-medium
+                text-base ${internalValue ? "text-grey-10" : styles.text}
+                placeholder:text-grey-4 placeholder:text-body2-medium
                 ${!editable ? "cursor-default" : ""}
               `}
-              rows={1}
               style={{
                 fontFamily: "Pretendard, sans-serif",
                 fontSize: "16px",
@@ -144,14 +141,9 @@ const FigmaTextBox: React.FC<TextInputProps> = ({
                 text-base ${
                   internalValue ? "text-grey-10 font-semibold" : styles.text
                 }
-                placeholder:text-grey-4 placeholder:font-medium
+                placeholder:text-grey-4 placeholder:text-body2-medium
                 ${!editable ? "cursor-default" : ""}
               `}
-              style={{
-                fontFamily: "Pretendard, sans-serif",
-                fontSize: "16px",
-                lineHeight: "1.25",
-              }}
             />
           )}
         </div>

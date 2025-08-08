@@ -42,7 +42,7 @@ const Balloon: React.FC<BalloonProps> = ({
 }) => {
   return (
     <div
-      className={`relative flex items-center w-[335px] max-w-full rounded-[24px] px-6 py-5 gap-2 ${borderStyle[status]} ${bgStyle[status]} ${className}`}
+      className={`relative flex items-center w-full max-w-full rounded-[24px] px-6 py-5 gap-2 ${borderStyle[status]} ${bgStyle[status]} ${className}`}
       style={{ minHeight: 60, padding: "12px 24px", borderRadius: 24 }}
       aria-label="말풍선"
       aria-disabled={status === "disabled"}
