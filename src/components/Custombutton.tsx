@@ -15,7 +15,7 @@ interface CustomButtonProps
   pressHold?: boolean;
   leftIcon?: React.ReactNode;
   rightIcon?: React.ReactNode;
-  children: React.ReactNode;
+  children?: React.ReactNode;
   className?: string;
 }
 
@@ -92,6 +92,15 @@ export default function CustomButton({
     return "radius-4"; // fallback
   })();
 
+  // children이 실제로 존재하는지 확인하는 헬퍼 함수
+  const hasValidChildren = () => {
+    if (!children) return false;
+    if (typeof children === "string") {
+      return children.trim() !== "";
+    }
+    return true;
+  };
+
   return (
     <button
       className={clsx(
@@ -103,9 +112,17 @@ export default function CustomButton({
       disabled={typeStyle === "disable"}
       {...props}
     >
-      {leftIcon && <span className="mr-2">{leftIcon}</span>}
-      {children}
-      {rightIcon && <span className="ml-2">{rightIcon}</span>}
+      {leftIcon && (
+        <span className={hasValidChildren() ? "mr-2" : ""}>{leftIcon}</span>
+      )}
+      {children &&
+        typeof children === "string" &&
+        children.trim() !== "" &&
+        children}
+      {children && typeof children !== "string" && children}
+      {rightIcon && (
+        <span className={hasValidChildren() ? "ml-2" : ""}>{rightIcon}</span>
+      )}
     </button>
   );
 }
