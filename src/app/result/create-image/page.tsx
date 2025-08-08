@@ -7,6 +7,12 @@ import FigmaButton from "@/components/FigmaButton";
 import { copyCurrentUrl, downloadCardByRef, shareToKakao } from "./utils";
 import { ToastContainer, useToast } from "@/components/common/Toast";
 import CanvasCard from "../card-image/components/CanvasCard";
+import { downloadCanvasCardAsJPG } from "./utils/canvasUtils";
+
+interface CanvasCardRef {
+  getCanvasAsBlob: (type?: string, quality?: number) => Promise<Blob | null>;
+  getCanvasAsDataURL: (type?: string, quality?: number) => string;
+}
 
 export default function Page() {
   const [selectedCardType, setSelectedCardType] = useState<
@@ -133,7 +139,7 @@ export default function Page() {
               scale={cardScale}
             /> */}
             <CanvasCard
-              // ref={canvasCardRef}
+              ref={cardRef}
               recipient="부장님"
               message={`부장님, 정말 죄송합니다만....내일 회식에 참석하지 못할 것 같습니다... 
 
@@ -180,8 +186,12 @@ export default function Page() {
           <button
             className="flex-1 bg-grey-10 border-[1.5px] border-grey-10 text-white rounded-[24px] py-3 flex justify-center items-center hover:bg-grey-9 transition-colors"
             onClick={() => {
-              downloadCardByRef(cardRef);
-              showSuccessToast("이미지가 저장되었어요!");
+              if (cardRef.current) {
+                downloadCanvasCardAsJPG(
+                  cardRef.current as any as CanvasCardRef,
+                );
+                showSuccessToast("이미지가 저장되었어요!");
+              }
             }}
           >
             <img
