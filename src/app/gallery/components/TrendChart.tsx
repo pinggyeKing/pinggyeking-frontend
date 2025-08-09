@@ -41,7 +41,7 @@ export default function TrendChart() {
   const barGap = 8;
 
   return (
-    <div className="bg-white border border-[#4E4E4E] rounded-3xl pt-4 w-full flex items-center justify-center p-4">
+    <div className="bg-white border-2 border-[#4E4E4E] rounded-3xl p-6 sm:p-8 w-full shadow-sm hover:shadow-md transition-shadow duration-200">
       <svg
         width="100%"
         height="100%"
@@ -148,6 +148,7 @@ export default function TrendChart() {
                     strokeWidth="1"
                     rx="4"
                     ry="4"
+                    className="drop-shadow-sm"
                   />
                   <text
                     x={x + barWidth}

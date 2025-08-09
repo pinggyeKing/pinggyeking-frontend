@@ -39,7 +39,7 @@ export default function SatisfactionChart() {
   const barSpacing = plotWidth / satisfactionData.length;
 
   return (
-    <div className="bg-white border-[1.5px] border-[#4E4E4E] rounded-3xl pt-4 w-full flex items-center justify-center">
+    <div className="bg-white border-2 border-[#4E4E4E] rounded-3xl p-6 sm:p-8 w-full shadow-sm hover:shadow-md transition-shadow duration-200">
       <svg
         width="100%"
         height="100%"
@@ -132,8 +132,8 @@ export default function SatisfactionChart() {
                 width={barWidth}
                 height={barHeight}
                 fill={data.isTop ? "#4E4E4E" : "#8E8E8E"}
-                rx="2"
-                ry="2"
+                rx="4"
+                ry="4"
                 className="transition-all duration-200 cursor-pointer"
                 onMouseEnter={() => setHoveredIndex(index)}
                 onMouseLeave={() => setHoveredIndex(null)}
@@ -152,6 +152,7 @@ export default function SatisfactionChart() {
                     strokeWidth="1"
                     rx="4"
                     ry="4"
+                    className="drop-shadow-sm"
                   />
                   <text
                     x={x + barWidth / 2}

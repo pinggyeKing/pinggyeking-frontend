@@ -11,14 +11,10 @@ export default function StatCard({
 }: StatCardProps) {
   return (
     <div
-      className={`bg-white border-2 border-[#4E4E4E] rounded-2xl p-3 sm:p-4 flex flex-col gap-2 w-20 sm:w-24 flex-1 min-w-0 ${className}`}
+      className={`bg-white border-2 border-[#4E4E4E] rounded-2xl p-2 flex flex-col gap-1 md:gap-3 aspect-square items-center justify-center text-center shadow-sm hover:shadow-md transition-shadow duration-200 ${className}`}
     >
-      <div className="text-[#4E4E4E] text-xs sm:text-sm font-medium text-center leading-tight">
-        {title}
-      </div>
-      <div className="text-[#1E1E1E] text-base sm:text-lg font-semibold text-center">
-        {value}
-      </div>
+      <div className="text-body3-medium">{title}</div>
+      <div className="text-body1-semibold">{value}</div>
     </div>
   );
 }

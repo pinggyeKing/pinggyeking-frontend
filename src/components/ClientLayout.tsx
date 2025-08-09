@@ -59,9 +59,9 @@ const ClientLayout: React.FC<ClientLayoutProps> = ({ children }) => {
   if (isGalleryPage) {
     return (
       <>
-        <div className="flex flex-col items-center mt-[35px] mb-[63px] px-6 w-[375px] h-[714px] m-auto">
+        <div className="flex flex-col items-center pt-[35px] pb-[140px] md:pb-[20px] px-6 w-[375px] md:w-full md:max-w-[431px] min-h-screen m-auto">
           {/* 공통 타이틀 */}
-          <div className="text-extra-title text-grey-8 text-center leading-[60px] mb-6">
+          <div className="text-extra-title text-grey-8 text-center leading-[60px] mb-[24px]">
             변명연구소
           </div>
 
