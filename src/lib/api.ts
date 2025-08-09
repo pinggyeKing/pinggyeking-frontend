@@ -15,7 +15,7 @@ api.interceptors.response.use(
   (error) => {
     console.error("API Error:", error);
     return Promise.reject(error);
-  },
+  }
 );
 
 // API 응답 타입 정의
@@ -35,3 +35,48 @@ export interface GalleryResponse {
     count: number;
   };
 }
+
+// 핑계 생성 요청 타입
+export interface ExcuseGenerateRequest {
+  situation: string;
+  target: string;
+  tone: string;
+  isRegenerated: boolean;
+  regeneratedBtnVal?: string; // 재생성 버튼 값 (구체적으로, 간결하게)
+  questions: Array<{
+    step: number;
+    prompt: string;
+    answer: string;
+  }>;
+}
+
+// 핑계 생성 응답 타입
+export interface ExcuseGenerateResponse {
+  excuse: {
+    situation: string;
+    target: string;
+    tone: string;
+    excuse: string;
+    credibilityWhy: string;
+    credibilityScore: number;
+    category: string;
+    keyword: string[];
+    alts: string[];
+    tokens_used: number;
+    response_time_ms: number;
+    created_at: string;
+  };
+  imageKey: string;
+  id: number;
+}
+
+// 핑계 생성 API
+export const generateExcuse = async (
+  data: ExcuseGenerateRequest
+): Promise<ExcuseGenerateResponse> => {
+  const response = await api.post<ExcuseGenerateResponse>(
+    "/api/clova/generate",
+    data
+  );
+  return response.data;
+};

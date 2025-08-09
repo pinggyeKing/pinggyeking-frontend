@@ -15,18 +15,46 @@ import {
 import { useToast } from "@/components/common/Toast";
 import Modal from "@/components/common/Modal";
 import FigmaTextBox from "@/components/FigmaTextBox";
+import {
+  generateExcuse,
+  ExcuseGenerateRequest,
+  ExcuseGenerateResponse,
+} from "@/lib/api";
 
 export default function ResultPage() {
   const router = useRouter();
-  const [resultText] = useState(`부장님, 정말 죄송합니다만....내일 회식에 
+  const [resultText, setResultText] = useState("");
+
+  // 서버에서 받아올 캐릭터 정보 (임시로 state로 설정)
+  const [characterType, setCharacterType] = useState<string>("default");
+
+  // 핑계 데이터 상태
+  const [excuseData, setExcuseData] = useState<ExcuseGenerateResponse | null>(
+    null
+  );
+
+  // 로딩 상태
+  const [isRegenerating, setIsRegenerating] = useState(false);
+
+  // 페이지 로드 시 저장된 결과 데이터 불러오기
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const savedResult = localStorage.getItem("excuse_result");
+      if (savedResult) {
+        const resultData = JSON.parse(savedResult) as ExcuseGenerateResponse;
+        setExcuseData(resultData);
+        setResultText(resultData.excuse.excuse);
+      } else {
+        // 저장된 결과가 없으면 기본 텍스트 사용
+        setResultText(`부장님, 정말 죄송합니다만....내일 회식에 
 참석하지 못할 것 같습니다... 
 
 이유,,,, 
 
 ,,,, `);
-
-  // 서버에서 받아올 캐릭터 정보 (임시로 state로 설정)
-  const [characterType, setCharacterType] = useState<string>("default");
+      }
+    }
+  }, []);
 
   // localStorage에서 초기값 로드하는 함수들
   const getInitialLikeStatus = (): "none" | "like" | "dislike" => {
@@ -47,7 +75,7 @@ export default function ResultPage() {
 
   // 좋아요/싫어요 상태 관리
   const [likeStatus, setLikeStatus] = useState<"none" | "like" | "dislike">(
-    getInitialLikeStatus,
+    getInitialLikeStatus
   );
 
   // 재생성 드롭다운 상태 관리
@@ -77,7 +105,7 @@ export default function ResultPage() {
     if (typeof window !== "undefined" && selectedRegenerateOption) {
       localStorage.setItem(
         "result_regenerate_option",
-        selectedRegenerateOption,
+        selectedRegenerateOption
       );
     }
   }, [selectedRegenerateOption]);
@@ -102,6 +130,11 @@ export default function ResultPage() {
   };
 
   const handleExitConfirm = () => {
+    // 홈으로 가기 전 local storage 삭제
+    localStorage.removeItem("excuse_form_data");
+    localStorage.removeItem("excuse_result");
+    localStorage.removeItem("result_like_status");
+    localStorage.removeItem("result_regenerate_option");
     router.push("/");
   };
 
@@ -122,12 +155,57 @@ export default function ResultPage() {
   const handleRegenerateOption = async (option: "구체적으로" | "간결하게") => {
     setSelectedRegenerateOption(option);
     setIsRegenerateOpen(false);
-    if (option === "구체적으로") {
-      // TODO: 구체적으로 재생성 로직
-    } else {
-      // TODO: 간결하게 재생성 로직 (설정 페이지로 이동)
+    setIsRegenerating(true);
+
+    try {
+      // localStorage에서 저장된 생성 데이터 불러오기
+      const savedFormData = localStorage.getItem("excuse_form_data");
+      if (!savedFormData) {
+        showInfoToast("생성 정보를 찾을 수 없습니다.");
+        return;
+      }
+
+      const formData = JSON.parse(savedFormData);
+
+      // API 요청 데이터 구성
+      const requestData: ExcuseGenerateRequest = {
+        situation: formData.situation || "회식 참석 불가",
+        target: formData.target || "상사",
+        tone: formData.tone || "정중하게",
+        isRegenerated: true,
+        regeneratedBtnVal: option,
+        questions: [
+          {
+            step: 1,
+            prompt: "구체적으로 어떤 상황이신가요?",
+            answer: formData.situation || "",
+          },
+          {
+            step: 2,
+            prompt:
+              "추가로 설명하고 싶은 부분이 있나요? (상황 설명, 정도나 심각성, 관련 배경 등)",
+            answer: formData.additionalInfo || "",
+          },
+          {
+            step: 3,
+            prompt: "상대방에게 전달할 때 고려해야 할 점이 있나요?",
+            answer: formData.considerations || "",
+          },
+        ],
+      };
+
+      router.push("/loading");
+      // API 호출
+      const response = await generateExcuse(requestData);
+      setExcuseData(response);
+      setResultText(response.excuse.excuse);
+      showInfoToast("핑계가 재생성되었습니다!");
+    } catch (error) {
+      console.error("재생성 실패:", error);
+      showInfoToast("재생성에 실패했습니다. 다시 시도해주세요.");
+    } finally {
+      setIsRegenerating(false);
     }
-    await router.push("/loading");
   };
 
   const handleCreateImage = () => {
@@ -241,12 +319,13 @@ export default function ResultPage() {
                 onClick={handleRegenerate}
                 leftIcon={<RefreshCcw size={20} />}
                 rightIcon={<ChevronDown size={20} />}
+                disabled={isRegenerating}
               >
                 재생성
               </CustomButton>
 
               {/* 재생성 옵션 드롭다운 */}
-              {isRegenerateOpen && (
+              {isRegenerateOpen && !isRegenerating && (
                 <div className="absolute top-full left-0 right-0 z-10">
                   <div className="flex flex-col p-1 gap-0.5">
                     <CustomButton
@@ -256,6 +335,7 @@ export default function ResultPage() {
                       pressHold={selectedRegenerateOption === "구체적으로"}
                       onClick={() => handleRegenerateOption("구체적으로")}
                       className="justify-start text-left"
+                      disabled={isRegenerating}
                     >
                       구체적으로
                     </CustomButton>
@@ -266,6 +346,7 @@ export default function ResultPage() {
                       pressHold={selectedRegenerateOption === "간결하게"}
                       onClick={() => handleRegenerateOption("간결하게")}
                       className="justify-start text-left"
+                      disabled={isRegenerating}
                     >
                       간결하게
                     </CustomButton>
