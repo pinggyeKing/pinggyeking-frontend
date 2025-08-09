@@ -42,7 +42,7 @@ export default function StatsGrid({ data }: StatsGridProps) {
   ];
 
   return (
-    <div className="flex justify-between items-center gap-3 sm:gap-6 w-full max-w-md sm:max-w-lg">
+    <div className="grid grid-cols-4 md:grid-cols-2 gap-2 md:gap-4 w-full mx-auto">
       {stats.map((stat, index) => (
         <StatCard key={index} title={stat.title} value={stat.value} />
       ))}

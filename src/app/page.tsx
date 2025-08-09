@@ -19,7 +19,7 @@ export default function Home() {
     setIsPrivacyModalOpen(false);
   };
   return (
-    <div className="flex flex-col items-center pt-[35px] min-h-screen">
+    <div className="flex flex-col items-center pt-[35px] pb-[140px] md:pb-[20px] min-h-screen">
       {/* 로고 타이틀 */}
       <div className="text-extra-title text-grey-8 text-center leading-[68px] mb-[55px]">
         변명연구소

@@ -5,7 +5,14 @@ import Card from "../card-image/components/Card";
 import { Carousel } from "./components";
 import FigmaButton from "@/components/FigmaButton";
 import { copyCurrentUrl, downloadCardByRef, shareToKakao } from "./utils";
-import { Toast, ToastContainer, useToast } from "@/components/common/Toast";
+import { ToastContainer, useToast } from "@/components/common/Toast";
+import CanvasCard from "../card-image/components/CanvasCard";
+import { downloadCanvasCardAsJPG } from "./utils/canvasUtils";
+
+interface CanvasCardRef {
+  getCanvasAsBlob: (type?: string, quality?: number) => Promise<Blob | null>;
+  getCanvasAsDataURL: (type?: string, quality?: number) => string;
+}
 
 export default function Page() {
   const [selectedCardType, setSelectedCardType] = useState<
@@ -26,12 +33,31 @@ export default function Page() {
     console.log("Back button clicked");
   };
 
-  // 화면 너비에 따른 카드 스케일 조정 (데스크탑: 0.65, 모바일: 0.82)
+  // 화면 너비에 따른 카드 스케일 조정 - 부모 영역을 넘치지 않도록 계산
   useEffect(() => {
     const updateCardScale = () => {
       const windowWidth = window.innerWidth;
-      // Tailwind의 md 브레이크포인트는 768px
-      setCardScale(windowWidth >= 768 ? 0.65 : 0.82);
+      const windowHeight = window.innerHeight;
+
+      // 카드의 실제 크기 (444 x 494)
+      const cardWidth = 444;
+      const cardHeight = 494;
+
+      // 패딩과 여백을 고려한 사용 가능한 공간 계산
+      const availableWidth = windowWidth - 32; // px-4 (16px * 2)
+      const availableHeight = windowHeight * 0.6; // 화면 높이의 60% 정도 사용
+
+      // 너비와 높이 기준으로 스케일 계산
+      const scaleByWidth = availableWidth / cardWidth;
+      const scaleByHeight = availableHeight / cardHeight;
+
+      // 더 작은 스케일을 선택하여 넘치지 않도록 함
+      const calculatedScale = Math.min(scaleByWidth, scaleByHeight, 1); // 최대 1배
+
+      // 최소 스케일 제한 (너무 작아지지 않도록)
+      const finalScale = Math.max(calculatedScale, 0.3);
+
+      setCardScale(finalScale);
     };
 
     // 초기 스케일 설정
@@ -66,7 +92,7 @@ export default function Page() {
   return (
     <>
       <ToastContainer />
-      <div className="flex flex-col items-center min-h-full w-[375px]">
+      <div className="flex flex-col items-center min-h-full w-full">
         {/* Header Section */}
         <div className="flex flex-col gap-4 mb-5 w-full">
           {/* Back Button */}
@@ -98,9 +124,9 @@ export default function Page() {
         />
 
         {/* Card Preview */}
-        <div className="mb-5 flex justify-center">
-          <div className="transform origin-center">
-            <Card
+        <div className="mb-5 flex justify-center w-full">
+          <div className="transform origin-center max-w-full overflow-hidden">
+            {/* <Card
               ref={cardRef}
               recipient="부장님"
               message={`부장님, 정말 죄송합니다만....내일 회식에 참석하지 못할 것 같습니다... 
@@ -111,6 +137,18 @@ export default function Page() {
 ,,,,`}
               cardType={selectedCardType}
               scale={cardScale}
+            /> */}
+            <CanvasCard
+              ref={cardRef}
+              recipient="부장님"
+              message={`부장님, 정말 죄송합니다만....내일 회식에 참석하지 못할 것 같습니다... 
+
+
+이유,,,, 
+
+,,,,`}
+              cardType={selectedCardType}
+              scale={0.65}
             />
           </div>
         </div>
@@ -148,8 +186,12 @@ export default function Page() {
           <button
             className="flex-1 bg-grey-10 border-[1.5px] border-grey-10 text-white rounded-[24px] py-3 flex justify-center items-center hover:bg-grey-9 transition-colors"
             onClick={() => {
-              downloadCardByRef(cardRef);
-              showSuccessToast("이미지가 저장되었어요!");
+              if (cardRef.current) {
+                downloadCanvasCardAsJPG(
+                  cardRef.current as any as CanvasCardRef,
+                );
+                showSuccessToast("이미지가 저장되었어요!");
+              }
             }}
           >
             <img
