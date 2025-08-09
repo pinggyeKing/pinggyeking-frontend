@@ -47,7 +47,7 @@ export default function ResultPage() {
 
   // 좋아요/싫어요 상태 관리
   const [likeStatus, setLikeStatus] = useState<"none" | "like" | "dislike">(
-    getInitialLikeStatus
+    getInitialLikeStatus,
   );
 
   // 재생성 드롭다운 상태 관리
@@ -77,7 +77,7 @@ export default function ResultPage() {
     if (typeof window !== "undefined" && selectedRegenerateOption) {
       localStorage.setItem(
         "result_regenerate_option",
-        selectedRegenerateOption
+        selectedRegenerateOption,
       );
     }
   }, [selectedRegenerateOption]);
@@ -137,13 +137,13 @@ export default function ResultPage() {
   const handleFeedbackConfirm = () => {
     setShowFeedbackModal(false);
     // TODO: 이미지 생성 페이지로 이동
-    router.push("/result/create-image");
+    router.push("/result/1/create-image");
   };
 
   const handleFeedbackCancel = () => {
     setShowFeedbackModal(false);
     // TODO: 이미지 생성 페이지로 이동
-    router.push("/result/create-image");
+    router.push("/result/1/create-image");
   };
 
   const handleThumbsUp = () => {

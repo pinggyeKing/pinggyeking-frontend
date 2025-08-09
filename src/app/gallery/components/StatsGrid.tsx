@@ -29,11 +29,11 @@ export default function StatsGrid({ data }: StatsGridProps) {
     },
     {
       title: "평균만족도",
-      value: `${Math.round(data.averageSatisfaction * 10)}%`,
+      value: `${data.averageSatisfaction}%`,
     },
     {
       title: "재생성률",
-      value: `${Math.round(data.regenerationRate)}%`,
+      value: `${data.regenerationRate}%`,
     },
     {
       title: "피크 타임",
