@@ -52,7 +52,7 @@ export default function RootLayout({
                 backgroundImage: "url(/Background.svg)",
               }}
             >
-              <div className="w-full h-full overflow-hidden rounded-[28px]">
+              <div className="w-full h-full overflow-y-auto overflow-x-hidden rounded-[28px] pb-[140px]">
                 <StructuredData />
                 <SplashProvider>
                   <ToastProvider>
@@ -68,7 +68,7 @@ export default function RootLayout({
 
         {/* Mobile background - full screen */}
         <div
-          className="md:hidden bg-cover bg-center bg-no-repeat bg-fixed min-h-screen"
+          className="md:hidden bg-cover bg-center bg-no-repeat bg-fixed min-h-screen pb-[140px]"
           style={{
             backgroundImage: "url(/Background.svg)",
           }}
