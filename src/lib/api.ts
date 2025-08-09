@@ -20,12 +20,10 @@ api.interceptors.response.use(
 
 // API 응답 타입 정의
 export interface ExcuseDetailResponse {
-  excuse: {
-    situation: string;
-    target: string;
-    tone: string;
-    excuse: string;
-  };
+  excuse: string;
+  situation: string;
+  target: string;
+  tone: string;
 }
 
 export interface GalleryResponse {

@@ -165,8 +165,8 @@ export default function Page() {
           <div className="transform origin-center max-w-full overflow-hidden">
             <CanvasCard
               ref={cardRef}
-              recipient={excuseData.excuse.target}
-              message={excuseData.excuse.excuse}
+              recipient={excuseData.target}
+              message={excuseData.excuse}
               cardType={selectedCardType}
               scale={0.65}
             />

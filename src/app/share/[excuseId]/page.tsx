@@ -93,7 +93,7 @@ export default function SharePage({ params }: SharePageProps) {
     );
   }
 
-  const { situation, target, tone, excuse } = excuseData.excuse;
+  const { situation, target, tone, excuse } = excuseData;
 
   // 카드에 표시할 메시지 포맷팅
   const message = `${target}, 정말 죄송합니다만....${situation}

@@ -220,7 +220,9 @@ const CanvasCard = forwardRef<HTMLDivElement, CanvasCardProps>(
 
       const recipientX = CANVAS_WIDTH * finalTextPositions.recipient.x;
       const recipientY = CANVAS_HEIGHT * finalTextPositions.recipient.y;
-      ctx.fillText(`To. ${recipient}`, recipientX, recipientY);
+      // recipient가 undefined이거나 빈 문자열인 경우에만 기본값 사용
+      const displayRecipient = recipient && recipient.trim() ? recipient : "님";
+      ctx.fillText(`To. ${displayRecipient}`, recipientX, recipientY);
 
       // 메시지 텍스트 렌더링
       const messageFontSize = CANVAS_HEIGHT * finalFontSizes.message;
@@ -237,7 +239,7 @@ const CanvasCard = forwardRef<HTMLDivElement, CanvasCardProps>(
       // 메시지를 줄바꿈하여 렌더링
       renderMultilineText(
         ctx,
-        message,
+        message || "", // message가 falsy 값인 경우 빈 문자열로 처리
         messageX,
         messageY,
         maxWidth,
@@ -292,6 +294,11 @@ const CanvasCard = forwardRef<HTMLDivElement, CanvasCardProps>(
       maxHeight: number,
       lineHeight: number,
     ) => {
+      // text가 null, undefined, 또는 빈 문자열인 경우 조기 반환
+      if (!text || typeof text !== "string") {
+        return;
+      }
+
       const lines = text.split("\n");
       let currentY = y;
 
@@ -320,8 +327,19 @@ const CanvasCard = forwardRef<HTMLDivElement, CanvasCardProps>(
       text: string,
       maxWidth: number,
     ): string[] => {
+      // text가 null, undefined, 또는 빈 문자열인 경우 빈 배열 반환
+      if (!text || typeof text !== "string") {
+        return [];
+      }
+
       const words = text.split(" ");
       const lines: string[] = [];
+
+      // words 배열이 비어있는 경우 처리
+      if (words.length === 0) {
+        return [];
+      }
+
       let currentLine = words[0];
 
       for (let i = 1; i < words.length; i++) {

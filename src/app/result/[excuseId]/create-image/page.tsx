@@ -112,7 +112,7 @@ export default function CreateImagePage({ params }: CreateImagePageProps) {
   }
 
   // 데이터가 없는 경우
-  if (!excuseData?.excuse) {
+  if (!excuseData) {
     return (
       <div className="flex flex-col items-center justify-center min-h-screen gap-4">
         <p className="text-lg text-gray-600">핑계 정보를 찾을 수 없습니다.</p>
@@ -167,8 +167,8 @@ export default function CreateImagePage({ params }: CreateImagePageProps) {
           <div className="transform origin-center max-w-full overflow-hidden">
             <CanvasCard
               ref={cardRef}
-              recipient={excuseData.excuse.target}
-              message={excuseData.excuse.excuse}
+              recipient={excuseData.target}
+              message={excuseData.excuse}
               cardType={selectedCardType}
               scale={0.65}
             />

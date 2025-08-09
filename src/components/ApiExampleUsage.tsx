@@ -43,16 +43,16 @@ export default function ApiExampleUsage() {
           <div className="bg-gray-50 p-4 rounded">
             <h3 className="font-semibold">핑계 내용:</h3>
             <p>
-              <strong>상황:</strong> {excuseData.excuse.situation}
+              <strong>상황:</strong> {excuseData.situation}
             </p>
             <p>
-              <strong>대상:</strong> {excuseData.excuse.target}
+              <strong>대상:</strong> {excuseData.target}
             </p>
             <p>
-              <strong>톤:</strong> {excuseData.excuse.tone}
+              <strong>톤:</strong> {excuseData.tone}
             </p>
             <p>
-              <strong>핑계:</strong> {excuseData.excuse.excuse}
+              <strong>핑계:</strong> {excuseData.excuse}
             </p>
           </div>
         )}
