@@ -5,7 +5,7 @@ import {
   copyCustomLink,
   copyCurrentUrl,
   copyResultLink,
-} from "@/app/result/create-image/utils";
+} from "@/app/result/utils";
 
 interface CopyLinkButtonProps {
   // 복사할 링크 (파라미터로 받음)

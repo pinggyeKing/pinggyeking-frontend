@@ -19,12 +19,14 @@ interface ActionButtonsProps {
     tone: string;
   };
   excuseId?: string;
+  selectedCardType?: "default" | "formal" | "cute" | "humorous" | "pop";
 }
 
 export default function ActionButtons({
   cardRef,
   excuseData,
   excuseId,
+  selectedCardType,
 }: ActionButtonsProps) {
   const { showSuccessToast } = useToast();
 
@@ -44,9 +46,12 @@ export default function ActionButtons({
         ? `${window.location.protocol}//${window.location.host}`
         : "";
     const absoluteImageUrl = `${baseUrl}/cards/kakao-share-image.png`;
+    const query = selectedCardType
+      ? `?cardType=${encodeURIComponent(selectedCardType)}`
+      : "";
     const absoluteLinkUrl = excuseId
-      ? `${baseUrl}/share/${excuseId}`
-      : `${baseUrl}/share/sample-excuse-123`;
+      ? `${baseUrl}/share/${excuseId}${query}`
+      : `${baseUrl}/share/sample-excuse-123${query}`;
 
     shareToKakao({
       title,

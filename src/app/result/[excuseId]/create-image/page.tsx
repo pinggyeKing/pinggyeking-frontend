@@ -180,6 +180,7 @@ export default function CreateImagePage({ params }: CreateImagePageProps) {
           cardRef={cardRef}
           excuseData={excuseData}
           excuseId={resolvedParams.excuseId}
+          selectedCardType={selectedCardType}
         />
       </div>
     </>

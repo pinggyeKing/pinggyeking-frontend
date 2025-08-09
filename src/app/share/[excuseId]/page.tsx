@@ -3,7 +3,7 @@
 import Card from "@/app/result/card-image/components/Card";
 import FigmaButton from "@/components/FigmaButton";
 import LottieLoading from "@/components/LottieLoading";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useState, useEffect, use } from "react";
 import { useExcuseDetail } from "@/app/share/api";
 import CanvasCard from "@/app/result/card-image/components/CanvasCard";
@@ -19,6 +19,16 @@ export default function SharePage({ params }: SharePageProps) {
   const router = useRouter();
   const [isDesktop, setIsDesktop] = useState(false);
   const [isMounted, setIsMounted] = useState(false);
+  const searchParams = useSearchParams();
+  const rawCardType = searchParams?.get("cardType");
+  const cardType =
+    rawCardType === "default" ||
+    rawCardType === "formal" ||
+    rawCardType === "cute" ||
+    rawCardType === "humorous" ||
+    rawCardType === "pop"
+      ? rawCardType
+      : "default";
 
   const {
     data: excuseData,
@@ -110,7 +120,9 @@ ${excuse}`;
           <CanvasCard
             recipient={target}
             message={message}
-            cardType="default"
+            cardType={
+              cardType as "default" | "formal" | "cute" | "humorous" | "pop"
+            }
             scale={isDesktop ? 0.65 : 0.82}
           />
         </div>
