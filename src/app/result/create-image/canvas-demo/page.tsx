@@ -2,11 +2,11 @@
 
 import React, { useRef, useState } from "react";
 import CanvasCard from "../../card-image/components/CanvasCard";
-import { Carousel } from "../components";
 import FigmaButton from "@/components/FigmaButton";
-import { downloadCanvasCardAsJPG } from "../utils/canvasUtils";
-import { copyCurrentUrl, shareToKakao } from "../utils";
+import { downloadCanvasCardAsJPG } from "@/app/result/utils/canvasUtils";
+import { copyCurrentUrl, shareToKakao } from "@/app/result/utils";
 import { ToastContainer, useToast } from "@/components/common/Toast";
+import { Carousel } from "../../components";
 
 export default function CanvasDemoPage() {
   const [selectedCardType, setSelectedCardType] = useState<
