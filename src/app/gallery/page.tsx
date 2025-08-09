@@ -15,7 +15,7 @@ export default function GalleryPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 p-4 sm:p-6">
+    <div className="min-h-screen p-4 sm:p-6">
       <div className="max-w-6xl mx-auto space-y-6 sm:space-y-8">
         {/* 페이지 제목 */}
         <div className="text-center">

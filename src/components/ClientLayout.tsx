@@ -18,6 +18,7 @@ const ClientLayout: React.FC<ClientLayoutProps> = ({ children }) => {
 
   const isHomePage = pathname === "/";
   const isLoadingPage = pathname === "/loading";
+  const isGalleryPage = pathname === "/gallery";
 
   if (showSplash) {
     return <SplashPage />;
@@ -49,6 +50,23 @@ const ClientLayout: React.FC<ClientLayoutProps> = ({ children }) => {
               {children}
             </div>
           </div>
+        </div>
+        {showNavigation && <Navigation />}
+      </>
+    );
+  }
+
+  if (isGalleryPage) {
+    return (
+      <>
+        <div className="flex flex-col items-center mt-[35px] mb-[63px] px-6 w-[375px] h-[714px] m-auto">
+          {/* 공통 타이틀 */}
+          <div className="text-extra-title text-grey-8 text-center leading-[60px] mb-6">
+            변명연구소
+          </div>
+
+          {/* 페이지별 콘텐츠 - 로딩 페이지는 중앙 정렬 */}
+          <div className="w-full h-full flex justify-center">{children}</div>
         </div>
         {showNavigation && <Navigation />}
       </>
