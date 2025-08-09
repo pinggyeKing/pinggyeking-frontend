@@ -4,10 +4,13 @@ import StatsGrid from "./components/StatsGrid";
 import SatisfactionChart from "./components/SatisfactionChart";
 import TrendChart from "./components/TrendChart";
 import LottieLoading from "@/components/LottieLoading";
+import FigmaButton from "@/components/FigmaButton";
 import { useGallery } from "@/app/gallery/api";
+import { useRouter } from "next/navigation";
 
 export default function GalleryPage() {
   const { data: galleryData, isLoading, error } = useGallery();
+  const router = useRouter();
 
   // 로딩 상태
   if (isLoading) {
@@ -25,12 +28,15 @@ export default function GalleryPage() {
         <p className="text-lg text-gray-600">
           갤러리를 불러오는 중 오류가 발생했습니다.
         </p>
-        <button
+        <FigmaButton
+          variant="primary"
+          round="pills"
+          size={1.0}
           onClick={() => window.location.reload()}
-          className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600"
+          className="px-6"
         >
           다시 시도
-        </button>
+        </FigmaButton>
       </div>
     );
   }
@@ -38,8 +44,17 @@ export default function GalleryPage() {
   // 데이터가 없는 경우
   if (!galleryData) {
     return (
-      <div className="flex items-center justify-center min-h-screen">
+      <div className="flex flex-col items-center justify-center min-h-screen gap-4">
         <p className="text-lg text-gray-600">데이터를 찾을 수 없습니다.</p>
+        <FigmaButton
+          variant="primary"
+          round="pills"
+          size={1.0}
+          onClick={() => router.push("/create")}
+          className="px-6"
+        >
+          새로운 핑계 만들기
+        </FigmaButton>
       </div>
     );
   }

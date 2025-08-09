@@ -9,6 +9,6 @@ export const fetchGallery = async (): Promise<GalleryResponse> => {
     return mockGalleryData;
   }
 
-  const response = await api.get<GalleryResponse>("/api/gallery");
+  const response = await api.get<GalleryResponse>("/api/dashboard");
   return response.data;
 };
