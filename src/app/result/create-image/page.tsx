@@ -1,18 +1,11 @@
 "use client";
 
 import React, { useRef, useState, useEffect } from "react";
-import { Carousel } from "./components";
+import { Carousel, ActionButtons } from "./components";
 import FigmaButton from "@/components/FigmaButton";
-import { copyCurrentUrl, downloadCardByRef, shareToKakao } from "./utils";
-import { ToastContainer, useToast } from "@/components/common/Toast";
+import { ToastContainer } from "@/components/common/Toast";
 import CanvasCard from "../card-image/components/CanvasCard";
-import { downloadCanvasCardAsJPG } from "./utils/canvasUtils";
 import { useRouter } from "next/navigation";
-
-interface CanvasCardRef {
-  getCanvasAsBlob: (type?: string, quality?: number) => Promise<Blob | null>;
-  getCanvasAsDataURL: (type?: string, quality?: number) => string;
-}
 
 export default function Page() {
   const router = useRouter();
@@ -21,7 +14,6 @@ export default function Page() {
   >("default");
   const [cardScale, setCardScale] = useState<number>(0.65);
   const cardRef = useRef<HTMLDivElement>(null);
-  const { showSuccessToast } = useToast();
 
   const handleSelectionChange = (selectedId: string) => {
     console.log("Selected character style:", selectedId);
@@ -144,53 +136,7 @@ export default function Page() {
         </div>
 
         {/* Action Buttons */}
-        <div className="flex gap-3 px-1 w-full">
-          <button
-            className="flex-1 border-2 border-grey-10 rounded-[24px] py-3 flex justify-center items-center bg-white hover:bg-grey-1 transition-colors"
-            onClick={() => {
-              shareToKakao({
-                title: "탬플릿을 선택해주세요",
-                description: "아래 생성된 핑계를 확인해주세요",
-                imageUrl: "/cards/kakao-share-image.png",
-                linkUrl: window.location.href,
-              });
-            }}
-          >
-            <img
-              src="/icons/kakao-talk-share.svg"
-              alt="KakaoTalk"
-              className="w-6 h-6"
-            />
-          </button>
-          <button
-            className="flex-1 border-2 border-grey-10 rounded-[24px] py-3 flex justify-center items-center bg-white hover:bg-grey-1 transition-colors"
-            onClick={async () => {
-              const success = await copyCurrentUrl("", ""); // 빈 메시지로 alert 방지
-              if (success) {
-                showSuccessToast("링크가 복사되었어요!");
-              }
-            }}
-          >
-            <img src="/icons/li-link.svg" alt="Link" className="w-6 h-6" />
-          </button>
-          <button
-            className="flex-1 bg-grey-10 border-[1.5px] border-grey-10 text-white rounded-[24px] py-3 flex justify-center items-center hover:bg-grey-9 transition-colors"
-            onClick={() => {
-              if (cardRef.current) {
-                downloadCanvasCardAsJPG(
-                  cardRef.current as any as CanvasCardRef,
-                );
-                showSuccessToast("이미지가 저장되었어요!");
-              }
-            }}
-          >
-            <img
-              src="/icons/li-download.svg"
-              alt="Download"
-              className="w-6 h-6"
-            />
-          </button>
-        </div>
+        <ActionButtons cardRef={cardRef} />
       </div>
     </>
   );
