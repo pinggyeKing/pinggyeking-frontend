@@ -18,11 +18,13 @@ interface ActionButtonsProps {
     target: string;
     tone: string;
   };
+  excuseId?: string;
 }
 
 export default function ActionButtons({
   cardRef,
   excuseData,
+  excuseId,
 }: ActionButtonsProps) {
   const { showSuccessToast } = useToast();
 
@@ -38,7 +40,7 @@ export default function ActionButtons({
       title,
       description,
       imageUrl: "/cards/kakao-share-image.png",
-      linkUrl: window.location.href,
+      linkUrl: excuseId ? `/share/${excuseId}` : "/share/",
     });
   };
 
