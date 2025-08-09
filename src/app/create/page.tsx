@@ -12,18 +12,18 @@ import Balloon from "@/components/inputs/Balloon";
 
 export default function Page() {
   const pickerOptions1 = [
-    { label: "상사/선배", value: "boss" },
-    { label: "교수/선생님", value: "teacher" },
-    { label: "동료/친구", value: "colleague" },
-    { label: "연인/가족", value: "lover" },
-    { label: "기타", value: "other" },
+    { label: "상사/선배", value: "상사/선배" },
+    { label: "교수/선생님", value: "교수/선생님" },
+    { label: "동료/친구", value: "동료/친구" },
+    { label: "연인/가족", value: "연인/가족" },
+    { label: "기타", value: "기타" },
   ];
   const pickerOptions2 = [
-    { label: "정중하게", value: "polite" },
-    { label: "친근하게", value: "friendly" },
-    { label: "유머러스하게", value: "humorous" },
-    { label: "진지하게", value: "serious" },
-    { label: "알아서 해줘~", value: "casual" },
+    { label: "정중하게", value: "정중하게" },
+    { label: "친근하게", value: "친근하게" },
+    { label: "유머러스하게", value: "유머러스하게" },
+    { label: "진지하게", value: "진지하게" },
+    { label: "알아서 해줘~", value: "알아서 해줘~" },
   ];
 
   const [currentStep, setCurrentStep] = useState(1);
@@ -35,7 +35,7 @@ export default function Page() {
   const [showExitModal, setShowExitModal] = useState(false);
   const router = useRouter();
 
-  const handleNext = () => {
+  const handleNext = async () => {
     if (currentStep === 1 && selectedValue1) {
       setCurrentStep(2);
     } else if (currentStep === 2 && selectedValue2) {
@@ -45,14 +45,19 @@ export default function Page() {
     } else if (currentStep === 4) {
       setCurrentStep(5);
     } else if (currentStep === 5) {
-      // 완료 처리 - 로딩 페이지로 먼저 이동
-      console.log("모든 선택 완료:", {
-        relation: selectedValue1,
+      // 폼 데이터 준비
+      const formData = {
+        target: selectedValue1,
         tone: selectedValue2,
         situation: textInput3,
-        reason: textInput4,
-        additionalInfo: textInput5,
-      });
+        additionalInfo: textInput4,
+        considerations: textInput5,
+      };
+
+      // localStorage에 폼 데이터 저장 (재생성 시 사용)
+      localStorage.setItem("excuse_form_data", JSON.stringify(formData));
+
+      // 로딩 페이지로 이동 (API 호출은 loading 페이지에서 처리)
       router.push("/loading");
     }
   };

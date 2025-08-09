@@ -15,18 +15,63 @@ import {
 import { useToast } from "@/components/common/Toast";
 import Modal from "@/components/common/Modal";
 import FigmaTextBox from "@/components/FigmaTextBox";
+import {
+  ExcuseGenerateResponse,
+  submitFeedback,
+  FeedbackRequest,
+} from "@/lib/api";
 
 export default function ResultPage() {
   const router = useRouter();
-  const [resultText] = useState(`부장님, 정말 죄송합니다만....내일 회식에 
+  const [resultText, setResultText] = useState("");
+
+  // 서버에서 받아올 캐릭터 정보 (임시로 state로 설정)
+  const [characterType, setCharacterType] = useState<string>("default");
+
+  // 핑계 데이터 상태
+  const [excuseData, setExcuseData] = useState<ExcuseGenerateResponse | null>(
+    null
+  );
+
+  // 페이지 로드 시 저장된 결과 데이터 불러오기
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const savedResult = localStorage.getItem("excuse_result");
+      if (savedResult) {
+        const resultData = JSON.parse(savedResult) as ExcuseGenerateResponse;
+        setExcuseData(resultData);
+        setResultText(resultData.excuse.excuse);
+
+        // imageKey에 따라 캐릭터 타입 설정
+        if (resultData.imageKey) {
+          const imageKeyToCharacter: { [key: string]: string } = {
+            A: "suit",
+            B: "default",
+            C: "cute",
+            D: "kidding",
+            E: "cool",
+          };
+          const newCharacterType =
+            imageKeyToCharacter[resultData.imageKey] || "default";
+          setCharacterType(newCharacterType);
+        }
+      } else {
+        // 저장된 결과가 없으면 기본 텍스트 사용
+        setResultText(`부장님, 정말 죄송합니다만....내일 회식에 
 참석하지 못할 것 같습니다... 
 
 이유,,,, 
 
 ,,,, `);
+      }
 
-  // 서버에서 받아올 캐릭터 정보 (임시로 state로 설정)
-  const [characterType, setCharacterType] = useState<string>("default");
+      // localStorage에서 캐릭터 타입 정보도 확인
+      const savedCharacterType = localStorage.getItem("character_type");
+      if (savedCharacterType) {
+        setCharacterType(savedCharacterType);
+      }
+    }
+  }, []);
 
   // localStorage에서 초기값 로드하는 함수들
   const getInitialLikeStatus = (): "none" | "like" | "dislike" => {
@@ -47,7 +92,7 @@ export default function ResultPage() {
 
   // 좋아요/싫어요 상태 관리
   const [likeStatus, setLikeStatus] = useState<"none" | "like" | "dislike">(
-    getInitialLikeStatus,
+    getInitialLikeStatus
   );
 
   // 재생성 드롭다운 상태 관리
@@ -63,8 +108,8 @@ export default function ResultPage() {
 
   // 피드백 모달 상태 관리
   const [showFeedbackModal, setShowFeedbackModal] = useState(false);
-
   const [feedback, setFeedback] = useState("");
+  const [isFeedbackSubmitting, setIsFeedbackSubmitting] = useState(false);
 
   // localStorage에 상태 저장하는 useEffect들
   useEffect(() => {
@@ -77,21 +122,40 @@ export default function ResultPage() {
     if (typeof window !== "undefined" && selectedRegenerateOption) {
       localStorage.setItem(
         "result_regenerate_option",
-        selectedRegenerateOption,
+        selectedRegenerateOption
       );
     }
   }, [selectedRegenerateOption]);
 
   const { showInfoToast } = useToast();
 
+  // 동적 라우팅을 위한 헬퍼 함수
+  const navigateToCreateImage = () => {
+    const savedResult = localStorage.getItem("excuse_result");
+    if (savedResult) {
+      try {
+        const resultData = JSON.parse(savedResult) as ExcuseGenerateResponse;
+        if (resultData.id) {
+          router.push(`/result/${resultData.id}/create-image`);
+          return;
+        }
+      } catch (error) {
+        console.error("결과 데이터 파싱 오류:", error);
+      }
+    }
+
+    // 기본 경로로 이동 (fallback)
+    router.push("/result/1/create-image");
+  };
+
   // 캐릭터 타입에 따른 이미지 경로 매핑
   const getCharacterImage = (type: string) => {
     const characterMap: { [key: string]: string } = {
       default: "/characters/default.svg",
-      casual: "/characters/casual.svg",
-      formal: "/characters/formal.svg",
-      student: "/characters/student.svg",
-      // 필요에 따라 더 많은 캐릭터 타입 추가 가능
+      suit: "/characters/suit.svg",
+      cute: "/characters/cute.svg",
+      kidding: "/characters/kidding.svg",
+      cool: "/characters/cool.svg",
     };
 
     return characterMap[type] || characterMap.default;
@@ -102,6 +166,12 @@ export default function ResultPage() {
   };
 
   const handleExitConfirm = () => {
+    // 홈으로 가기 전 local storage 삭제
+    localStorage.removeItem("excuse_form_data");
+    localStorage.removeItem("excuse_result");
+    localStorage.removeItem("result_like_status");
+    localStorage.removeItem("result_regenerate_option");
+    localStorage.removeItem("character_type");
     router.push("/");
   };
 
@@ -122,28 +192,65 @@ export default function ResultPage() {
   const handleRegenerateOption = async (option: "구체적으로" | "간결하게") => {
     setSelectedRegenerateOption(option);
     setIsRegenerateOpen(false);
-    if (option === "구체적으로") {
-      // TODO: 구체적으로 재생성 로직
-    } else {
-      // TODO: 간결하게 재생성 로직 (설정 페이지로 이동)
+
+    // localStorage에서 저장된 생성 데이터 확인
+    const savedFormData = localStorage.getItem("excuse_form_data");
+    if (!savedFormData) {
+      showInfoToast("생성 정보를 찾을 수 없습니다.");
+      return;
     }
-    await router.push("/loading");
+
+    // 재생성 정보를 localStorage에 저장
+    localStorage.setItem("is_regeneration", "true");
+    localStorage.setItem("regeneration_option", option);
+
+    // 로딩 페이지로 이동 (API 호출은 loading 페이지에서 처리)
+    router.push("/loading");
   };
 
   const handleCreateImage = () => {
+    // 항상 피드백 모달 표시
     setShowFeedbackModal(true);
   };
 
-  const handleFeedbackConfirm = () => {
-    setShowFeedbackModal(false);
-    // TODO: 이미지 생성 페이지로 이동
-    router.push("/result/1/create-image");
+  const handleFeedbackConfirm = async () => {
+    setIsFeedbackSubmitting(true);
+
+    try {
+      // 현재 좋아요/싫어요 상태에 따라 rating 결정
+      let rating: "LIKE" | "DISLIKE" = "LIKE";
+      if (likeStatus === "dislike") {
+        rating = "DISLIKE";
+      } else if (likeStatus === "none") {
+        // 상태가 none인 경우 기본적으로 LIKE로 설정
+        rating = "LIKE";
+        setLikeStatus("like");
+      }
+
+      await submitFeedback({
+        rating,
+        feedback: feedback.trim(),
+      });
+
+      setShowFeedbackModal(false);
+      setFeedback(""); // 피드백 내용 초기화
+      navigateToCreateImage();
+    } catch (error: any) {
+      console.error("피드백 전송 실패:", error);
+
+      if (error.response?.data?.message) {
+        showInfoToast(error.response.data.message);
+      } else {
+        showInfoToast("피드백 전송에 실패했습니다.");
+      }
+    } finally {
+      setIsFeedbackSubmitting(false);
+    }
   };
 
   const handleFeedbackCancel = () => {
     setShowFeedbackModal(false);
-    // TODO: 이미지 생성 페이지로 이동
-    router.push("/result/1/create-image");
+    navigateToCreateImage();
   };
 
   const handleThumbsUp = () => {
@@ -185,8 +292,8 @@ export default function ResultPage() {
         {/* 캐릭터 */}
         <div className="flex justify-center pt-[40px] pb-[4.32px]">
           <Image
-            src="/characters/default.svg"
-            alt="정장 캐릭터"
+            src={getCharacterImage(characterType)}
+            alt={`${characterType} 캐릭터`}
             width={112}
             height={120}
           />
@@ -326,7 +433,7 @@ export default function ResultPage() {
           onClose={handleFeedbackCancel}
           onCancel={handleFeedbackCancel}
           onConfirm={handleFeedbackConfirm}
-          confirmText="평가 제출하기"
+          confirmText={isFeedbackSubmitting ? "전송 중..." : "평가 제출하기"}
           size="small"
           showCloseButton={true}
         >
@@ -346,13 +453,24 @@ export default function ResultPage() {
               height={164}
               className="pt-[41px] pr-[80.725px] pb-[4.295px] pl-[71px]"
             />
-            <FigmaTextBox
-              value={feedback}
-              multiline={true}
-              placeholder="어떤 점이 만족스럽나요?"
-              editable={true}
-              onChange={setFeedback}
-            />
+            <div className="w-full">
+              <FigmaTextBox
+                value={feedback}
+                multiline={true}
+                placeholder="어떤 점이 만족스럽나요? (최대 1000자)"
+                editable={!isFeedbackSubmitting}
+                onChange={setFeedback}
+              />
+              <div className="flex justify-end mt-1">
+                <span
+                  className={`text-sm ${
+                    feedback.length > 1000 ? "text-red-500" : "text-grey-6"
+                  }`}
+                >
+                  {feedback.length}/1000
+                </span>
+              </div>
+            </div>
           </div>
         </Modal>
       )}
