@@ -70,6 +70,19 @@ export interface ExcuseGenerateResponse {
   id: number;
 }
 
+// 피드백 요청 타입
+export interface FeedbackRequest {
+  rating: "LIKE" | "DISLIKE";
+  feedback: string;
+}
+
+// 피드백 에러 응답 타입
+export interface FeedbackErrorResponse {
+  status: number;
+  code: string;
+  message: string;
+}
+
 // 핑계 생성 API
 export const generateExcuse = async (
   data: ExcuseGenerateRequest
@@ -78,5 +91,11 @@ export const generateExcuse = async (
     "/api/clova/generate",
     data
   );
+  return response.data;
+};
+
+// 피드백 전송 API
+export const submitFeedback = async (data: FeedbackRequest): Promise<void> => {
+  const response = await api.post<void>("/api/feedback", data);
   return response.data;
 };

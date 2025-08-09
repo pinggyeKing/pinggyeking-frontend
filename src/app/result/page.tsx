@@ -15,7 +15,11 @@ import {
 import { useToast } from "@/components/common/Toast";
 import Modal from "@/components/common/Modal";
 import FigmaTextBox from "@/components/FigmaTextBox";
-import { ExcuseGenerateResponse } from "@/lib/api";
+import {
+  ExcuseGenerateResponse,
+  submitFeedback,
+  FeedbackRequest,
+} from "@/lib/api";
 
 export default function ResultPage() {
   const router = useRouter();
@@ -104,8 +108,8 @@ export default function ResultPage() {
 
   // 피드백 모달 상태 관리
   const [showFeedbackModal, setShowFeedbackModal] = useState(false);
-
   const [feedback, setFeedback] = useState("");
+  const [isFeedbackSubmitting, setIsFeedbackSubmitting] = useState(false);
 
   // localStorage에 상태 저장하는 useEffect들
   useEffect(() => {
@@ -205,28 +209,43 @@ export default function ResultPage() {
   };
 
   const handleCreateImage = () => {
-    // localStorage에서 excuse_result의 id 확인
-    const savedResult = localStorage.getItem("excuse_result");
-    if (savedResult) {
-      try {
-        const resultData = JSON.parse(savedResult) as ExcuseGenerateResponse;
-        if (resultData.id) {
-          // id가 있으면 바로 이미지 생성 페이지로 이동
-          navigateToCreateImage();
-          return;
-        }
-      } catch (error) {
-        console.error("결과 데이터 파싱 오류:", error);
-      }
-    }
-
-    // id가 없거나 오류 발생 시 피드백 모달 표시
+    // 항상 피드백 모달 표시
     setShowFeedbackModal(true);
   };
 
-  const handleFeedbackConfirm = () => {
-    setShowFeedbackModal(false);
-    navigateToCreateImage();
+  const handleFeedbackConfirm = async () => {
+    setIsFeedbackSubmitting(true);
+
+    try {
+      // 현재 좋아요/싫어요 상태에 따라 rating 결정
+      let rating: "LIKE" | "DISLIKE" = "LIKE";
+      if (likeStatus === "dislike") {
+        rating = "DISLIKE";
+      } else if (likeStatus === "none") {
+        // 상태가 none인 경우 기본적으로 LIKE로 설정
+        rating = "LIKE";
+        setLikeStatus("like");
+      }
+
+      await submitFeedback({
+        rating,
+        feedback: feedback.trim(),
+      });
+
+      setShowFeedbackModal(false);
+      setFeedback(""); // 피드백 내용 초기화
+      navigateToCreateImage();
+    } catch (error: any) {
+      console.error("피드백 전송 실패:", error);
+
+      if (error.response?.data?.message) {
+        showInfoToast(error.response.data.message);
+      } else {
+        showInfoToast("피드백 전송에 실패했습니다.");
+      }
+    } finally {
+      setIsFeedbackSubmitting(false);
+    }
   };
 
   const handleFeedbackCancel = () => {
@@ -414,7 +433,7 @@ export default function ResultPage() {
           onClose={handleFeedbackCancel}
           onCancel={handleFeedbackCancel}
           onConfirm={handleFeedbackConfirm}
-          confirmText="평가 제출하기"
+          confirmText={isFeedbackSubmitting ? "전송 중..." : "평가 제출하기"}
           size="small"
           showCloseButton={true}
         >
@@ -434,13 +453,24 @@ export default function ResultPage() {
               height={164}
               className="pt-[41px] pr-[80.725px] pb-[4.295px] pl-[71px]"
             />
-            <FigmaTextBox
-              value={feedback}
-              multiline={true}
-              placeholder="어떤 점이 만족스럽나요?"
-              editable={true}
-              onChange={setFeedback}
-            />
+            <div className="w-full">
+              <FigmaTextBox
+                value={feedback}
+                multiline={true}
+                placeholder="어떤 점이 만족스럽나요? (최대 1000자)"
+                editable={!isFeedbackSubmitting}
+                onChange={setFeedback}
+              />
+              <div className="flex justify-end mt-1">
+                <span
+                  className={`text-sm ${
+                    feedback.length > 1000 ? "text-red-500" : "text-grey-6"
+                  }`}
+                >
+                  {feedback.length}/1000
+                </span>
+              </div>
+            </div>
           </div>
         </Modal>
       )}

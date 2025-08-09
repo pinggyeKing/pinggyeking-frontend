@@ -166,10 +166,6 @@ export default function Loading() {
         // API 호출 완료 - sessionStorage 정리
         sessionStorage.removeItem("api_in_progress");
 
-        // 성공 메시지 표시 후 결과 페이지로 이동
-        showInfoToast(
-          isRegeneration ? "핑계가 재생성되었습니다!" : "핑계가 생성되었습니다!"
-        );
         setTimeout(() => {
           router.push("/result");
         }, 500);
