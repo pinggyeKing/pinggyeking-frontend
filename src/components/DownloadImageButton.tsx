@@ -5,7 +5,7 @@ import {
   downloadImage,
   downloadCanvasAsJPG,
   downloadElementAsJPG,
-} from "@/app/result/create-image/utils";
+} from "@/app/result/utils";
 
 interface DownloadImageButtonProps {
   // 다운로드 타입

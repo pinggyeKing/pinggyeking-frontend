@@ -18,27 +18,41 @@ interface ActionButtonsProps {
     target: string;
     tone: string;
   };
+  excuseId?: string;
 }
 
 export default function ActionButtons({
   cardRef,
   excuseData,
+  excuseId,
 }: ActionButtonsProps) {
   const { showSuccessToast } = useToast();
 
   const handleKakaoShare = () => {
-    const title = excuseData
-      ? `${excuseData.target}에게 핑계 카드`
-      : "탬플릿을 선택해주세요";
-    const description = excuseData
-      ? excuseData.excuse.substring(0, 100) + "..."
-      : "아래 생성된 핑계를 확인해주세요";
+    // const title = excuseData
+    //   ? `${excuseData.target}에게 핑계 카드`
+    //   : "변명연구소에서보낸 편지";
+    const title = "변명연구소에서보낸 편지";
+    // const description = excuseData
+    //   ? excuseData.excuse.substring(0, 100) + "..."
+    //   : "아래 생성된 핑계를 확인해주세요";
+    const description = "";
+
+    // 절대 URL 생성
+    const baseUrl =
+      typeof window !== "undefined"
+        ? `${window.location.protocol}//${window.location.host}`
+        : "";
+    const absoluteImageUrl = `${baseUrl}/cards/kakao-share-image.png`;
+    const absoluteLinkUrl = excuseId
+      ? `${baseUrl}/share/${excuseId}`
+      : `${baseUrl}/share/`;
 
     shareToKakao({
       title,
       description,
-      imageUrl: "/cards/kakao-share-image.png",
-      linkUrl: window.location.href,
+      imageUrl: absoluteImageUrl,
+      linkUrl: absoluteLinkUrl,
     });
   };
 

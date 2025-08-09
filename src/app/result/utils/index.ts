@@ -94,7 +94,7 @@ export const shareToKakao = async (
       },
       buttons: [
         {
-          title: content.buttonTitle || "웹으로 보기",
+          title: content.buttonTitle || "지금 보러가기",
           link: {
             mobileWebUrl: content.linkUrl || window.location.href,
             webUrl: content.linkUrl || window.location.href,

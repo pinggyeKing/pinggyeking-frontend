@@ -174,7 +174,11 @@ export default function Page() {
         </div>
 
         {/* Action Buttons */}
-        <ActionButtons cardRef={cardRef} excuseData={excuseData} />
+        <ActionButtons
+          cardRef={cardRef}
+          excuseData={excuseData}
+          excuseId={excuseId || undefined}
+        />
       </div>
     </>
   );

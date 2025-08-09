@@ -1,10 +1,7 @@
 "use client";
 
 import React from "react";
-import {
-  shareImageResult,
-  shareTextResult,
-} from "@/app/result/create-image/utils";
+import { shareImageResult, shareTextResult } from "@/app/result/utils";
 
 interface ShareKakaoButtonProps {
   // 공유할 컨텐츠 타입

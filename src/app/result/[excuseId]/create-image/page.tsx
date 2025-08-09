@@ -176,7 +176,12 @@ export default function CreateImagePage({ params }: CreateImagePageProps) {
         </div>
 
         {/* Action Buttons */}
-        <ActionButtons cardRef={cardRef} excuseData={excuseData} />
+        <ActionButtons
+          cardRef={cardRef}
+          excuseData={excuseData}
+          excuseId={resolvedParams.excuseId}
+          selectedCardType={selectedCardType}
+        />
       </div>
     </>
   );
