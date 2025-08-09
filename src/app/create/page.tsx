@@ -9,8 +9,6 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Modal from "@/components/common/Modal";
 import Balloon from "@/components/inputs/Balloon";
-import { generateExcuse, ExcuseGenerateRequest } from "@/lib/api";
-import { useToast } from "@/components/common/Toast";
 
 export default function Page() {
   const pickerOptions1 = [
@@ -35,20 +33,7 @@ export default function Page() {
   const [textInput4, setTextInput4] = useState<string>("");
   const [textInput5, setTextInput5] = useState<string>("");
   const [showExitModal, setShowExitModal] = useState(false);
-  const [isSubmitting, setIsSubmitting] = useState(false);
   const router = useRouter();
-  const { showInfoToast } = useToast();
-
-  // value를 label로 변환하는 헬퍼 함수들
-  const getTargetLabel = (value: string) => {
-    const option = pickerOptions1.find((opt) => opt.value === value);
-    return option ? option.label : value;
-  };
-
-  const getToneLabel = (value: string) => {
-    const option = pickerOptions2.find((opt) => opt.value === value);
-    return option ? option.label : value;
-  };
 
   const handleNext = async () => {
     if (currentStep === 1 && selectedValue1) {
@@ -72,73 +57,8 @@ export default function Page() {
       // localStorage에 폼 데이터 저장 (재생성 시 사용)
       localStorage.setItem("excuse_form_data", JSON.stringify(formData));
 
-      setIsSubmitting(true);
-
-      try {
-        // API 요청 데이터 구성
-        const requestData: ExcuseGenerateRequest = {
-          situation: textInput3,
-          target: getTargetLabel(selectedValue1),
-          tone: getToneLabel(selectedValue2),
-          isRegenerated: false,
-          regeneratedBtnVal: "", // 첫 생성시에는 빈 문자열
-          questions: [
-            {
-              step: 1,
-              prompt: "구체적으로 어떤 상황이신가요?",
-              answer: textInput3,
-            },
-            {
-              step: 2,
-              prompt:
-                "추가로 설명하고 싶은 부분이 있나요? (상황 설명, 정도나 심각성, 관련 배경 등)",
-              answer: textInput4,
-            },
-            {
-              step: 3,
-              prompt: "상대방에게 전달할 때 고려해야 할 점이 있나요?",
-              answer: textInput5,
-            },
-          ],
-        };
-
-        console.log("API 요청 데이터:", requestData);
-
-        // 로딩 페이지로 먼저 이동
-        router.push("/loading");
-
-        // API 호출
-        const response = await generateExcuse(requestData);
-
-        // 결과 데이터를 localStorage에 저장
-        localStorage.setItem("excuse_result", JSON.stringify(response));
-
-        showInfoToast("핑계가 생성되었습니다!");
-        // 로딩 페이지에서 자동으로 result 페이지로 이동하도록 처리
-      } catch (error: any) {
-        console.error("핑계 생성 실패:", error);
-
-        let errorMessage = "핑계 생성에 실패했습니다. 다시 시도해주세요.";
-
-        if (error.response) {
-          // 서버에서 응답을 받은 경우
-          console.error("응답 상태:", error.response.status);
-          console.error("응답 데이터:", error.response.data);
-
-          if (error.response.status === 400) {
-            errorMessage = "요청 데이터가 올바르지 않습니다.";
-          } else if (error.response.status === 500) {
-            errorMessage = "서버 오류가 발생했습니다.";
-          }
-        } else if (error.request) {
-          // 요청을 보냈지만 응답을 받지 못한 경우
-          console.error("네트워크 오류:", error.request);
-          errorMessage = "네트워크 연결을 확인해주세요.";
-        }
-
-        showInfoToast(errorMessage);
-        setIsSubmitting(false);
-      }
+      // 로딩 페이지로 이동 (API 호출은 loading 페이지에서 처리)
+      router.push("/loading");
     }
   };
 
@@ -347,12 +267,12 @@ export default function Page() {
         </div>
         <div className="w-[80px] h-[48px]">
           <CustomButton
-            typeStyle={canProceed() && !isSubmitting ? "primary" : "disable"}
+            typeStyle={canProceed() ? "primary" : "disable"}
             round="square"
             onClick={handleNext}
-            disabled={!canProceed() || isSubmitting}
+            disabled={!canProceed()}
           >
-            {isSubmitting && currentStep === 5 ? "제출" : "다음"}
+            {currentStep === 5 ? "제출" : "다음"}
           </CustomButton>
         </div>
       </div>

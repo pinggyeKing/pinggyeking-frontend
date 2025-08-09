@@ -15,11 +15,7 @@ import {
 import { useToast } from "@/components/common/Toast";
 import Modal from "@/components/common/Modal";
 import FigmaTextBox from "@/components/FigmaTextBox";
-import {
-  generateExcuse,
-  ExcuseGenerateRequest,
-  ExcuseGenerateResponse,
-} from "@/lib/api";
+import { ExcuseGenerateResponse } from "@/lib/api";
 
 export default function ResultPage() {
   const router = useRouter();
@@ -33,9 +29,6 @@ export default function ResultPage() {
     null
   );
 
-  // 로딩 상태
-  const [isRegenerating, setIsRegenerating] = useState(false);
-
   // 페이지 로드 시 저장된 결과 데이터 불러오기
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -44,6 +37,20 @@ export default function ResultPage() {
         const resultData = JSON.parse(savedResult) as ExcuseGenerateResponse;
         setExcuseData(resultData);
         setResultText(resultData.excuse.excuse);
+
+        // imageKey에 따라 캐릭터 타입 설정
+        if (resultData.imageKey) {
+          const imageKeyToCharacter: { [key: string]: string } = {
+            A: "suit",
+            B: "default",
+            C: "cute",
+            D: "kidding",
+            E: "cool",
+          };
+          const newCharacterType =
+            imageKeyToCharacter[resultData.imageKey] || "default";
+          setCharacterType(newCharacterType);
+        }
       } else {
         // 저장된 결과가 없으면 기본 텍스트 사용
         setResultText(`부장님, 정말 죄송합니다만....내일 회식에 
@@ -52,6 +59,12 @@ export default function ResultPage() {
 이유,,,, 
 
 ,,,, `);
+      }
+
+      // localStorage에서 캐릭터 타입 정보도 확인
+      const savedCharacterType = localStorage.getItem("character_type");
+      if (savedCharacterType) {
+        setCharacterType(savedCharacterType);
       }
     }
   }, []);
@@ -112,14 +125,33 @@ export default function ResultPage() {
 
   const { showInfoToast } = useToast();
 
+  // 동적 라우팅을 위한 헬퍼 함수
+  const navigateToCreateImage = () => {
+    const savedResult = localStorage.getItem("excuse_result");
+    if (savedResult) {
+      try {
+        const resultData = JSON.parse(savedResult) as ExcuseGenerateResponse;
+        if (resultData.id) {
+          router.push(`/result/${resultData.id}/create-image`);
+          return;
+        }
+      } catch (error) {
+        console.error("결과 데이터 파싱 오류:", error);
+      }
+    }
+
+    // 기본 경로로 이동 (fallback)
+    router.push("/result/1/create-image");
+  };
+
   // 캐릭터 타입에 따른 이미지 경로 매핑
   const getCharacterImage = (type: string) => {
     const characterMap: { [key: string]: string } = {
       default: "/characters/default.svg",
-      casual: "/characters/casual.svg",
-      formal: "/characters/formal.svg",
-      student: "/characters/student.svg",
-      // 필요에 따라 더 많은 캐릭터 타입 추가 가능
+      suit: "/characters/suit.svg",
+      cute: "/characters/cute.svg",
+      kidding: "/characters/kidding.svg",
+      cool: "/characters/cool.svg",
     };
 
     return characterMap[type] || characterMap.default;
@@ -135,6 +167,7 @@ export default function ResultPage() {
     localStorage.removeItem("excuse_result");
     localStorage.removeItem("result_like_status");
     localStorage.removeItem("result_regenerate_option");
+    localStorage.removeItem("character_type");
     router.push("/");
   };
 
@@ -155,73 +188,50 @@ export default function ResultPage() {
   const handleRegenerateOption = async (option: "구체적으로" | "간결하게") => {
     setSelectedRegenerateOption(option);
     setIsRegenerateOpen(false);
-    setIsRegenerating(true);
 
-    try {
-      // localStorage에서 저장된 생성 데이터 불러오기
-      const savedFormData = localStorage.getItem("excuse_form_data");
-      if (!savedFormData) {
-        showInfoToast("생성 정보를 찾을 수 없습니다.");
-        return;
-      }
-
-      const formData = JSON.parse(savedFormData);
-
-      // API 요청 데이터 구성
-      const requestData: ExcuseGenerateRequest = {
-        situation: formData.situation || "회식 참석 불가",
-        target: formData.target || "상사",
-        tone: formData.tone || "정중하게",
-        isRegenerated: true,
-        regeneratedBtnVal: option,
-        questions: [
-          {
-            step: 1,
-            prompt: "구체적으로 어떤 상황이신가요?",
-            answer: formData.situation || "",
-          },
-          {
-            step: 2,
-            prompt:
-              "추가로 설명하고 싶은 부분이 있나요? (상황 설명, 정도나 심각성, 관련 배경 등)",
-            answer: formData.additionalInfo || "",
-          },
-          {
-            step: 3,
-            prompt: "상대방에게 전달할 때 고려해야 할 점이 있나요?",
-            answer: formData.considerations || "",
-          },
-        ],
-      };
-
-      router.push("/loading");
-      // API 호출
-      const response = await generateExcuse(requestData);
-      setExcuseData(response);
-      setResultText(response.excuse.excuse);
-      showInfoToast("핑계가 재생성되었습니다!");
-    } catch (error) {
-      console.error("재생성 실패:", error);
-      showInfoToast("재생성에 실패했습니다. 다시 시도해주세요.");
-    } finally {
-      setIsRegenerating(false);
+    // localStorage에서 저장된 생성 데이터 확인
+    const savedFormData = localStorage.getItem("excuse_form_data");
+    if (!savedFormData) {
+      showInfoToast("생성 정보를 찾을 수 없습니다.");
+      return;
     }
+
+    // 재생성 정보를 localStorage에 저장
+    localStorage.setItem("is_regeneration", "true");
+    localStorage.setItem("regeneration_option", option);
+
+    // 로딩 페이지로 이동 (API 호출은 loading 페이지에서 처리)
+    router.push("/loading");
   };
 
   const handleCreateImage = () => {
+    // localStorage에서 excuse_result의 id 확인
+    const savedResult = localStorage.getItem("excuse_result");
+    if (savedResult) {
+      try {
+        const resultData = JSON.parse(savedResult) as ExcuseGenerateResponse;
+        if (resultData.id) {
+          // id가 있으면 바로 이미지 생성 페이지로 이동
+          navigateToCreateImage();
+          return;
+        }
+      } catch (error) {
+        console.error("결과 데이터 파싱 오류:", error);
+      }
+    }
+
+    // id가 없거나 오류 발생 시 피드백 모달 표시
     setShowFeedbackModal(true);
   };
 
   const handleFeedbackConfirm = () => {
     setShowFeedbackModal(false);
-    // TODO: 이미지 생성 페이지로 이동
-    router.push("/result/1/create-image");
+    navigateToCreateImage();
   };
 
   const handleFeedbackCancel = () => {
     setShowFeedbackModal(false);
-    // TODO: 이미지 생성 페이지로 이동
-    router.push("/result/1/create-image");
+    navigateToCreateImage();
   };
 
   const handleThumbsUp = () => {
@@ -263,8 +273,8 @@ export default function ResultPage() {
         {/* 캐릭터 */}
         <div className="flex justify-center pt-[40px] pb-[4.32px]">
           <Image
-            src="/characters/default.svg"
-            alt="정장 캐릭터"
+            src={getCharacterImage(characterType)}
+            alt={`${characterType} 캐릭터`}
             width={112}
             height={120}
           />
@@ -319,13 +329,12 @@ export default function ResultPage() {
                 onClick={handleRegenerate}
                 leftIcon={<RefreshCcw size={20} />}
                 rightIcon={<ChevronDown size={20} />}
-                disabled={isRegenerating}
               >
                 재생성
               </CustomButton>
 
               {/* 재생성 옵션 드롭다운 */}
-              {isRegenerateOpen && !isRegenerating && (
+              {isRegenerateOpen && (
                 <div className="absolute top-full left-0 right-0 z-10">
                   <div className="flex flex-col p-1 gap-0.5">
                     <CustomButton
@@ -335,7 +344,6 @@ export default function ResultPage() {
                       pressHold={selectedRegenerateOption === "구체적으로"}
                       onClick={() => handleRegenerateOption("구체적으로")}
                       className="justify-start text-left"
-                      disabled={isRegenerating}
                     >
                       구체적으로
                     </CustomButton>
@@ -346,7 +354,6 @@ export default function ResultPage() {
                       pressHold={selectedRegenerateOption === "간결하게"}
                       onClick={() => handleRegenerateOption("간결하게")}
                       className="justify-start text-left"
-                      disabled={isRegenerating}
                     >
                       간결하게
                     </CustomButton>
