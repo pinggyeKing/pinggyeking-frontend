@@ -1,13 +1,22 @@
 "use client";
 
-import React, { useRef, useState, useEffect } from "react";
-import { Carousel, ActionButtons } from "./components";
+import React, { useRef, useState, useEffect, use } from "react";
+import { Carousel, ActionButtons } from "../../components";
 import FigmaButton from "@/components/FigmaButton";
 import { ToastContainer } from "@/components/common/Toast";
-import CanvasCard from "../card-image/components/CanvasCard";
+import CanvasCard from "../../card-image/components/CanvasCard";
 import { useRouter } from "next/navigation";
+import { useExcuseDetail } from "@/app/share/api";
+import LottieLoading from "@/components/LottieLoading";
 
-export default function Page() {
+interface CreateImagePageProps {
+  params: Promise<{
+    excuseId: string;
+  }>;
+}
+
+export default function CreateImagePage({ params }: CreateImagePageProps) {
+  const resolvedParams = use(params);
   const router = useRouter();
   const [selectedCardType, setSelectedCardType] = useState<
     "default" | "formal" | "cute" | "humorous" | "pop"
@@ -15,17 +24,12 @@ export default function Page() {
   const [cardScale, setCardScale] = useState<number>(0.65);
   const cardRef = useRef<HTMLDivElement>(null);
 
-  const handleSelectionChange = (selectedId: string) => {
-    console.log("Selected character style:", selectedId);
-    setSelectedCardType(
-      selectedId as "default" | "formal" | "cute" | "humorous" | "pop",
-    );
-  };
-
-  const handleBackClick = () => {
-    console.log("Back button clicked");
-    router.back();
-  };
+  // API 호출
+  const {
+    data: excuseData,
+    isLoading,
+    error,
+  } = useExcuseDetail(resolvedParams.excuseId);
 
   // 화면 너비에 따른 카드 스케일 조정 - 부모 영역을 넘치지 않도록 계산
   useEffect(() => {
@@ -66,6 +70,65 @@ export default function Page() {
     };
   }, []);
 
+  const handleSelectionChange = (selectedId: string) => {
+    console.log("Selected character style:", selectedId);
+    setSelectedCardType(
+      selectedId as "default" | "formal" | "cute" | "humorous" | "pop",
+    );
+  };
+
+  const handleBackClick = () => {
+    console.log("Back button clicked");
+    router.back();
+  };
+
+  // 로딩 상태
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <LottieLoading text="핑계를 불러오는 중이에요!" />
+      </div>
+    );
+  }
+
+  // 에러 상태
+  if (error) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-screen gap-4">
+        <p className="text-lg text-gray-600">
+          핑계를 불러오는 중 오류가 발생했습니다.
+        </p>
+        <FigmaButton
+          variant="primary"
+          round="pills"
+          size={1.0}
+          onClick={() => router.push("/create")}
+          className="px-6"
+        >
+          새로운 핑계 만들기
+        </FigmaButton>
+      </div>
+    );
+  }
+
+  // 데이터가 없는 경우
+  if (!excuseData?.excuse) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-screen gap-4">
+        <p className="text-lg text-gray-600">핑계 정보를 찾을 수 없습니다.</p>
+        <FigmaButton
+          variant="primary"
+          round="pills"
+          size={1.0}
+          onClick={() => router.push("/create")}
+          className="px-6"
+        >
+          새로운 핑계 만들기
+        </FigmaButton>
+      </div>
+    );
+  }
+
   return (
     <>
       <ToastContainer />
@@ -94,7 +157,6 @@ export default function Page() {
         </div>
 
         {/* Card Style Selection */}
-        {/* Original Carousel */}
         <Carousel
           onSelectionChange={handleSelectionChange}
           initialSelected={selectedCardType}
@@ -105,13 +167,8 @@ export default function Page() {
           <div className="transform origin-center max-w-full overflow-hidden">
             <CanvasCard
               ref={cardRef}
-              recipient="부장님"
-              message={`부장님, 정말 죄송합니다만....내일 회식에 참석하지 못할 것 같습니다... 
-
-
-이유,,,, 
-
-,,,,`}
+              recipient={excuseData.excuse.target}
+              message={excuseData.excuse.excuse}
               cardType={selectedCardType}
               scale={0.65}
             />
@@ -119,7 +176,7 @@ export default function Page() {
         </div>
 
         {/* Action Buttons */}
-        <ActionButtons cardRef={cardRef} />
+        <ActionButtons cardRef={cardRef} excuseData={excuseData} />
       </div>
     </>
   );

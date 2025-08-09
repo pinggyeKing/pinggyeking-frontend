@@ -12,15 +12,33 @@ interface CanvasCardRef {
 
 interface ActionButtonsProps {
   cardRef: React.RefObject<HTMLDivElement | null>;
+  excuseData?: {
+    excuse: {
+      situation: string;
+      target: string;
+      tone: string;
+      excuse: string;
+    };
+  };
 }
 
-export default function ActionButtons({ cardRef }: ActionButtonsProps) {
+export default function ActionButtons({
+  cardRef,
+  excuseData,
+}: ActionButtonsProps) {
   const { showSuccessToast } = useToast();
 
   const handleKakaoShare = () => {
+    const title = excuseData
+      ? `${excuseData.excuse.target}에게 핑계 카드`
+      : "탬플릿을 선택해주세요";
+    const description = excuseData
+      ? excuseData.excuse.excuse.substring(0, 100) + "..."
+      : "아래 생성된 핑계를 확인해주세요";
+
     shareToKakao({
-      title: "탬플릿을 선택해주세요",
-      description: "아래 생성된 핑계를 확인해주세요",
+      title,
+      description,
       imageUrl: "/cards/kakao-share-image.png",
       linkUrl: window.location.href,
     });
