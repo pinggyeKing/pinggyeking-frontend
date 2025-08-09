@@ -39,7 +39,7 @@ export default function SatisfactionChart() {
   const barSpacing = plotWidth / satisfactionData.length;
 
   return (
-    <div className="bg-white border-2 border-[#4E4E4E] rounded-3xl p-6 sm:p-8 w-full shadow-sm hover:shadow-md transition-shadow duration-200">
+    <div className="bg-white border-2 border-[#4E4E4E] rounded-[18.7px] p-2 sm:p-2 w-full shadow-sm hover:shadow-md transition-shadow duration-200">
       <svg
         width="100%"
         height="100%"
