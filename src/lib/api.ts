@@ -2,7 +2,7 @@ import axios from "axios";
 
 // API 기본 설정
 export const api = axios.create({
-  baseURL: "http://49.50.133.127:8080",
+  baseURL: process.env.NEXT_PUBLIC_API_BASE_URL || "http://49.50.133.127:8080",
   timeout: 10000,
   headers: {
     "Content-Type": "application/json",
