@@ -1,13 +1,13 @@
 "use client";
 
 import React, { useRef, useState, useEffect } from "react";
-import Card from "../card-image/components/Card";
 import { Carousel } from "./components";
 import FigmaButton from "@/components/FigmaButton";
 import { copyCurrentUrl, downloadCardByRef, shareToKakao } from "./utils";
 import { ToastContainer, useToast } from "@/components/common/Toast";
 import CanvasCard from "../card-image/components/CanvasCard";
 import { downloadCanvasCardAsJPG } from "./utils/canvasUtils";
+import { useRouter } from "next/navigation";
 
 interface CanvasCardRef {
   getCanvasAsBlob: (type?: string, quality?: number) => Promise<Blob | null>;
@@ -15,6 +15,7 @@ interface CanvasCardRef {
 }
 
 export default function Page() {
+  const router = useRouter();
   const [selectedCardType, setSelectedCardType] = useState<
     "default" | "formal" | "cute" | "humorous" | "pop"
   >("default");
@@ -31,6 +32,7 @@ export default function Page() {
 
   const handleBackClick = () => {
     console.log("Back button clicked");
+    router.back();
   };
 
   // 화면 너비에 따른 카드 스케일 조정 - 부모 영역을 넘치지 않도록 계산
@@ -126,18 +128,6 @@ export default function Page() {
         {/* Card Preview */}
         <div className="mb-5 flex justify-center w-full">
           <div className="transform origin-center max-w-full overflow-hidden">
-            {/* <Card
-              ref={cardRef}
-              recipient="부장님"
-              message={`부장님, 정말 죄송합니다만....내일 회식에 참석하지 못할 것 같습니다... 
-
-
-이유,,,, 
-
-,,,,`}
-              cardType={selectedCardType}
-              scale={cardScale}
-            /> */}
             <CanvasCard
               ref={cardRef}
               recipient="부장님"

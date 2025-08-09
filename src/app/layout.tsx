@@ -5,6 +5,7 @@ import { SplashProvider } from "@/contexts/SplashContext";
 import { NavigationProvider } from "@/contexts/NavigationContext";
 import { ToastProvider, ToastContainer } from "@/components/common/Toast";
 import StructuredData from "@/components/StructuredData";
+import QueryClientWrapper from "@/components/QueryClientWrapper";
 
 export const metadata: Metadata = {
   title: "변명 연구소",
@@ -54,13 +55,15 @@ export default function RootLayout({
             >
               <div className="w-full h-full overflow-y-auto overflow-x-hidden rounded-[28px] pb-[140px]">
                 <StructuredData />
-                <SplashProvider>
-                  <ToastProvider>
-                    <NavigationProvider>
-                      <ClientLayout>{children}</ClientLayout>
-                    </NavigationProvider>
-                  </ToastProvider>
-                </SplashProvider>
+                <QueryClientWrapper>
+                  <SplashProvider>
+                    <ToastProvider>
+                      <NavigationProvider>
+                        <ClientLayout>{children}</ClientLayout>
+                      </NavigationProvider>
+                    </ToastProvider>
+                  </SplashProvider>
+                </QueryClientWrapper>
               </div>
             </div>
           </div>
@@ -74,14 +77,16 @@ export default function RootLayout({
           }}
         >
           <StructuredData />
-          <SplashProvider>
-            <NavigationProvider>
-              <ToastProvider>
-                <ClientLayout>{children}</ClientLayout>
-                <ToastContainer />
-              </ToastProvider>
-            </NavigationProvider>
-          </SplashProvider>
+          <QueryClientWrapper>
+            <SplashProvider>
+              <NavigationProvider>
+                <ToastProvider>
+                  <ClientLayout>{children}</ClientLayout>
+                  <ToastContainer />
+                </ToastProvider>
+              </NavigationProvider>
+            </SplashProvider>
+          </QueryClientWrapper>
         </div>
       </body>
     </html>
