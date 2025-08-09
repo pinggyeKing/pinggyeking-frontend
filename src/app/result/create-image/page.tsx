@@ -66,23 +66,6 @@ export default function Page() {
     };
   }, []);
 
-  const getCharacterImage = (type: string) => {
-    switch (type) {
-      case "default":
-        return "/characters/card-style-default.svg";
-      case "formal":
-        return "/characters/card-style-formal.svg";
-      case "cute":
-        return "/characters/card-style-cute.svg";
-      case "humorous":
-        return "/characters/card-style-humorous.svg";
-      case "pop":
-        return "/characters/card-style-pop.svg";
-      default:
-        return "/characters/card-style-default.svg";
-    }
-  };
-
   return (
     <>
       <ToastContainer />
