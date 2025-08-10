@@ -110,6 +110,10 @@ export default function ResultPage() {
   const [showFeedbackModal, setShowFeedbackModal] = useState(false);
   const [feedback, setFeedback] = useState("");
   const [isFeedbackSubmitting, setIsFeedbackSubmitting] = useState(false);
+  // 피드백 모달 호출 출처 추적 (이미지 생성 버튼 vs 좋아요/싫어요 반응)
+  const [feedbackSource, setFeedbackSource] = useState<
+    "create-image" | "reaction" | null
+  >(null);
 
   // localStorage에 상태 저장하는 useEffect들
   useEffect(() => {
@@ -210,6 +214,7 @@ export default function ResultPage() {
 
   const handleCreateImage = () => {
     // 항상 피드백 모달 표시
+    setFeedbackSource("create-image");
     setShowFeedbackModal(true);
   };
 
@@ -250,7 +255,11 @@ export default function ResultPage() {
 
   const handleFeedbackCancel = () => {
     setShowFeedbackModal(false);
-    navigateToCreateImage();
+    // create-image 로 열렸을 때만 이동, reaction 에서는 머무름
+    if (feedbackSource === "create-image") {
+      navigateToCreateImage();
+    }
+    setFeedbackSource(null);
   };
 
   const handleThumbsUp = () => {
@@ -259,6 +268,7 @@ export default function ResultPage() {
 
     // 좋아요를 누른 경우 피드백 모달 표시
     if (newStatus === "like") {
+      setFeedbackSource("reaction");
       setShowFeedbackModal(true);
     }
   };
@@ -269,6 +279,7 @@ export default function ResultPage() {
 
     // 싫어요를 누른 경우 피드백 모달 표시
     if (newStatus === "dislike") {
+      setFeedbackSource("reaction");
       setShowFeedbackModal(true);
     }
   };
