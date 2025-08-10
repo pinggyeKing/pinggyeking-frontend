@@ -254,13 +254,23 @@ export default function ResultPage() {
   };
 
   const handleThumbsUp = () => {
-    setLikeStatus(likeStatus === "like" ? "none" : "like");
-    // TODO: 서버에 좋아요 전송
+    const newStatus = likeStatus === "like" ? "none" : "like";
+    setLikeStatus(newStatus);
+
+    // 좋아요를 누른 경우 피드백 모달 표시
+    if (newStatus === "like") {
+      setShowFeedbackModal(true);
+    }
   };
 
   const handleThumbsDown = () => {
-    setLikeStatus(likeStatus === "dislike" ? "none" : "dislike");
-    // TODO: 서버에 싫어요 전송
+    const newStatus = likeStatus === "dislike" ? "none" : "dislike";
+    setLikeStatus(newStatus);
+
+    // 싫어요를 누른 경우 피드백 모달 표시
+    if (newStatus === "dislike") {
+      setShowFeedbackModal(true);
+    }
   };
 
   return (
