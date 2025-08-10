@@ -179,7 +179,14 @@ export default function CreateImagePage({ params }: CreateImagePageProps) {
         </div>
 
         {/* Card Preview */}
-        <div className="flex justify-center w-full relative z-0">
+        <div
+          className="flex justify-center relative z-0"
+          style={{
+            width: "calc(100% + 2rem)",
+            marginLeft: "-1rem",
+            marginRight: "-1rem",
+          }}
+        >
           <div className="transform origin-center max-w-full overflow-hidden">
             <CanvasCard
               ref={cardRef}
