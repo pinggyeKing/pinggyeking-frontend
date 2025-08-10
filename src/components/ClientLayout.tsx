@@ -76,7 +76,7 @@ const ClientLayout: React.FC<ClientLayoutProps> = ({ children }) => {
   // 다른 페이지들은 공통 레이아웃 적용
   return (
     <>
-      <div className="flex flex-col items-center pt-[35px] pb-[140px] md:pb-[20px] px-6 w-[375px] md:w-full md:max-w-[431px] min-h-screen m-auto">
+      <div className="flex flex-col items-center pt-[35px] pb-[120px] md:pb-[20px] px-6 w-[375px] md:w-full md:max-w-[431px] min-h-screen m-auto">
         {/* 공통 타이틀 */}
         <div className="text-extra-title text-grey-8 text-center leading-[60px] mb-[24px]">
           변명연구소
@@ -84,7 +84,7 @@ const ClientLayout: React.FC<ClientLayoutProps> = ({ children }) => {
 
         {/* 페이지별 콘텐츠 */}
         <div className="w-full flex-1 flex justify-center">
-          <div className="w-full radius-24 flex flex-col py-2 px-4 border-2 border-grey-7 bg-grey-0">
+          <div className="w-full radius-24 flex flex-col py-6 px-5 border-2 border-grey-7 bg-grey-0">
             {children}
           </div>
         </div>
