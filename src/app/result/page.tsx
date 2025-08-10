@@ -358,6 +358,7 @@ export default function ResultPage() {
                 onClick={handleRegenerate}
                 leftIcon={<RefreshCcw size={20} />}
                 rightIcon={<ChevronDown size={20} />}
+                className="whitespace-nowrap"
               >
                 재생성
               </CustomButton>

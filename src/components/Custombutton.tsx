@@ -113,7 +113,7 @@ export default function CustomButton({
       {...props}
     >
       {leftIcon && (
-        <span className={hasValidChildren() ? "mr-2" : ""}>{leftIcon}</span>
+        <span className={hasValidChildren() ? "mr-1" : ""}>{leftIcon}</span>
       )}
       {children &&
         typeof children === "string" &&
@@ -121,7 +121,7 @@ export default function CustomButton({
         children}
       {children && typeof children !== "string" && children}
       {rightIcon && (
-        <span className={hasValidChildren() ? "ml-2" : ""}>{rightIcon}</span>
+        <span className={hasValidChildren() ? "ml-1" : ""}>{rightIcon}</span>
       )}
     </button>
   );
