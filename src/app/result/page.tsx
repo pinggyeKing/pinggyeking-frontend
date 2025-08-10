@@ -30,7 +30,7 @@ export default function ResultPage() {
 
   // 핑계 데이터 상태
   const [excuseData, setExcuseData] = useState<ExcuseGenerateResponse | null>(
-    null
+    null,
   );
 
   // 페이지 로드 시 저장된 결과 데이터 불러오기
@@ -92,7 +92,7 @@ export default function ResultPage() {
 
   // 좋아요/싫어요 상태 관리
   const [likeStatus, setLikeStatus] = useState<"none" | "like" | "dislike">(
-    getInitialLikeStatus
+    getInitialLikeStatus,
   );
 
   // 재생성 드롭다운 상태 관리
@@ -126,7 +126,7 @@ export default function ResultPage() {
     if (typeof window !== "undefined" && selectedRegenerateOption) {
       localStorage.setItem(
         "result_regenerate_option",
-        selectedRegenerateOption
+        selectedRegenerateOption,
       );
     }
   }, [selectedRegenerateOption]);
@@ -439,7 +439,7 @@ export default function ResultPage() {
               </p>
             </div>
             <Image
-              src="/characters/error.svg"
+              src="/characters/Error.svg"
               alt="처음으로 돌아갈까?"
               width={287}
               height={164}

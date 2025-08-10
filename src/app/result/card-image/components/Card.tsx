@@ -130,7 +130,7 @@ const Card = forwardRef<HTMLDivElement, CardProps>(
                 marginBottom: `${getScaledSpacing(8, 4)}px`,
               }}
             >
-              To. {recipient}
+              {recipient}
             </div>
 
             {/* Element 2: Message */}

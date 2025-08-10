@@ -222,7 +222,7 @@ const CanvasCard = forwardRef<HTMLDivElement, CanvasCardProps>(
       const recipientY = CANVAS_HEIGHT * finalTextPositions.recipient.y;
       // recipient가 undefined이거나 빈 문자열인 경우에만 기본값 사용
       const displayRecipient = recipient && recipient.trim() ? recipient : "님";
-      ctx.fillText(`To. ${displayRecipient}`, recipientX, recipientY);
+      ctx.fillText(`${displayRecipient}`, recipientX, recipientY);
 
       // 메시지 텍스트 렌더링
       const messageFontSize = CANVAS_HEIGHT * finalFontSizes.message;

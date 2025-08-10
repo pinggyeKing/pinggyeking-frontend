@@ -159,7 +159,7 @@ export default function CreateImagePage({ params }: CreateImagePageProps) {
         </div>
 
         {/* Card Style Selection */}
-        <div className="w-full bg-gray-50 rounded-lg py-1 relative z-10">
+        <div className="w-full bg-gray-50 rounded-lg py-1 relative z-0">
           <Carousel
             onSelectionChange={handleSelectionChange}
             initialSelected={selectedCardType}

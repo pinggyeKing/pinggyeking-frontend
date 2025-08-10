@@ -154,7 +154,7 @@ export default function CanvasDemoPage() {
           {/* Recipient Text Controls */}
           <div className="bg-white p-4 rounded-lg border">
             <h3 className="font-medium text-grey-10 mb-3">
-              수신자 텍스트 ("To. 부장님")
+              수신자 텍스트 ("부장님")
             </h3>
             <div className="grid grid-cols-2 gap-4">
               <div>
