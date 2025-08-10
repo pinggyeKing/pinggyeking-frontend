@@ -40,7 +40,7 @@ export default function SharePage({ params }: SharePageProps) {
   }, []);
 
   const handleGenerateClick = () => {
-    router.push("/create");
+    router.push("/");
   };
 
   // 로딩 상태
