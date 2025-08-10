@@ -15,7 +15,7 @@ api.interceptors.response.use(
   (error) => {
     console.error("API Error:", error);
     return Promise.reject(error);
-  }
+  },
 );
 
 // API 응답 타입 정의
@@ -85,11 +85,11 @@ export interface FeedbackErrorResponse {
 
 // 핑계 생성 API
 export const generateExcuse = async (
-  data: ExcuseGenerateRequest
+  data: ExcuseGenerateRequest,
 ): Promise<ExcuseGenerateResponse> => {
   const response = await api.post<ExcuseGenerateResponse>(
     "/api/clova/generate",
-    data
+    data,
   );
   return response.data;
 };
