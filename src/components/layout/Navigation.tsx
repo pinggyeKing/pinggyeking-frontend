@@ -68,6 +68,8 @@ const Navigation = () => {
             <div className="flex items-stretch justify-stretch gap-8 rounded-[24px] bg-white px-6 py-4">
               {menuItems.map(({ label, href, ariaLabel, icon: Icon }) => {
                 const isActive = currentPath === href;
+                const isExcuseGeneration = href === "/"; // 핑계 생성 버튼 확인
+
                 return (
                   <Link
                     key={href}
@@ -76,7 +78,9 @@ const Navigation = () => {
                     aria-current={isActive ? "page" : undefined}
                     className={`flex flex-1 cursor-pointer items-center justify-center gap-1 rounded-[24px] border-2 px-4 py-3 font-normal transition-colors duration-200 
                     ${
-                      isActive
+                      isExcuseGeneration
+                        ? "border-[#1E1E1E] bg-grey-10 text-white" // 핑계 생성 버튼은 항상 bg-grey-10
+                        : isActive
                         ? "border-[#1E1E1E] bg-[#1E1E1E] text-white"
                         : "border-[#1E1E1E] bg-white text-[#1E1E1E] hover:bg-gray-50"
                     }`}
@@ -89,7 +93,7 @@ const Navigation = () => {
                   >
                     <Icon
                       className="h-6 w-6"
-                      strokeWidth={isActive ? 2.5 : 2}
+                      strokeWidth="2.5"
                       aria-hidden="true"
                     />
                     <span className="leading-none">{label}</span>

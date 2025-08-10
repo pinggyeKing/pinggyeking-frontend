@@ -46,7 +46,7 @@ const ClientLayout: React.FC<ClientLayoutProps> = ({ children }) => {
 
           {/* 페이지별 콘텐츠 - 로딩 페이지는 중앙 정렬 */}
           <div className="w-full flex-1 flex justify-center">
-            <div className="w-full h-full radius-24 flex flex-col justify-center items-center py-2 px-4 border-2 border-grey-7 bg-grey-0">
+            <div className="w-[327px] h-[630px] radius-24 flex flex-col justify-center items-center py-2 px-4 border-2 border-grey-7 bg-grey-0">
               {children}
             </div>
           </div>
@@ -66,7 +66,9 @@ const ClientLayout: React.FC<ClientLayoutProps> = ({ children }) => {
           </div>
 
           {/* 페이지별 콘텐츠 - 로딩 페이지는 중앙 정렬 */}
-          <div className="w-full h-full flex justify-center">{children}</div>
+          <div className="w-[327px] h-[630px] flex justify-center">
+            {children}
+          </div>
         </div>
         {showNavigation && <Navigation />}
       </>
@@ -84,7 +86,7 @@ const ClientLayout: React.FC<ClientLayoutProps> = ({ children }) => {
 
         {/* 페이지별 콘텐츠 */}
         <div className="w-full flex-1 flex justify-center">
-          <div className="w-full radius-24 flex flex-col py-6 px-5 border-2 border-grey-7 bg-grey-0">
+          <div className="w-[327px] h-[630px] radius-24 flex flex-col py-6 px-5 border-2 border-grey-7 bg-grey-0">
             {children}
           </div>
         </div>
