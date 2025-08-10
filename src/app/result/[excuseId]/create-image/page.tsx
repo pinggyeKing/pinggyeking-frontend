@@ -21,7 +21,7 @@ export default function CreateImagePage({ params }: CreateImagePageProps) {
   const [selectedCardType, setSelectedCardType] = useState<
     "default" | "formal" | "cute" | "humorous" | "pop"
   >("default");
-  const [cardScale, setCardScale] = useState<number>(0.65);
+  const cardScale = 286 / 444; // CanvasCard base width is 444px → fixed rendered width 286px
   const cardRef = useRef<HTMLDivElement>(null);
 
   // API 호출
@@ -70,19 +70,7 @@ export default function CreateImagePage({ params }: CreateImagePageProps) {
   //   };
   // }, []);
 
-  // 데스크탑(>=768px)과 모바일 기준으로 원하는 폭에 맞춰 스케일 계산
-  useEffect(() => {
-    const updateScale = () => {
-      const isDesktop = window.innerWidth >= 768; // ClientLayout의 md 기준과 동일
-      const desiredWidth = isDesktop ? 286 : 360; // px
-      const baseWidth = 444; // CanvasCard의 CANVAS_WIDTH
-      setCardScale(desiredWidth / baseWidth);
-    };
-
-    updateScale();
-    window.addEventListener("resize", updateScale);
-    return () => window.removeEventListener("resize", updateScale);
-  }, []);
+  // scale is fixed to achieve 286px width regardless of viewport
 
   const handleSelectionChange = (selectedId: string) => {
     console.log("Selected character style:", selectedId);
