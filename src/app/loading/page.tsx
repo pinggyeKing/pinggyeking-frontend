@@ -57,9 +57,11 @@ export default function Loading() {
           localStorage.getItem("is_regeneration") === "true";
 
         // 재생성이 아니고 이미 결과가 있는 경우에만 바로 결과 페이지로 이동
+        // 단, create 페이지에서 새로운 핑계 생성 시 excuse_result가 삭제되므로
+        // 이 로직은 브라우저 뒤로가기 등에서만 작동
         const existingResult = localStorage.getItem("excuse_result");
         if (existingResult && !isRegeneration) {
-          console.log("기존 결과 발견, 결과 페이지로 이동");
+          console.log("기존 결과 발견, 결과 페이지로 이동 (뒤로가기 등)");
           sessionStorage.removeItem("api_in_progress");
           setTimeout(() => {
             router.push("/result");
@@ -68,6 +70,7 @@ export default function Loading() {
         }
 
         console.log("재생성 여부:", isRegeneration);
+        console.log("새로운 API 호출 진행");
 
         // value를 label로 변환하는 헬퍼 함수들
         const getTargetLabel = (value: string) => {

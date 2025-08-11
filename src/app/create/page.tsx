@@ -57,6 +57,14 @@ export default function Page() {
       // localStorage에 폼 데이터 저장 (재생성 시 사용)
       localStorage.setItem("excuse_form_data", JSON.stringify(formData));
 
+      // 새로운 핑계 생성이므로 기존 결과 및 관련 데이터 삭제
+      localStorage.removeItem("excuse_result");
+      localStorage.removeItem("result_like_status");
+      localStorage.removeItem("result_regenerate_option");
+      localStorage.removeItem("character_type");
+      localStorage.removeItem("is_regeneration");
+      localStorage.removeItem("regeneration_option");
+
       // 로딩 페이지로 이동 (API 호출은 loading 페이지에서 처리)
       router.push("/loading");
     }
