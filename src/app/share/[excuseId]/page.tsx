@@ -17,7 +17,6 @@ interface SharePageProps {
 export default function SharePage({ params }: SharePageProps) {
   const resolvedParams = use(params);
   const router = useRouter();
-  const [isDesktop, setIsDesktop] = useState(false);
   const [isMounted, setIsMounted] = useState(false);
   const searchParams = useSearchParams();
   const rawCardType = searchParams?.get("cardType");
@@ -38,22 +37,10 @@ export default function SharePage({ params }: SharePageProps) {
 
   useEffect(() => {
     setIsMounted(true);
-
-    // 데스크탑 여부 체크 함수
-    const checkIsDesktop = () => {
-      setIsDesktop(window.innerWidth >= 768); // md breakpoint (768px)
-    };
-
-    checkIsDesktop();
-    window.addEventListener("resize", checkIsDesktop);
-
-    return () => {
-      window.removeEventListener("resize", checkIsDesktop);
-    };
   }, []);
 
   const handleGenerateClick = () => {
-    router.push("/create");
+    router.push("/");
   };
 
   // 로딩 상태
@@ -112,6 +99,8 @@ export default function SharePage({ params }: SharePageProps) {
 
 ${excuse}`;
 
+  const CARD_SCALE = 286 / 444; // CanvasCard base width is 444px → fixed width 286px
+
   return (
     <div className="flex flex-col items-center justify-between gap-6">
       {/* Card Preview */}
@@ -123,7 +112,7 @@ ${excuse}`;
             cardType={
               cardType as "default" | "formal" | "cute" | "humorous" | "pop"
             }
-            scale={isDesktop ? 0.65 : 0.82}
+            scale={CARD_SCALE}
           />
         </div>
       </div>
