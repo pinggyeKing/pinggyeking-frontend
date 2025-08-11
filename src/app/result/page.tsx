@@ -214,8 +214,10 @@ export default function ResultPage() {
 
   const handleCreateImage = () => {
     // 항상 피드백 모달 표시
-    setFeedbackSource("create-image");
-    setShowFeedbackModal(true);
+    // setFeedbackSource("create-image");
+    // setShowFeedbackModal(true);
+
+    router.push(`/result/${excuseData?.id}/create-image`);
   };
 
   const handleFeedbackConfirm = async () => {
