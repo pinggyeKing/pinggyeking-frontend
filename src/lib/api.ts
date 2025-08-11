@@ -15,7 +15,7 @@ function resolveBaseURL() {
   console.log("[API Client] Fallback 사용:", fallbackUrl);
   return fallbackUrl;
 }
-const baseURL = resolveBaseURL();
+const baseURL = "https://49.50.133.127:8443";
 
 export const api = axios.create({
   baseURL,
