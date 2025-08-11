@@ -11,7 +11,7 @@ function resolveBaseURL() {
   }
 
   // fallback (개발환경용)
-  const fallbackUrl = "http://49.50.133.127:8443";
+  const fallbackUrl = "https://49.50.133.127:8443";
   console.log("[API Client] Fallback 사용:", fallbackUrl);
   return fallbackUrl;
 }
