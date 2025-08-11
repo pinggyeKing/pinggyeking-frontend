@@ -2,10 +2,11 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   async rewrites() {
-    // NOTE: 실제 백엔드가 HTTPS 를 지원한다면 반드시 https:// 로 교체 필요
-    // ex) https://api.excuselab.com
+    // 프로덕션에서도 rewrites 활성화하되, HTTPS 백엔드 사용
     const upstream =
-      process.env.NEXT_PUBLIC_API_BASE_URL || "http://49.50.133.127:8080";
+      process.env.NODE_ENV === "production"
+        ? process.env.NEXT_PUBLIC_API_BASE_URL || "https://49.50.133.127:8080" // HTTPS로 변경
+        : process.env.NEXT_PUBLIC_API_BASE_URL || "http://49.50.133.127:8080";
 
     return [
       {
