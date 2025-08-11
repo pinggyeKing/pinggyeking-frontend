@@ -1,17 +1,19 @@
 import axios from "axios";
 
-// Mixed Content 방지를 위한 baseURL 결정 로직
-// 개발 환경: 직접 백엔드 접근 (http://49.50.133.127:8080)
-// 프로덕션: 상대경로 사용 -> Next.js rewrites가 서버사이드에서 HTTP 백엔드로 프록시
+// API 클라이언트 설정 - 직접 HTTPS 엔드포인트 사용
 function resolveBaseURL() {
-  // 프로덕션에서는 무조건 상대 경로 사용 (브라우저는 HTTPS로만 요청)
-  if (process.env.NODE_ENV === "production") {
-    return ""; // 상대 경로 -> rewrites가 HTTP 백엔드로 프록시
+  // 환경변수에서 API URL 가져오기 (개발/프로덕션 모두)
+  const envUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
+
+  if (envUrl) {
+    console.log("[API Client] 환경변수 사용:", envUrl);
+    return envUrl;
   }
 
-  // 개발 환경에서만 직접 백엔드 접근
-  const envUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
-  return envUrl || "http://49.50.133.127:8080";
+  // fallback (개발환경용)
+  const fallbackUrl = "http://49.50.133.127:8081";
+  console.log("[API Client] Fallback 사용:", fallbackUrl);
+  return fallbackUrl;
 }
 const baseURL = resolveBaseURL();
 
