@@ -15,7 +15,7 @@ function resolveBaseURL() {
   console.log("[API Client] Fallback 사용:", fallbackUrl);
   return fallbackUrl;
 }
-const baseURL = "https://6b1ff6592d2b.ngrok-free.app/";
+const baseURL = "https://5075b107652b.ngrok-free.app/";
 
 export const api = axios.create({
   baseURL,
