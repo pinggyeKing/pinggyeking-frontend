@@ -106,7 +106,8 @@ export default function Loading() {
           situation: formData.situation,
           target: getTargetLabel(formData.target),
           tone: getToneLabel(formData.tone),
-          isRegenerated: isRegeneration,
+          // TODO 임시 조치 true
+          isRegenerated: true,
           regeneratedBtnVal: regenerationOption,
           questions: [
             {

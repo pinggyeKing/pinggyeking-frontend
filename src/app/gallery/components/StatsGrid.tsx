@@ -25,19 +25,19 @@ export default function StatsGrid({ data }: StatsGridProps) {
   const stats = [
     {
       title: "생성된 핑계",
-      value: data.totalExcuses.toLocaleString(),
+      value: data.totalExcuses?.toLocaleString() ?? "0",
     },
     {
       title: "평균만족도",
-      value: `${data.averageSatisfaction}%`,
+      value: `${data.averageSatisfaction ?? "0"}%`,
     },
     {
       title: "재생성률",
-      value: `${data.regenerationRate}%`,
+      value: `${data.regenerationRate ?? "0"}%`,
     },
     {
       title: "피크 타임",
-      value: formatPeakTime(data.peakTime.hour),
+      value: formatPeakTime(data.peakTime?.hour ?? 0),
     },
   ];
 

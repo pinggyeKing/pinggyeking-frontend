@@ -15,7 +15,7 @@ function resolveBaseURL() {
   console.log("[API Client] Fallback 사용:", fallbackUrl);
   return fallbackUrl;
 }
-const baseURL = "https://49.50.133.127:8443";
+const baseURL = "https://6b1ff6592d2b.ngrok-free.app/";
 
 export const api = axios.create({
   baseURL,
@@ -31,7 +31,7 @@ if (typeof window !== "undefined") {
     "[API Client] baseURL:",
     baseURL || "<relative>",
     "env:",
-    process.env.NODE_ENV
+    process.env.NODE_ENV,
   );
 }
 
@@ -41,7 +41,7 @@ api.interceptors.response.use(
   (error) => {
     console.error("API Error:", error);
     return Promise.reject(error);
-  }
+  },
 );
 
 // API 응답 타입 정의
@@ -111,11 +111,11 @@ export interface FeedbackErrorResponse {
 
 // 핑계 생성 API
 export const generateExcuse = async (
-  data: ExcuseGenerateRequest
+  data: ExcuseGenerateRequest,
 ): Promise<ExcuseGenerateResponse> => {
   const response = await api.post<ExcuseGenerateResponse>(
     "/api/clova/generate",
-    data
+    data,
   );
   return response.data;
 };
