@@ -2,16 +2,16 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   async rewrites() {
-    // 프로덕션에서도 rewrites 활성화하되, HTTPS 백엔드 사용
-    const upstream =
-      process.env.NODE_ENV === "production"
-        ? process.env.NEXT_PUBLIC_API_BASE_URL || "https://49.50.133.127:8080" // HTTPS로 변경
-        : process.env.NEXT_PUBLIC_API_BASE_URL || "http://49.50.133.127:8080";
+    // 서버사이드 프록시: 클라이언트는 상대경로(/api/*)로 요청하고
+    // Next.js 서버가 HTTP 백엔드로 프록시 (Mixed Content 방지)
+    const backendUrl = process.env.BACKEND_URL || "http://49.50.133.127:8080";
+
+    console.log(`[Rewrites] Proxying /api/* to ${backendUrl}/api/*`);
 
     return [
       {
         source: "/api/:path*",
-        destination: `${upstream}/api/:path*`,
+        destination: `${backendUrl}/api/:path*`,
       },
     ];
   },
