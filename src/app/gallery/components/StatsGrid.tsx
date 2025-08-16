@@ -24,11 +24,11 @@ export default function StatsGrid({ data }: StatsGridProps) {
 
   const stats = [
     {
-      title: "생성된 핑계",
+      title: "생성된\n핑계",
       value: data.totalExcuses?.toLocaleString() ?? "0",
     },
     {
-      title: "평균만족도",
+      title: "평균\n만족도",
       value: `${data.averageSatisfaction ?? "0"}%`,
     },
     {
