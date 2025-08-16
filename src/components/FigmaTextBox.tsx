@@ -78,7 +78,6 @@ const FigmaTextBox: React.FC<TextInputProps> = ({
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
     const newValue = e.target.value;
-    if (maxLength && newValue.length > maxLength) return;
     setInternalValue(newValue);
     if (onChange) onChange(newValue);
   };
@@ -90,7 +89,7 @@ const FigmaTextBox: React.FC<TextInputProps> = ({
   };
 
   return (
-    <div className={`w-full h-full ${className}`}>
+    <div className={`w-[335px] h-full ${className}`}>
       <div
         className={`
         relative rounded-[24px] border-2 transition-all duration-200 h-full
@@ -110,9 +109,8 @@ const FigmaTextBox: React.FC<TextInputProps> = ({
               onKeyPress={handleKeyPress}
               placeholder={placeholder}
               disabled={!editable}
-              maxLength={maxLength}
               className={`
-                w-full min-h-[24px] max-h-[160px] resize-none 
+                w-full h-full resize-none overflow-y-auto
                 bg-transparent border-none outline-none
                 text-base ${internalValue ? "text-grey-10" : styles.text}
                 placeholder:text-grey-4 placeholder:text-body2-medium
@@ -135,7 +133,6 @@ const FigmaTextBox: React.FC<TextInputProps> = ({
               onKeyPress={handleKeyPress}
               placeholder={placeholder}
               disabled={!editable}
-              maxLength={maxLength}
               className={`
                 w-full h-[24px] bg-transparent border-none outline-none
                 text-base ${
