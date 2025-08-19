@@ -36,7 +36,7 @@ export default function StatsGrid({ data }: StatsGridProps) {
       value: `${data.regenerationRate ?? "0"}%`,
     },
     {
-      title: "피크 타임",
+      title: "피크\n타임",
       value: formatPeakTime(data.peakTime?.hour ?? 0),
     },
   ];
