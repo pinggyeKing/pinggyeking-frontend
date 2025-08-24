@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import LottieLoading from "@/components/LottieLoading";
 import { generateExcuse, ExcuseGenerateRequest } from "@/lib/api";
@@ -10,42 +10,42 @@ export default function Loading() {
   const router = useRouter();
   const { showInfoToast } = useToast();
   const [loadingText, setLoadingText] = useState("핑계를 생성중이에요!");
-  const isApiCalledRef = useRef(false); // useRef로 API 호출 상태 관리
-  const [isApiCalled, setIsApiCalled] = useState(false); // UI 상태용
 
   useEffect(() => {
-    // useRef로 중복 호출 방지 (React Strict Mode 대응)
-    if (isApiCalledRef.current) {
-      console.log("이미 API 호출됨 (useRef)");
+    // 컴포넌트 마운트 로그
+    const componentId = Math.random().toString(36).substr(2, 9);
+    console.log(`🚀 Loading 컴포넌트 마운트 [${componentId}]`);
+
+    // 전역 플래그로 추가 보호
+    const API_CALL_FLAG = "excuse_api_in_progress";
+
+    // 이미 API 호출이 진행 중인지 확인
+    if ((window as any)[API_CALL_FLAG]) {
+      console.log(`⏸️ 이미 API 호출이 진행 중입니다 [${componentId}]`);
       return;
     }
 
-    // sessionStorage를 사용한 추가 중복 호출 방지
-    const existingCall = sessionStorage.getItem("api_in_progress");
+    // API 호출 플래그 설정
+    (window as any)[API_CALL_FLAG] = true;
 
-    if (existingCall) {
-      console.log("이미 API 호출 중입니다. (sessionStorage)");
-      return;
-    }
-
-    // API 호출 시작 표시
-    isApiCalledRef.current = true;
-    setIsApiCalled(true);
-
-    const apiCallKey = `api_call_${Date.now()}`;
-    sessionStorage.setItem("api_in_progress", apiCallKey);
+    // AbortController를 사용하여 중복 API 호출 방지
+    const abortController = new AbortController();
 
     const generateExcuseData = async () => {
       try {
-        console.log("API 호출 시작");
+        console.log(`📞 API 호출 시작 [${componentId}]`);
+
+        // AbortController 상태 확인
+        if (abortController.signal.aborted) {
+          console.log(`❌ API 호출이 이미 취소됨 [${componentId}]`);
+          return;
+        }
 
         // localStorage에서 저장된 폼 데이터 가져오기
         const savedFormData = localStorage.getItem("excuse_form_data");
         if (!savedFormData) {
-          console.log("폼 데이터가 없음");
+          console.log(`❌ 폼 데이터가 없음 [${componentId}]`);
           showInfoToast("생성 정보를 찾을 수 없습니다.");
-          sessionStorage.removeItem("api_in_progress");
-          isApiCalledRef.current = false; // 실패 시 초기화
           router.push("/");
           return;
         }
@@ -61,16 +61,20 @@ export default function Loading() {
         // 이 로직은 브라우저 뒤로가기 등에서만 작동
         const existingResult = localStorage.getItem("excuse_result");
         if (existingResult && !isRegeneration) {
-          console.log("기존 결과 발견, 결과 페이지로 이동 (뒤로가기 등)");
-          sessionStorage.removeItem("api_in_progress");
+          console.log(`📋 기존 결과 발견, 결과 페이지로 이동 [${componentId}]`);
           setTimeout(() => {
-            router.push("/result");
+            const resultData = JSON.parse(existingResult);
+            if (resultData.id) {
+              router.push(`/result/${resultData.id}`);
+            } else {
+              router.push("/result");
+            }
           }, 500);
           return;
         }
 
-        console.log("재생성 여부:", isRegeneration);
-        console.log("새로운 API 호출 진행");
+        console.log(`🔄 재생성 여부: ${isRegeneration} [${componentId}]`);
+        console.log(`🚀 새로운 API 호출 진행 [${componentId}]`);
 
         // value를 label로 변환하는 헬퍼 함수들
         const getTargetLabel = (value: string) => {
@@ -138,10 +142,18 @@ export default function Loading() {
           setLoadingText(loadingTexts[textIndex]);
         }, 2000);
 
-        console.log("API 요청 데이터:", requestData);
+        console.log(`📤 API 요청 데이터 [${componentId}]:`, requestData);
+
+        // API 호출 전 abort 확인
+        if (abortController.signal.aborted) {
+          console.log(`❌ API 호출이 취소되었습니다 [${componentId}]`);
+          return;
+        }
 
         // API 호출
+        console.log(`🌐 generateExcuse API 호출 실행 [${componentId}]`);
         const response = await generateExcuse(requestData);
+        console.log(`✅ API 응답 받음 [${componentId}]:`, response);
 
         // 결과 데이터를 localStorage에 저장
         localStorage.setItem("excuse_result", JSON.stringify(response));
@@ -167,14 +179,59 @@ export default function Loading() {
         // 로딩 텍스트 정리
         clearInterval(textInterval);
 
-        // API 호출 완료 - sessionStorage 정리
-        sessionStorage.removeItem("api_in_progress");
+        // API 호출 완료 - 플래그 정리
+        (window as any)[API_CALL_FLAG] = false;
 
         setTimeout(() => {
-          router.push("/result");
+          // API 응답의 ID를 사용하여 dynamic route로 이동
+          if (response.id) {
+            router.push(`/result/${response.id}`);
+          } else {
+            // fallback: ID가 없는 경우 기본 결과 페이지로 이동
+            router.push("/result");
+          }
         }, 500);
       } catch (error: any) {
-        console.error("핑계 생성 실패:", error);
+        console.error(`❌ 핑계 생성 실패 [${componentId}]:`, error);
+
+        // AbortError 인경우 무시 (정상적인 취소)
+        if (error.name === "AbortError") {
+          console.log(
+            `🚫 API 호출이 정상적으로 취소되었습니다 [${componentId}]`
+          );
+
+          // 플래그 정리
+          (window as any)[API_CALL_FLAG] = false;
+
+          // AbortError인 경우에도 기존 결과가 있다면 result 페이지로 이동
+          const existingResult = localStorage.getItem("excuse_result");
+          if (existingResult) {
+            try {
+              const resultData = JSON.parse(existingResult);
+              console.log(
+                `📋 AbortError이지만 기존 결과로 이동 [${componentId}]`
+              );
+              if (resultData.id) {
+                router.push(`/result/${resultData.id}`);
+              } else {
+                router.push("/result");
+              }
+              return;
+            } catch (parseError) {
+              console.error(
+                `❌ 기존 결과 파싱 오류 [${componentId}]:`,
+                parseError
+              );
+            }
+          }
+
+          // 기존 결과가 없는 경우 홈으로 이동
+          console.log(
+            `🏠 AbortError이고 기존 결과 없음 - 홈으로 이동 [${componentId}]`
+          );
+          router.push("/");
+          return;
+        }
 
         let errorMessage = "핑계 생성에 실패했습니다. 다시 시도해주세요.";
 
@@ -198,23 +255,19 @@ export default function Loading() {
         localStorage.removeItem("is_regeneration");
         localStorage.removeItem("regeneration_option");
 
-        // API 호출 상태 초기화 (재시도 가능하도록)
-        setIsApiCalled(false);
-        isApiCalledRef.current = false; // useRef도 초기화
-
-        // API 호출 실패 - sessionStorage 정리
-        sessionStorage.removeItem("api_in_progress"); // 오류 발생 시 create 페이지로 되돌아가기
-        setTimeout(() => {
-          router.push("/create");
-        }, 1500);
+        // API 호출 실패 - 플래그 정리
+        (window as any)[API_CALL_FLAG] = false;
       }
     };
 
     generateExcuseData();
 
-    // cleanup 함수 - 컴포넌트 언마운트 시 sessionStorage 정리
+    // cleanup 함수 - 컴포넌트 언마운트 시 AbortController로 API 호출 취소
     return () => {
-      sessionStorage.removeItem("api_in_progress");
+      console.log(`🧹 컴포넌트 언마운트 - API 호출 취소 [${componentId}]`);
+      abortController.abort();
+      // 플래그도 정리
+      (window as any)[API_CALL_FLAG] = false;
     };
   }, []); // 의존성 배열 비우기 - 컴포넌트 마운트시에만 실행
 

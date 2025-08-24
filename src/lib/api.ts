@@ -32,7 +32,7 @@ if (typeof window !== "undefined") {
     "[API Client] baseURL:",
     baseURL || "<relative>",
     "env:",
-    process.env.NODE_ENV,
+    process.env.NODE_ENV
   );
 }
 
@@ -42,7 +42,7 @@ api.interceptors.response.use(
   (error) => {
     console.error("API Error:", error);
     return Promise.reject(error);
-  },
+  }
 );
 
 // API 응답 타입 정의
@@ -111,14 +111,32 @@ export interface FeedbackErrorResponse {
 }
 
 // 핑계 생성 API
+// 중복 API 호출 방지를 위한 전역 플래그
+let isGenerateExcuseInProgress = false;
+
 export const generateExcuse = async (
-  data: ExcuseGenerateRequest,
+  data: ExcuseGenerateRequest
 ): Promise<ExcuseGenerateResponse> => {
-  const response = await api.post<ExcuseGenerateResponse>(
-    "/api/clova/generate",
-    data,
-  );
-  return response.data;
+  // 이미 진행 중인 API 호출이 있는지 확인
+  if (isGenerateExcuseInProgress) {
+    console.log("🚫 generateExcuse: 이미 진행 중인 API 호출이 있습니다");
+    throw new Error("API 호출이 이미 진행 중입니다");
+  }
+
+  try {
+    isGenerateExcuseInProgress = true;
+    console.log("🌐 generateExcuse: API 호출 시작");
+
+    const response = await api.post<ExcuseGenerateResponse>(
+      "/api/clova/generate",
+      data
+    );
+
+    console.log("✅ generateExcuse: API 호출 완료");
+    return response.data;
+  } finally {
+    isGenerateExcuseInProgress = false;
+  }
 };
 
 // 피드백 전송 API
