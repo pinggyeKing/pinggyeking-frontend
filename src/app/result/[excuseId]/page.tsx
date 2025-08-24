@@ -1,25 +1,15 @@
 "use client";
 
-import React, { useState, useEffect, use } from "react";
-import { useRouter } from "next/navigation";
+import React, { use } from "react";
 import CustomButton from "@/components/Custombutton";
 import Balloon from "@/components/inputs/Balloon";
-import Image from "next/image";
-import {
-  ChevronDown,
-  Copy,
-  RefreshCcw,
-  ThumbsDown,
-  ThumbsUp,
-} from "lucide-react";
-import { useToast } from "@/components/common/Toast";
-import Modal from "@/components/common/Modal";
-import FigmaTextBox from "@/components/FigmaTextBox";
-import {
-  ExcuseGenerateResponse,
-  submitFeedback,
-  FeedbackRequest,
-} from "@/lib/api";
+import ResultHeader from "./components/ResultHeader";
+import ActionButtons from "./components/ActionButtons";
+import ExitModal from "./components/ExitModal";
+import FeedbackModal from "./components/FeedbackModal";
+import { useResultData } from "./useResultData";
+import { useResultInteractions } from "./useResultInteractions";
+import { useResultActions } from "./useResultActions";
 
 interface ResultPageProps {
   params: Promise<{
@@ -29,252 +19,30 @@ interface ResultPageProps {
 
 export default function ResultPage({ params }: ResultPageProps) {
   const resolvedParams = use(params);
-  const router = useRouter();
   const excuseId = resolvedParams.excuseId;
 
-  const [resultText, setResultText] = useState("");
-  const [characterType, setCharacterType] = useState<string>("default");
-  const [excuseData, setExcuseData] = useState<ExcuseGenerateResponse | null>(
-    null
-  );
-  const [isLoading, setIsLoading] = useState(true);
+  // 데이터 로딩
+  const { resultText, characterType, isLoading } = useResultData(excuseId);
 
-  // 페이지 로드 시 ID를 이용한 데이터 조회
-  useEffect(() => {
-    const loadExcuseData = () => {
-      if (typeof window !== "undefined") {
-        // localStorage에서 저장된 결과 확인
-        const savedResult = localStorage.getItem("excuse_result");
-        if (savedResult) {
-          try {
-            const resultData = JSON.parse(
-              savedResult
-            ) as ExcuseGenerateResponse;
+  // 상호작용 상태 관리
+  const interactions = useResultInteractions(excuseId);
 
-            // ID가 일치하는지 확인 (API의 id는 number, URL param은 string이므로 변환하여 비교)
-            if (resultData.id.toString() === excuseId) {
-              setExcuseData(resultData);
-              setResultText(resultData.excuse.excuse);
-
-              // imageKey에 따라 캐릭터 타입 설정
-              if (resultData.imageKey) {
-                const imageKeyToCharacter: { [key: string]: string } = {
-                  A: "suit",
-                  B: "default",
-                  C: "cute",
-                  D: "kidding",
-                  E: "cool",
-                };
-                const newCharacterType =
-                  imageKeyToCharacter[resultData.imageKey] || "default";
-                setCharacterType(newCharacterType);
-              }
-              setIsLoading(false);
-              return;
-            }
-          } catch (error) {
-            console.error("결과 데이터 파싱 오류:", error);
-          }
-        }
-
-        // 저장된 결과가 없거나 ID가 일치하지 않으면 홈으로 리다이렉트
-        console.log("일치하는 결과를 찾을 수 없습니다. 홈으로 이동합니다.");
-        router.push("/");
-      }
-    };
-
-    loadExcuseData();
-  }, [excuseId, router]);
-
-  // localStorage에서 초기값 로드하는 함수들
-  const getInitialLikeStatus = (): "none" | "like" | "dislike" => {
-    if (typeof window !== "undefined") {
-      const saved = localStorage.getItem(`result_like_status_${excuseId}`);
-      return saved ? (saved as "none" | "like" | "dislike") : "none";
-    }
-    return "none";
-  };
-
-  const getInitialRegenerateOption = (): "구체적으로" | "간결하게" | null => {
-    if (typeof window !== "undefined") {
-      const saved = localStorage.getItem(
-        `result_regenerate_option_${excuseId}`
-      );
-      return saved ? (saved as "구체적으로" | "간결하게") : null;
-    }
-    return null;
-  };
-
-  // 좋아요/싫어요 상태 관리
-  const [likeStatus, setLikeStatus] = useState<"none" | "like" | "dislike">(
-    getInitialLikeStatus
-  );
-
-  // 재생성 드롭다운 상태 관리
-  const [isRegenerateOpen, setIsRegenerateOpen] = useState(false);
-
-  // 선택된 재생성 옵션 상태 관리
-  const [selectedRegenerateOption, setSelectedRegenerateOption] = useState<
-    "구체적으로" | "간결하게" | null
-  >(getInitialRegenerateOption);
-
-  // 홈으로 이동 모달 상태 관리
-  const [showExitModal, setShowExitModal] = useState(false);
-
-  // 피드백 모달 상태 관리
-  const [showFeedbackModal, setShowFeedbackModal] = useState(false);
-  const [feedback, setFeedback] = useState("");
-  const [isFeedbackSubmitting, setIsFeedbackSubmitting] = useState(false);
-  const [feedbackSource, setFeedbackSource] = useState<
-    "create-image" | "reaction" | null
-  >(null);
-
-  // localStorage에 상태 저장하는 useEffect들 (ID별로 저장)
-  useEffect(() => {
-    if (typeof window !== "undefined" && excuseId) {
-      localStorage.setItem(`result_like_status_${excuseId}`, likeStatus);
-    }
-  }, [likeStatus, excuseId]);
-
-  useEffect(() => {
-    if (typeof window !== "undefined" && selectedRegenerateOption && excuseId) {
-      localStorage.setItem(
-        `result_regenerate_option_${excuseId}`,
-        selectedRegenerateOption
-      );
-    }
-  }, [selectedRegenerateOption, excuseId]);
-
-  const { showInfoToast } = useToast();
-
-  // 캐릭터 타입에 따른 이미지 경로 매핑
-  const getCharacterImage = (type: string) => {
-    const characterMap: { [key: string]: string } = {
-      default: "/characters/default.svg",
-      suit: "/characters/suit.svg",
-      cute: "/characters/cute.svg",
-      kidding: "/characters/kidding.svg",
-      cool: "/characters/cool.svg",
-    };
-
-    return characterMap[type] || characterMap.default;
-  };
-
-  const handleGoHome = () => {
-    setShowExitModal(true);
-  };
-
-  const handleExitConfirm = () => {
-    // 홈으로 가기 전 local storage 삭제
-    localStorage.removeItem("excuse_form_data");
-    localStorage.removeItem("excuse_result");
-    localStorage.removeItem(`result_like_status_${excuseId}`);
-    localStorage.removeItem(`result_regenerate_option_${excuseId}`);
-    localStorage.removeItem("character_type");
-    router.push("/");
-  };
-
-  const handleExitCancel = () => {
-    setShowExitModal(false);
-  };
-
-  const handleCopyText = () => {
-    navigator.clipboard.writeText(resultText);
-    showInfoToast("복사되었어요!");
-  };
-
-  const handleRegenerate = () => {
-    setIsRegenerateOpen(!isRegenerateOpen);
-  };
-
-  const handleRegenerateOption = async (option: "구체적으로" | "간결하게") => {
-    setSelectedRegenerateOption(option);
-    setIsRegenerateOpen(false);
-
-    // localStorage에서 저장된 생성 데이터 확인
-    const savedFormData = localStorage.getItem("excuse_form_data");
-    if (!savedFormData) {
-      showInfoToast("생성 정보를 찾을 수 없습니다.");
-      return;
-    }
-
-    // 재생성 정보를 localStorage에 저장
-    localStorage.setItem("is_regeneration", "true");
-    localStorage.setItem("regeneration_option", option);
-
-    // 로딩 페이지로 이동 (API 호출은 loading 페이지에서 처리)
-    router.push("/loading");
-  };
-
-  const handleCreateImage = () => {
-    router.push(`/result/${excuseId}/create-image`);
-  };
-
-  const handleFeedbackConfirm = async () => {
-    setIsFeedbackSubmitting(true);
-
-    try {
-      // 현재 좋아요/싫어요 상태에 따라 rating 결정
-      let rating: "LIKE" | "DISLIKE" = "LIKE";
-      if (likeStatus === "dislike") {
-        rating = "DISLIKE";
-      } else if (likeStatus === "none") {
-        // 상태가 none인 경우 기본적으로 LIKE로 설정
-        rating = "LIKE";
-        setLikeStatus("like");
-      }
-
-      await submitFeedback({
-        rating,
-        feedback: feedback.trim(),
-      });
-
-      setShowFeedbackModal(false);
-      setFeedback(""); // 피드백 내용 초기화
-      handleCreateImage();
-    } catch (error: any) {
-      console.error("피드백 전송 실패:", error);
-
-      if (error.response?.data?.message) {
-        showInfoToast(error.response.data.message);
-      } else {
-        showInfoToast("피드백 전송에 실패했습니다.");
-      }
-    } finally {
-      setIsFeedbackSubmitting(false);
-    }
-  };
-
-  const handleFeedbackCancel = () => {
-    setShowFeedbackModal(false);
-    // create-image 로 열렸을 때만 이동, reaction 에서는 머무름
-    if (feedbackSource === "create-image") {
-      handleCreateImage();
-    }
-    setFeedbackSource(null);
-  };
-
-  const handleThumbsUp = () => {
-    const newStatus = likeStatus === "like" ? "none" : "like";
-    setLikeStatus(newStatus);
-
-    // 좋아요를 누른 경우 피드백 모달 표시
-    if (newStatus === "like") {
-      setFeedbackSource("reaction");
-      setShowFeedbackModal(true);
-    }
-  };
-
-  const handleThumbsDown = () => {
-    const newStatus = likeStatus === "dislike" ? "none" : "dislike";
-    setLikeStatus(newStatus);
-
-    // 싫어요를 누른 경우 피드백 모달 표시
-    if (newStatus === "dislike") {
-      setFeedbackSource("reaction");
-      setShowFeedbackModal(true);
-    }
-  };
+  // 액션 핸들러들
+  const actions = useResultActions({
+    excuseId,
+    resultText,
+    likeStatus: interactions.likeStatus,
+    feedback: interactions.feedback,
+    feedbackSource: interactions.feedbackSource,
+    setLikeStatus: interactions.setLikeStatus,
+    setRegenerateOpen: interactions.setRegenerateOpen,
+    setSelectedRegenerateOption: interactions.setSelectedRegenerateOption,
+    setShowExitModal: interactions.setShowExitModal,
+    setShowFeedbackModal: interactions.setShowFeedbackModal,
+    setFeedback: interactions.setFeedback,
+    setFeedbackSubmitting: interactions.setFeedbackSubmitting,
+    setFeedbackSource: interactions.setFeedbackSource,
+  });
 
   // 로딩 중이면 로딩 표시
   if (isLoading) {
@@ -288,39 +56,10 @@ export default function ResultPage({ params }: ResultPageProps) {
   return (
     <div className="w-full h-full flex flex-col gap-4">
       {/* 상단 헤더 */}
-      <div className="w-full flex flex-col gap-1 items-center">
-        <div className="w-full flex justify-end">
-          <div className="w-[100px]">
-            <CustomButton
-              typeStyle="primary"
-              size="medium"
-              round="pills"
-              onClick={handleGoHome}
-            >
-              처음으로
-            </CustomButton>
-          </div>
-        </div>
-
-        <div className="flex flex-col gap-1 items-center">
-          <h1 className="text-section-title text-grey-10 text-center">
-            핑계가 완성되었어요!
-          </h1>
-          <p className="text-section-subtitle text-grey-10 text-center">
-            아래 생성된 핑계를 확인해주세요
-          </p>
-        </div>
-
-        {/* 캐릭터 */}
-        <div className="flex justify-center pt-[40px] pb-[4.32px]">
-          <Image
-            src={getCharacterImage(characterType)}
-            alt={`${characterType} 캐릭터`}
-            width={112}
-            height={120}
-          />
-        </div>
-      </div>
+      <ResultHeader
+        characterType={characterType}
+        onGoHome={actions.handleGoHome}
+      />
 
       {/* 결과 텍스트 영역 */}
       <div className="flex-1 flex flex-col gap-3">
@@ -330,81 +69,16 @@ export default function ResultPage({ params }: ResultPageProps) {
         </div>
 
         {/* 평가 및 액션 버튼들 */}
-        <div className="flex flex-col">
-          {/* 모든 버튼을 한 줄에 배치 */}
-          <div className="flex gap-1">
-            <div className="flex-shrink-0">
-              <CustomButton
-                typeStyle="outline2"
-                size="medium"
-                round="pills"
-                pressHold={likeStatus === "like"}
-                onClick={handleThumbsUp}
-                leftIcon={<ThumbsUp size={20} />}
-              />
-            </div>
-            <div className="flex-shrink-0">
-              <CustomButton
-                typeStyle="outline2"
-                size="medium"
-                round="pills"
-                pressHold={likeStatus === "dislike"}
-                onClick={handleThumbsDown}
-                leftIcon={<ThumbsDown size={20} />}
-              />
-            </div>
-            <div className="flex-shrink-0">
-              <CustomButton
-                typeStyle="outline2"
-                size="medium"
-                round="pills"
-                onClick={handleCopyText}
-                leftIcon={<Copy size={20} />}
-              />
-            </div>
-            <div className="flex-1 relative">
-              <CustomButton
-                typeStyle="outline2"
-                size="medium"
-                round="pills"
-                onClick={handleRegenerate}
-                leftIcon={<RefreshCcw size={20} />}
-                rightIcon={<ChevronDown size={20} />}
-                className="whitespace-nowrap"
-              >
-                재생성
-              </CustomButton>
-
-              {/* 재생성 옵션 드롭다운 */}
-              {isRegenerateOpen && (
-                <div className="absolute top-full left-0 right-0 z-10">
-                  <div className="flex flex-col p-1 gap-0.5">
-                    <CustomButton
-                      typeStyle="outline2"
-                      size="medium"
-                      round="pills"
-                      pressHold={selectedRegenerateOption === "구체적으로"}
-                      onClick={() => handleRegenerateOption("구체적으로")}
-                      className="justify-start text-left"
-                    >
-                      구체적으로
-                    </CustomButton>
-                    <CustomButton
-                      typeStyle="outline2"
-                      size="medium"
-                      round="pills"
-                      pressHold={selectedRegenerateOption === "간결하게"}
-                      onClick={() => handleRegenerateOption("간결하게")}
-                      className="justify-start text-left"
-                    >
-                      간결하게
-                    </CustomButton>
-                  </div>
-                </div>
-              )}
-            </div>
-          </div>
-        </div>
+        <ActionButtons
+          likeStatus={interactions.likeStatus}
+          isRegenerateOpen={interactions.isRegenerateOpen}
+          selectedRegenerateOption={interactions.selectedRegenerateOption}
+          onThumbsUp={actions.handleThumbsUp}
+          onThumbsDown={actions.handleThumbsDown}
+          onCopyText={actions.handleCopyText}
+          onRegenerate={actions.handleRegenerate}
+          onRegenerateOption={actions.handleRegenerateOption}
+        />
       </div>
 
       {/* 하단 이미지 만들기 버튼 */}
@@ -413,90 +87,28 @@ export default function ResultPage({ params }: ResultPageProps) {
           typeStyle="primary"
           size="large"
           round="square"
-          onClick={handleCreateImage}
+          onClick={actions.handleCreateImage}
         >
           이미지 만들기
         </CustomButton>
       </div>
 
       {/* 홈으로 이동 확인 모달 */}
-      {showExitModal && (
-        <Modal
-          open={showExitModal}
-          onClose={handleExitCancel}
-          onCancel={handleExitCancel}
-          onConfirm={handleExitConfirm}
-          confirmText="확인"
-          size="small"
-          showCloseButton={false}
-        >
-          <div className="flex flex-col justify-center items-center gap-4">
-            <div className="flex flex-col gap-1">
-              <p className="text-section-title text-grey-10 text-center">
-                홈으로 이동하시겠습니까?
-              </p>
-              <p className="text-section-subtitle text-grey-10 text-center">
-                생성된 핑계를 다시 볼 수 없습니다.
-              </p>
-            </div>
-            <Image
-              src="/characters/Error.svg"
-              alt="처음으로 돌아갈까?"
-              width={287}
-              height={164}
-            />
-          </div>
-        </Modal>
-      )}
+      <ExitModal
+        open={interactions.showExitModal}
+        onConfirm={actions.handleExitConfirm}
+        onCancel={actions.handleExitCancel}
+      />
 
       {/* 피드백 모달 */}
-      {showFeedbackModal && (
-        <Modal
-          open={showFeedbackModal}
-          onClose={handleFeedbackCancel}
-          onCancel={handleFeedbackCancel}
-          onConfirm={handleFeedbackConfirm}
-          confirmText={isFeedbackSubmitting ? "전송 중..." : "평가 제출하기"}
-          size="small"
-          showCloseButton={true}
-        >
-          <div className="flex flex-col justify-center items-center gap-4">
-            <div className="flex flex-col gap-1">
-              <p className="text-section-title text-grey-10 text-center">
-                생성된 핑계는 어땠나요?
-              </p>
-              <p className="text-section-subtitle text-grey-10 text-center">
-                핑계를 평가해주세요! (선택사항)
-              </p>
-            </div>
-            <Image
-              src="/characters/suit.svg"
-              alt="피드백 캐릭터"
-              width={287}
-              height={164}
-              className="pt-[41px] pr-[80.725px] pb-[4.295px] pl-[71px]"
-            />
-            <div className="w-full">
-              <FigmaTextBox
-                value={feedback}
-                multiline={true}
-                placeholder="어떤 점이 만족스럽나요? (최대 1000자)"
-                editable={!isFeedbackSubmitting}
-                onChange={setFeedback}
-              />
-              <div className="flex justify-end mt-1">
-                <span
-                  className={`text-sm ${
-                    feedback.length > 1000 ? "text-red-500" : "text-grey-6"
-                  }`}
-                >
-                  {feedback.length}/1000
-                </span>
-              </div>
-            </div>
-          </div>
-        </Modal>
-      )}
+      <FeedbackModal
+        open={interactions.showFeedbackModal}
+        feedback={interactions.feedback}
+        isFeedbackSubmitting={interactions.isFeedbackSubmitting}
+        onFeedbackChange={interactions.setFeedback}
+        onConfirm={actions.handleFeedbackConfirm}
+        onCancel={actions.handleFeedbackCancel}
+      />
     </div>
   );
 }
