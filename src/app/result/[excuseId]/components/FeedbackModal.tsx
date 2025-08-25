@@ -45,7 +45,7 @@ export default function FeedbackModal({
           </p>
         </div>
         <Image
-          src="/characters/suit.svg"
+          src="/characters/character-normal.svg"
           alt="피드백 캐릭터"
           width={FEEDBACK_CHARACTER_SIZE.width}
           height={FEEDBACK_CHARACTER_SIZE.height}
