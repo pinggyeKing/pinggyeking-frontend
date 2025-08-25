@@ -8,26 +8,28 @@ import { useEffect } from "react";
  */
 export const useBodyScrollLock = (isOpen: boolean) => {
   useEffect(() => {
+    let scrollY = 0;
     if (isOpen) {
       // 현재 스크롤 위치 저장
-      const scrollY = window.scrollY;
+      scrollY = window.scrollY;
 
       // body에 스타일 적용하여 스크롤 방지
       document.body.style.position = "fixed";
       document.body.style.top = `-${scrollY}px`;
       document.body.style.width = "100%";
       document.body.style.overflow = "hidden";
-
-      // cleanup 함수 - 모달이 닫힐 때 원래 상태로 복원
-      return () => {
-        document.body.style.position = "";
-        document.body.style.top = "";
-        document.body.style.width = "";
-        document.body.style.overflow = "";
-
-        // 원래 스크롤 위치로 복원
-        window.scrollTo(0, scrollY);
-      };
     }
+    // cleanup 함수 - 모달이 닫힐 때 원래 상태로 복원
+    return () => {
+      document.body.style.position = "";
+      document.body.style.top = "";
+      document.body.style.width = "";
+      document.body.style.overflow = "";
+
+      // 원래 스크롤 위치로 복원
+      if (isOpen) {
+        window.scrollTo(0, scrollY);
+      }
+    };
   }, [isOpen]);
 };
