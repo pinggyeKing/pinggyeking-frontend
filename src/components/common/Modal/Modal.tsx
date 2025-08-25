@@ -1,7 +1,8 @@
 "use client";
 
-import React, { useEffect } from "react";
+import React from "react";
 import CustomButton from "../../Custombutton";
+import { useBodyScrollLock } from "@/hooks/useBodyScrollLock";
 
 // 1. props, size, 스타일 상수 정리
 interface ModalProps {
@@ -34,29 +35,7 @@ export default function Modal({
   showBottomButton = true,
 }: ModalProps) {
   // 모달이 열릴 때 body scroll 방지
-  useEffect(() => {
-    if (open) {
-      // 현재 스크롤 위치 저장
-      const scrollY = window.scrollY;
-
-      // body에 스타일 적용하여 스크롤 방지
-      document.body.style.position = "fixed";
-      document.body.style.top = `-${scrollY}px`;
-      document.body.style.width = "100%";
-      document.body.style.overflow = "hidden";
-
-      // cleanup 함수 - 모달이 닫힐 때 원래 상태로 복원
-      return () => {
-        document.body.style.position = "";
-        document.body.style.top = "";
-        document.body.style.width = "";
-        document.body.style.overflow = "";
-
-        // 원래 스크롤 위치로 복원
-        window.scrollTo(0, scrollY);
-      };
-    }
-  }, [open]);
+  useBodyScrollLock(open);
 
   if (!open) return null;
   const { width, minHeight } = MODAL_SIZES[size];
