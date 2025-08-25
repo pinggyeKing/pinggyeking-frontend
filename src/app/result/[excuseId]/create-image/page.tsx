@@ -75,13 +75,14 @@ export default function CreateImagePage({ params }: CreateImagePageProps) {
   const handleSelectionChange = (selectedId: string) => {
     console.log("Selected character style:", selectedId);
     setSelectedCardType(
-      selectedId as "default" | "formal" | "cute" | "humorous" | "pop",
+      selectedId as "default" | "formal" | "cute" | "humorous" | "pop"
     );
   };
 
   const handleBackClick = () => {
     console.log("Back button clicked");
-    router.back();
+    // Dynamic route로 이동
+    router.push(`/result/${resolvedParams.excuseId}`);
   };
 
   // 로딩 상태
