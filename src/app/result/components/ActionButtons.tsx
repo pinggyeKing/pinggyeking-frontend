@@ -64,6 +64,7 @@ export default function ActionButtons({
   const handleCopyLink = async () => {
     const success = await copyCurrentUrl({
       excuseId: excuseId || "",
+      cardType: selectedCardType,
       successMessage: "",
       errorMessage: "",
     }); // 빈 메시지로 alert 방지

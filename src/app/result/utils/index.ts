@@ -226,16 +226,18 @@ const fallbackCopyToClipboard = (
 // 현재 페이지 URL 복사하기
 export const copyCurrentUrl = async ({
   excuseId,
+  cardType,
   successMessage = "링크가 복사되었습니다!",
   errorMessage = "링크 복사에 실패했습니다.",
 }: {
   excuseId: string;
+  cardType?: "default" | "formal" | "cute" | "humorous" | "pop";
   successMessage?: string;
   errorMessage?: string;
 }): Promise<boolean> => {
   return await copyToClipboard(
     excuseId
-      ? `${window.location.origin}/share/${excuseId}`
+      ? `${window.location.origin}/share/${excuseId}?cardType=${cardType}`
       : window.location.href,
     successMessage,
     errorMessage,
