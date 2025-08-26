@@ -1,12 +1,13 @@
 "use client";
 
-import Card from "@/app/result/card-image/components/Card";
 import FigmaButton from "@/components/FigmaButton";
 import LottieLoading from "@/components/LottieLoading";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useState, useEffect, use } from "react";
 import { useExcuseDetail } from "@/app/share/api";
 import CanvasCard from "@/app/result/card-image/components/CanvasCard";
+import Header from "./components/Header";
+import CustomButton from "@/components/Custombutton";
 
 interface SharePageProps {
   params: Promise<{
@@ -41,6 +42,10 @@ export default function SharePage({ params }: SharePageProps) {
 
   const handleGenerateClick = () => {
     router.push("/");
+  };
+
+  const handleGalleryClick = () => {
+    router.push("/gallery");
   };
 
   // 로딩 상태
@@ -92,23 +97,18 @@ export default function SharePage({ params }: SharePageProps) {
 
   const { situation, target, tone, excuse } = excuseData;
 
-  // 카드에 표시할 메시지 포맷팅
-  const message = `${target}, 정말 죄송합니다만....${situation}
-
-이유,,,, 
-
-${excuse}`;
-
   const CARD_SCALE = 286 / 444; // CanvasCard base width is 444px → fixed width 286px
 
   return (
-    <div className="flex flex-col items-center justify-between gap-6">
+    <div className="flex flex-col items-center justify-between gap-6 mt-[-20px]">
+      {/* Header 추가  */}
+      <Header />
       {/* Card Preview */}
       <div className="flex justify-center">
         <div className="transform origin-center">
           <CanvasCard
             recipient={target}
-            message={message}
+            message={excuse}
             cardType={
               cardType as "default" | "formal" | "cute" | "humorous" | "pop"
             }
@@ -118,7 +118,7 @@ ${excuse}`;
       </div>
 
       {/* FigmaButton Component */}
-      <div style={{ width: "100%" }}>
+      <div className="flex flex-col gap-4 w-full">
         <div
           style={{
             backgroundColor: "#1E1E1E",
@@ -136,6 +136,13 @@ ${excuse}`;
             나도 핑계 생성 해볼까?
           </FigmaButton>
         </div>
+        <CustomButton
+          typeStyle="outline2"
+          round="pills"
+          onClick={handleGalleryClick}
+        >
+          핑계 갤러리 구경가기
+        </CustomButton>
       </div>
     </div>
   );
