@@ -66,20 +66,20 @@ const CanvasCard = forwardRef<HTMLDivElement, CanvasCardProps>(
     const defaultTextPositions: TextPositions = {
       recipient: {
         x: 0.09, // 카드 너비의 9%
-        y: 0.15, // 카드 높이의 15%
+        y: 0.08, // 카드 높이의 8% (더 위로 이동)
       },
       message: {
         x: 0.09,
-        y: 0.25,
-        maxWidth: 0.82, // 카드 너비의 82%
-        maxHeight: 0.6, // 카드 높이의 60%
+        y: 0.2,
+        maxWidth: 0.82,
+        maxHeight: 0.6,
       },
     };
 
     // 기본 폰트 크기 비율 정의 (props로 오버라이드 가능)
     const defaultFontSizes: FontSizes = {
-      recipient: 0.063, // 카드 높이의 6.3% (약 31px at 494px height)
-      message: 0.032, // 카드 높이의 3.2% (약 16px at 494px height)
+      recipient: 0.082, // 카드 높이의 8.2% (약 40px - 더 크게)
+      message: 0.04, // 카드 높이의 4% (약 20px)
     };
 
     // 최종 텍스트 위치와 폰트 크기 (기본값 + 커스텀 값 병합)
@@ -234,7 +234,7 @@ const CanvasCard = forwardRef<HTMLDivElement, CanvasCardProps>(
         CANVAS_WIDTH * (finalTextPositions.message.maxWidth || 0.82);
       const maxHeight =
         CANVAS_HEIGHT * (finalTextPositions.message.maxHeight || 0.6);
-      const lineHeight = messageFontSize * 1.2;
+      const lineHeight = messageFontSize * 1.3;
 
       // 메시지를 줄바꿈하여 렌더링
       renderMultilineText(
