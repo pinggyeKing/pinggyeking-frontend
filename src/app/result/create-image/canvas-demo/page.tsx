@@ -346,7 +346,11 @@ export default function CanvasDemoPage() {
           <button
             className="flex-1 border-2 border-grey-10 rounded-[24px] py-3 flex justify-center items-center bg-white hover:bg-grey-1 transition-colors"
             onClick={async () => {
-              const success = await copyCurrentUrl("", "");
+              const success = await copyCurrentUrl({
+                excuseId: "",
+                successMessage: "",
+                errorMessage: "",
+              });
               if (success) {
                 showSuccessToast("링크가 복사되었어요!");
               }
