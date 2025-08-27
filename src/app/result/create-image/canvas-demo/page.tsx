@@ -76,6 +76,18 @@ export default function CanvasDemoPage() {
     }));
   };
 
+  const handleCopyLink = async () => {
+    const success = await copyCurrentUrl({
+      excuseId: "",
+      successMessage: "",
+      errorMessage: "",
+    });
+
+    if (success) {
+      showSuccessToast("링크가 복사되었어요!");
+    }
+  };
+
   return (
     <>
       <ToastContainer />
@@ -345,16 +357,7 @@ export default function CanvasDemoPage() {
           </button>
           <button
             className="flex-1 border-2 border-grey-10 rounded-[24px] py-3 flex justify-center items-center bg-white hover:bg-grey-1 transition-colors"
-            onClick={async () => {
-              const success = await copyCurrentUrl({
-                excuseId: "",
-                successMessage: "",
-                errorMessage: "",
-              });
-              if (success) {
-                showSuccessToast("링크가 복사되었어요!");
-              }
-            }}
+            onClick={handleCopyLink}
           >
             <img src="/icons/li-link.svg" alt="Link" className="w-6 h-6" />
           </button>
