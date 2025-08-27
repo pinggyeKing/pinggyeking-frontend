@@ -5,6 +5,7 @@ import FigmaTextBox from "@/components/FigmaTextBox";
 import Image from "next/image";
 import { getFeedbackCharacterCount, isOverFeedbackLimit } from "../utils";
 import { FEEDBACK_CHARACTER_SIZE } from "../constants";
+import { useBodyScrollLock } from "@/hooks/useBodyScrollLock";
 
 interface FeedbackModalProps {
   open: boolean;
@@ -23,6 +24,9 @@ export default function FeedbackModal({
   onConfirm,
   onCancel,
 }: FeedbackModalProps) {
+  // 모달이 열릴 때 body scroll 방지
+  useBodyScrollLock(open);
+
   if (!open) return null;
 
   return (
@@ -45,7 +49,7 @@ export default function FeedbackModal({
           </p>
         </div>
         <Image
-          src="/characters/suit.svg"
+          src="/characters/default.svg"
           alt="피드백 캐릭터"
           width={FEEDBACK_CHARACTER_SIZE.width}
           height={FEEDBACK_CHARACTER_SIZE.height}

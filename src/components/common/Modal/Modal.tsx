@@ -2,6 +2,7 @@
 
 import React from "react";
 import CustomButton from "../../Custombutton";
+import { useBodyScrollLock } from "@/hooks/useBodyScrollLock";
 
 // 1. props, size, 스타일 상수 정리
 interface ModalProps {
@@ -33,6 +34,9 @@ export default function Modal({
   showCloseButton = true,
   showBottomButton = true,
 }: ModalProps) {
+  // 모달이 열릴 때 body scroll 방지
+  useBodyScrollLock(open);
+
   if (!open) return null;
   const { width, minHeight } = MODAL_SIZES[size];
   return (

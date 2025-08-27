@@ -1,6 +1,7 @@
 import React from "react";
 import { X, FileUser } from "lucide-react";
 import CustomButton from "./Custombutton";
+import { useBodyScrollLock } from "@/hooks/useBodyScrollLock";
 
 interface PrivacyModalProps {
   isOpen: boolean;
@@ -81,6 +82,9 @@ const PrivacyInfo = {
 };
 
 const PrivacyModal: React.FC<PrivacyModalProps> = ({ isOpen, onClose }) => {
+  // 모달이 열릴 때 body scroll 방지
+  useBodyScrollLock(isOpen);
+
   if (!isOpen) return null;
 
   const handleOverlayClick = (e: React.MouseEvent) => {

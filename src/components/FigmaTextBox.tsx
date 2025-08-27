@@ -89,7 +89,7 @@ const FigmaTextBox: React.FC<TextInputProps> = ({
   };
 
   return (
-    <div className={`w-[335px] h-full ${className}`}>
+    <div className={`w-full h-full ${className}`}>
       <div
         className={`
         relative rounded-[24px] border-2 transition-all duration-200 h-full
