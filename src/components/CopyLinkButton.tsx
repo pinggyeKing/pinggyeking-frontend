@@ -59,7 +59,11 @@ const CopyLinkButton: React.FC<CopyLinkButtonProps> = ({
           break;
 
         case "current":
-          success = await copyCurrentUrl(successMessage, errorMessage);
+          success = await copyCurrentUrl({
+            excuseId: resultId || "",
+            successMessage,
+            errorMessage,
+          });
           break;
 
         case "result":

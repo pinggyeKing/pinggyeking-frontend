@@ -8,6 +8,8 @@ import CanvasCard from "../../card-image/components/CanvasCard";
 import { useRouter } from "next/navigation";
 import { useExcuseDetail } from "@/app/share/api";
 import LottieLoading from "@/components/LottieLoading";
+import Link from "next/link";
+import Image from "next/image";
 
 interface CreateImagePageProps {
   params: Promise<{
@@ -30,47 +32,6 @@ export default function CreateImagePage({ params }: CreateImagePageProps) {
     isLoading,
     error,
   } = useExcuseDetail(resolvedParams.excuseId);
-
-  // // 화면 너비에 따른 카드 스케일 조정 - 부모 영역을 넘치지 않도록 계산
-  // useEffect(() => {
-  //   const updateCardScale = () => {
-  //     const windowWidth = window.innerWidth;
-  //     const windowHeight = window.innerHeight;
-  //
-  //     // 카드의 실제 크기 (444 x 494)
-  //     const cardWidth = 444;
-  //     const cardHeight = 494;
-  //
-  //     // 패딩과 여백을 고려한 사용 가능한 공간 계산
-  //     const availableWidth = windowWidth - 32; // px-4 (16px * 2)
-  //     const availableHeight = windowHeight * 0.6; // 화면 높이의 60% 정도 사용
-  //
-  //     // 너비와 높이 기준으로 스케일 계산
-  //     const scaleByWidth = availableWidth / cardWidth;
-  //     const scaleByHeight = availableHeight / cardHeight;
-  //
-  //     // 더 작은 스케일을 선택하여 넘치지 않도록 함
-  //     const calculatedScale = Math.min(scaleByWidth, scaleByHeight, 1); // 최대 1배
-  //
-  //     // 최소 스케일 제한 (너무 작아지지 않도록)
-  //     const finalScale = Math.max(calculatedScale, 0.3);
-  //
-  //     setCardScale(finalScale);
-  //   };
-  //
-  //   // 초기 스케일 설정
-  //   updateCardScale();
-  //
-  //   // 리사이즈 이벤트 리스너 추가
-  //   window.addEventListener("resize", updateCardScale);
-  //
-  //   // 클린업
-  //   return () => {
-  //     window.removeEventListener("resize", updateCardScale);
-  //   };
-  // }, []);
-
-  // scale is fixed to achieve 286px width regardless of viewport
 
   const handleSelectionChange = (selectedId: string) => {
     console.log("Selected character style:", selectedId);
@@ -139,7 +100,7 @@ export default function CreateImagePage({ params }: CreateImagePageProps) {
         {/* Header Section */}
         <div className="flex flex-col w-full">
           {/* Back Button */}
-          <div className="flex justify-end">
+          <div className="flex justify-end gap-1.5">
             <FigmaButton
               variant="primary"
               round="pills"
@@ -150,6 +111,14 @@ export default function CreateImagePage({ params }: CreateImagePageProps) {
             >
               이전으로
             </FigmaButton>
+            <Link href="/gallery" className="cursor-pointer content-center">
+              <Image
+                src="/icons/gallery-button.svg"
+                width={44}
+                height={36}
+                alt="gallery"
+              />
+            </Link>
           </div>
           {/* Title Area */}
           <div className="flex flex-col items-center gap-1">

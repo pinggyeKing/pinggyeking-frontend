@@ -34,7 +34,7 @@ export default function ActionButtons({
     // const title = excuseData
     //   ? `${excuseData.target}에게 핑계 카드`
     //   : "변명연구소에서보낸 편지";
-    const title = "변명연구소에서보낸 편지";
+    const title = "변명연구소에서 보낸 편지";
     // const description = excuseData
     //   ? excuseData.excuse.substring(0, 100) + "..."
     //   : "아래 생성된 핑계를 확인해주세요";
@@ -45,7 +45,7 @@ export default function ActionButtons({
       typeof window !== "undefined"
         ? `${window.location.protocol}//${window.location.host}`
         : "";
-    const absoluteImageUrl = `${baseUrl}/cards/kakao-share-image.png`;
+    const absoluteImageUrl = `${baseUrl}/icons/kakao-talk-share.png`;
     const query = selectedCardType
       ? `?cardType=${encodeURIComponent(selectedCardType)}`
       : "";
@@ -62,7 +62,12 @@ export default function ActionButtons({
   };
 
   const handleCopyLink = async () => {
-    const success = await copyCurrentUrl("", ""); // 빈 메시지로 alert 방지
+    const success = await copyCurrentUrl({
+      excuseId: excuseId || "",
+      cardType: selectedCardType,
+      successMessage: "",
+      errorMessage: "",
+    }); // 빈 메시지로 alert 방지
     if (success) {
       showSuccessToast("링크가 복사되었어요!");
     }

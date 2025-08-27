@@ -7,6 +7,8 @@ import LottieLoading from "@/components/LottieLoading";
 import FigmaButton from "@/components/FigmaButton";
 import { useGallery } from "@/app/gallery/api";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
+import Link from "next/link";
 
 export default function GalleryPage() {
   const { data: galleryData, isLoading, error } = useGallery();
@@ -60,7 +62,16 @@ export default function GalleryPage() {
   }
 
   return (
-    <div className="min-h-screen ">
+    <div className="min-h-screen">
+      <Link href="/create" className="cursor-pointer">
+        <Image
+          src="/icons/create-button-based.svg"
+          alt="create-button"
+          width={327}
+          height={36}
+          className="mb-4"
+        />
+      </Link>
       <div className="max-w-7xl mx-auto space-y-8">
         {/* 통계 카드 그리드 */}
         <div className="w-full">
