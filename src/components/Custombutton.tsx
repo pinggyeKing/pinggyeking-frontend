@@ -84,7 +84,7 @@ export default function CustomButton({
     }
     if (round === "pills") {
       if (size === "large") return "radius-24";
-      if (size === "medium") return "radius-16";
+      if (size === "medium") return "radius-24";
       if (size === "small") return "radius-12";
       if (size === "xsmall") return "radius-8";
       return "radius-24"; // default for pills

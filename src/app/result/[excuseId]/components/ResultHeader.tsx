@@ -2,22 +2,25 @@
 
 import CustomButton from "@/components/Custombutton";
 import Image from "next/image";
+import { LayoutDashboard } from "lucide-react";
 import { getCharacterImage } from "../utils";
 import { DEFAULT_CHARACTER_SIZE } from "../constants";
 
 interface ResultHeaderProps {
   characterType: string;
   onGoHome: () => void;
+  onGoGallery?: () => void;
 }
 
 export default function ResultHeader({
   characterType,
   onGoHome,
+  onGoGallery,
 }: ResultHeaderProps) {
   return (
     <div className="w-full flex flex-col gap-1 items-center">
-      <div className="w-full flex justify-end">
-        <div className="w-[100px]">
+      <div className="w-full flex justify-end items-top gap-1.5">
+        <div className="w-[78px] h-[40px]">
           <CustomButton
             typeStyle="primary"
             size="medium"
@@ -27,6 +30,17 @@ export default function ResultHeader({
             처음으로
           </CustomButton>
         </div>
+        {onGoGallery && (
+          <div className="w-[44px]">
+            <CustomButton
+              typeStyle="outline2"
+              size="medium"
+              round="pills"
+              onClick={onGoGallery}
+              leftIcon={<LayoutDashboard size={20} />}
+            />
+          </div>
+        )}
       </div>
 
       <div className="flex flex-col gap-1 items-center">
