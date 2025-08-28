@@ -19,7 +19,7 @@ export default function ResultHeader({
 }: ResultHeaderProps) {
   return (
     <div className="w-full flex flex-col gap-1 items-center">
-      <div className="w-full flex justify-end items-top gap-1.5">
+      <div className="w-full flex justify-end items-start gap-1.5">
         <div className="w-[78px] h-[40px]">
           <CustomButton
             typeStyle="primary"
