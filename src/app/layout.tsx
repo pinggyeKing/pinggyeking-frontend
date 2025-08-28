@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import "./globals.css";
 import ClientLayout from "@/components/ClientLayout";
 import { SplashProvider } from "@/contexts/SplashContext";
-import { NavigationProvider } from "@/contexts/NavigationContext";
 import { ToastProvider, ToastContainer } from "@/components/common/Toast";
 import StructuredData from "@/components/StructuredData";
 import QueryClientWrapper from "@/components/QueryClientWrapper";
@@ -53,14 +52,12 @@ export default function RootLayout({
                 backgroundImage: "url(/Background.svg)",
               }}
             >
-              <div className="w-full h-full overflow-y-auto overflow-x-hidden rounded-[28px] pb-[140px]">
+              <div className="w-full h-full overflow-y-auto overflow-x-hidden rounded-[28px] pb-[20px]">
                 <StructuredData />
                 <QueryClientWrapper>
                   <SplashProvider>
                     <ToastProvider>
-                      <NavigationProvider>
-                        <ClientLayout>{children}</ClientLayout>
-                      </NavigationProvider>
+                      <ClientLayout>{children}</ClientLayout>
                     </ToastProvider>
                   </SplashProvider>
                 </QueryClientWrapper>
@@ -71,7 +68,7 @@ export default function RootLayout({
 
         {/* Mobile background - full screen */}
         <div
-          className="md:hidden bg-cover bg-center bg-no-repeat bg-fixed min-h-screen pb-[140px]"
+          className="md:hidden bg-cover bg-center bg-no-repeat bg-fixed min-h-screen pb-[20px]"
           style={{
             backgroundImage: "url(/Background.svg)",
           }}
@@ -79,12 +76,10 @@ export default function RootLayout({
           <StructuredData />
           <QueryClientWrapper>
             <SplashProvider>
-              <NavigationProvider>
-                <ToastProvider>
-                  <ClientLayout>{children}</ClientLayout>
-                  <ToastContainer />
-                </ToastProvider>
-              </NavigationProvider>
+              <ToastProvider>
+                <ClientLayout>{children}</ClientLayout>
+                <ToastContainer />
+              </ToastProvider>
             </SplashProvider>
           </QueryClientWrapper>
         </div>

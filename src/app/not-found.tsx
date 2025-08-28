@@ -4,24 +4,14 @@ import Link from "next/link";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import CustomButton from "@/components/Custombutton";
-import { useNavigation } from "@/contexts/NavigationContext";
 
 function NotFound() {
   const [isVisible, setIsVisible] = useState(false);
-  const { hideNavigation, showNavigationBar } = useNavigation();
 
   useEffect(() => {
-    // 404 페이지에서는 네비게이션 숨기기
-    hideNavigation();
-
     // 페이지 로드 시 애니메이션 효과
     setIsVisible(true);
-
-    // 컴포넌트 언마운트 시 네비게이션 다시 보이기
-    return () => {
-      showNavigationBar();
-    };
-  }, [hideNavigation, showNavigationBar]);
+  }, []);
 
   return (
     <div className="min-h-screen bg-white flex items-center justify-center p-5">
@@ -58,11 +48,7 @@ function NotFound() {
         {/* 홈으로 이동 버튼 */}
         <div className="flex justify-center">
           <CustomButton round="square">
-            <Link
-              href="/"
-              className="w-full h-full"
-              onClick={showNavigationBar}
-            >
+            <Link href="/" className="w-full h-full">
               {"홈으로 이동"}
             </Link>
           </CustomButton>
