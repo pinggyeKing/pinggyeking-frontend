@@ -27,7 +27,7 @@ export default function Home() {
 
       {/* 메인 카드 */}
       <div className="px-6 flex justify-center items-center">
-        <div className="w-7/8 radius-24 flex flex-col justify-center items-center border-2 border-grey-7 bg-grey-0 py-8 px-5 mb-7">
+        <div className="w-[87.5%] radius-24 flex flex-col justify-center items-center border-2 border-grey-7 bg-grey-0 py-8 px-5 mb-7">
           {/* 상단 텍스트 */}
           <div className="flex flex-col items-center gap-1 text-center">
             <div className="text-section-title text-grey-10 leading-6">
