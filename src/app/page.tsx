@@ -49,9 +49,12 @@ export default function Home() {
           </div>
 
           {/* 버튼 */}
-          <div className="w-[130px] h-[48px] flex justify-center">
+          <div className="w-full flex justify-between gap-4">
             <CustomButton round="square">
               <Link href="/create">핑계 만들기</Link>
+            </CustomButton>
+            <CustomButton round="square" typeStyle="outline2">
+              <Link href="/gallery">핑계 갤러리</Link>
             </CustomButton>
           </div>
         </div>
