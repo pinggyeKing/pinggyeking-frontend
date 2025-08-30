@@ -30,7 +30,7 @@ const SplashPage = () => {
     <div className="min-h-screen flex flex-col items-center justify-center relative overflow-hidden">
       <div className="relative z-10 flex flex-col items-center text-center px-6 max-w-md">
         <div className="mb-8 transform transition-all duration-1000 ease-out">
-          <div className="relative">
+          <div className="relative gap-3">
             <Image
               src="/Logo.svg"
               alt="변명 연구소 로고"
@@ -39,6 +39,7 @@ const SplashPage = () => {
               priority
               className="drop-shadow-2xl animate-float"
             />
+            <span className="text-section-title text-grey-8">Loading...</span>
           </div>
         </div>
       </div>
