@@ -50,6 +50,10 @@ export const useResultActions = ({
     setShowExitModal(true);
   };
 
+  const handleGoGallery = () => {
+    router.push("/gallery");
+  };
+
   const handleExitConfirm = () => {
     clearAllResultData(excuseId);
     router.push("/");
@@ -147,6 +151,7 @@ export const useResultActions = ({
 
   return {
     handleGoHome,
+    handleGoGallery,
     handleExitConfirm,
     handleExitCancel,
     handleCopyText,

@@ -26,9 +26,8 @@ export default function Home() {
       </div>
 
       {/* 메인 카드 */}
-
-      <div className="px-6">
-        <div className="w-[327px] h-[630px] radius-24 flex flex-col justify-center items-center border-2 border-grey-7 bg-grey-0 py-8 px-5 mb-7">
+      <div className="px-6 flex justify-center items-center">
+        <div className="w-[87.5%] radius-24 flex flex-col justify-center items-center border-2 border-grey-7 bg-grey-0 py-8 px-5 mb-7">
           {/* 상단 텍스트 */}
           <div className="flex flex-col items-center gap-1 text-center">
             <div className="text-section-title text-grey-10 leading-6">
@@ -50,9 +49,12 @@ export default function Home() {
           </div>
 
           {/* 버튼 */}
-          <div className="w-[130px] h-[48px] flex justify-center">
+          <div className="w-full flex justify-between gap-4">
             <CustomButton round="square">
               <Link href="/create">핑계 만들기</Link>
+            </CustomButton>
+            <CustomButton round="square" typeStyle="outline2">
+              <Link href="/gallery">핑계 갤러리</Link>
             </CustomButton>
           </div>
         </div>

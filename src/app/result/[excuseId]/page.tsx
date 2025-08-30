@@ -59,12 +59,13 @@ export default function ResultPage({ params }: ResultPageProps) {
       <ResultHeader
         characterType={characterType}
         onGoHome={actions.handleGoHome}
+        onGoGallery={actions.handleGoGallery}
       />
 
       {/* 결과 텍스트 영역 */}
       <div className="flex-1 flex flex-col gap-3">
         {/* 결과 말풍선 */}
-        <div className="w-full h-full mt-4">
+        <div className="w-full h-[160px] mt-4">
           <Balloon text={resultText} />
         </div>
 
