@@ -95,14 +95,14 @@ export default function SharePage({ params }: SharePageProps) {
     );
   }
 
-  const { situation, target, tone, excuse } = excuseData;
+  const { situation, target, tone, excuse, headTitle } = excuseData;
 
   const CARD_SCALE = 286 / 444; // CanvasCard base width is 444px → fixed width 286px
 
   return (
     <div className="flex flex-col items-center justify-between gap-6 mt-[-20px]">
       {/* Header 추가  */}
-      <Header />
+      <Header headTitle={headTitle} />
       {/* Card Preview */}
       <div className="flex justify-center">
         <div className="transform origin-center">

@@ -32,7 +32,7 @@ if (typeof window !== "undefined") {
     "[API Client] baseURL:",
     baseURL || "<relative>",
     "env:",
-    process.env.NODE_ENV
+    process.env.NODE_ENV,
   );
 }
 
@@ -42,7 +42,7 @@ api.interceptors.response.use(
   (error) => {
     console.error("API Error:", error);
     return Promise.reject(error);
-  }
+  },
 );
 
 // API 응답 타입 정의
@@ -51,6 +51,7 @@ export interface ExcuseDetailResponse {
   situation: string;
   target: string;
   tone: string;
+  headTitle: string;
 }
 
 export interface GalleryResponse {
@@ -115,7 +116,7 @@ export interface FeedbackErrorResponse {
 let isGenerateExcuseInProgress = false;
 
 export const generateExcuse = async (
-  data: ExcuseGenerateRequest
+  data: ExcuseGenerateRequest,
 ): Promise<ExcuseGenerateResponse> => {
   // 이미 진행 중인 API 호출이 있는지 확인
   if (isGenerateExcuseInProgress) {
@@ -129,7 +130,7 @@ export const generateExcuse = async (
 
     const response = await api.post<ExcuseGenerateResponse>(
       "/api/clova/generate",
-      data
+      data,
     );
 
     console.log("✅ generateExcuse: API 호출 완료");
