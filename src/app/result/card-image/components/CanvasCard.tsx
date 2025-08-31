@@ -70,7 +70,7 @@ const CanvasCard = forwardRef<HTMLDivElement, CanvasCardProps>(
       },
       message: {
         x: 0.09,
-        y: 0.2,
+        y: 0.09,
         maxWidth: 0.82,
         maxHeight: 0.6,
       },
@@ -215,14 +215,14 @@ const CanvasCard = forwardRef<HTMLDivElement, CanvasCardProps>(
       ctx.fillStyle = "#000000";
 
       // 수신자 텍스트 렌더링
-      const recipientFontSize = CANVAS_HEIGHT * finalFontSizes.recipient;
-      ctx.font = `400 ${recipientFontSize}px "Ownglyph RDO ballpen", "Pretendard", sans-serif`;
+      // const recipientFontSize = CANVAS_HEIGHT * finalFontSizes.recipient;
+      // ctx.font = `400 ${recipientFontSize}px "Ownglyph RDO ballpen", "Pretendard", sans-serif`;
 
-      const recipientX = CANVAS_WIDTH * finalTextPositions.recipient.x;
-      const recipientY = CANVAS_HEIGHT * finalTextPositions.recipient.y;
-      // recipient가 undefined이거나 빈 문자열인 경우에만 기본값 사용
-      const displayRecipient = recipient && recipient.trim() ? recipient : "님";
-      ctx.fillText(`${displayRecipient}`, recipientX, recipientY);
+      // const recipientX = CANVAS_WIDTH * finalTextPositions.recipient.x;
+      // const recipientY = CANVAS_HEIGHT * finalTextPositions.recipient.y;
+      // // recipient가 undefined이거나 빈 문자열인 경우에만 기본값 사용
+      // const displayRecipient = recipient && recipient.trim() ? recipient : "님";
+      // ctx.fillText(`${displayRecipient}`, recipientX, recipientY);
 
       // 메시지 텍스트 렌더링
       const messageFontSize = CANVAS_HEIGHT * finalFontSizes.message;
