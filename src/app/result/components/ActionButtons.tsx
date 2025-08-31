@@ -45,7 +45,8 @@ export default function ActionButtons({
       typeof window !== "undefined"
         ? `${window.location.protocol}//${window.location.host}`
         : "";
-    const absoluteImageUrl = `${baseUrl}/icons/kakao-talk-share.png`;
+    // const absoluteImageUrl = `${baseUrl}/icons/kakao-talk-share.png`;
+    const absoluteImageUrl = `${baseUrl}/_next/image?url=%2Ficons%2Fkakao-talk-share.png&w=640&q=90`;
     const query = selectedCardType
       ? `?cardType=${encodeURIComponent(selectedCardType)}`
       : "";
