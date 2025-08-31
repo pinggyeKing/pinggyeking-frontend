@@ -7,6 +7,7 @@ export const mockExcuseDetail: ExcuseDetailResponse = {
   tone: "정중하고 죄송한",
   excuse:
     "갑자기 가족이 응급실에 실려가서 병원에 가야 할 상황이 생겼습니다. 정말 중요한 자리인 것은 알고 있지만, 어쩔 수 없는 상황이라 양해 부탁드립니다.",
+  headTitle: "흥미 유발 헤드 타이틀 문구",
 };
 
 export const mockGalleryData: GalleryResponse = {
