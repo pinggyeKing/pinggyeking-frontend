@@ -747,3 +747,23 @@ body {
   scrollbar-width: thin;
   scrollbar-color: var(--grey-6) var(--grey-2);
 }
+
+/* 스크롤바 완전히 숨기기 */
+/* Webkit 브라우저 (Chrome, Safari, Edge) */
+::-webkit-scrollbar {
+  display: none;
+}
+
+/* Firefox */
+html {
+  scrollbar-width: none;
+}
+
+/* 모든 브라우저 대응 */
+body {
+  -ms-overflow-style: none; /* Internet Explorer 10+ */
+  scrollbar-width: none; /* Firefox */
+}
+body::-webkit-scrollbar {
+  display: none; /* Safari and Chrome */
+}
