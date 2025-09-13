@@ -105,6 +105,7 @@ export default function ResultPage({ params }: ResultPageProps) {
       {/* 피드백 모달 */}
       <FeedbackModal
         open={interactions.showFeedbackModal}
+        likeStatus={interactions.likeStatus}
         feedback={interactions.feedback}
         isFeedbackSubmitting={interactions.isFeedbackSubmitting}
         onFeedbackChange={interactions.setFeedback}

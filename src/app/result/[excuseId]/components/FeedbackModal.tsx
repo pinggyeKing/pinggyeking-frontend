@@ -6,9 +6,11 @@ import Image from "next/image";
 import { getFeedbackCharacterCount, isOverFeedbackLimit } from "../utils";
 import { FEEDBACK_CHARACTER_SIZE } from "../constants";
 import { useBodyScrollLock } from "@/hooks/useBodyScrollLock";
+import { LikeStatus } from "../types";
 
 interface FeedbackModalProps {
   open: boolean;
+  likeStatus: LikeStatus;
   feedback: string;
   isFeedbackSubmitting: boolean;
   onFeedbackChange: (feedback: string) => void;
@@ -18,6 +20,7 @@ interface FeedbackModalProps {
 
 export default function FeedbackModal({
   open,
+  likeStatus,
   feedback,
   isFeedbackSubmitting,
   onFeedbackChange,
@@ -59,7 +62,11 @@ export default function FeedbackModal({
           <FigmaTextBox
             value={feedback}
             multiline={true}
-            placeholder="어떤 점이 만족스럽나요? (최대 1000자)"
+            placeholder={
+              likeStatus === "like"
+                ? "어떤 점이 만족스럽나요? (최대 1000자)"
+                : "어떤 점이 아쉬웠나요? (최대 1000자)"
+            }
             editable={!isFeedbackSubmitting}
             onChange={onFeedbackChange}
           />
