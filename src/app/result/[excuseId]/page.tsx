@@ -36,6 +36,7 @@ export default function ResultPage({ params }: ResultPageProps) {
     feedbackSource: interactions.feedbackSource,
     setLikeStatus: interactions.setLikeStatus,
     setRegenerateOpen: interactions.setRegenerateOpen,
+    toggleRegenerateOpen: interactions.toggleRegenerateOpen,
     setSelectedRegenerateOption: interactions.setSelectedRegenerateOption,
     setShowExitModal: interactions.setShowExitModal,
     setShowFeedbackModal: interactions.setShowFeedbackModal,

@@ -20,6 +20,7 @@ interface UseResultActionsProps {
   feedbackSource: FeedbackSource | null;
   setLikeStatus: (status: LikeStatus) => void;
   setRegenerateOpen: (isOpen: boolean) => void;
+  toggleRegenerateOpen: () => void;
   setSelectedRegenerateOption: (option: RegenerateOption | null) => void;
   setShowExitModal: (show: boolean) => void;
   setShowFeedbackModal: (show: boolean) => void;
@@ -36,6 +37,7 @@ export const useResultActions = ({
   feedbackSource,
   setLikeStatus,
   setRegenerateOpen,
+  toggleRegenerateOpen,
   setSelectedRegenerateOption,
   setShowExitModal,
   setShowFeedbackModal,
@@ -71,7 +73,7 @@ export const useResultActions = ({
   };
 
   const handleRegenerate = () => {
-    setRegenerateOpen(true);
+    toggleRegenerateOpen();
   };
 
   const handleRegenerateOption = async (option: RegenerateOption) => {

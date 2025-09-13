@@ -62,6 +62,10 @@ export const useResultInteractions = (excuseId: string) => {
     updateState({ isRegenerateOpen: isOpen });
   };
 
+  const toggleRegenerateOpen = () => {
+    updateState({ isRegenerateOpen: !state.isRegenerateOpen });
+  };
+
   const setSelectedRegenerateOption = (option: RegenerateOption | null) => {
     updateState({ selectedRegenerateOption: option });
   };
@@ -90,6 +94,7 @@ export const useResultInteractions = (excuseId: string) => {
     ...state,
     setLikeStatus,
     setRegenerateOpen,
+    toggleRegenerateOpen,
     setSelectedRegenerateOption,
     setShowExitModal,
     setShowFeedbackModal,
