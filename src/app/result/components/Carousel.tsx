@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect, useCallback } from "react";
-import CarouselItem from "./CarouselItem";
+import CarouselItem from "./Carousel.Item";
 
 interface CarouselProps {
   onSelectionChange?: (selectedId: string) => void;

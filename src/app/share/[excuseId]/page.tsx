@@ -5,7 +5,7 @@ import LottieLoading from "@/components/LottieLoading";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useState, useEffect, use } from "react";
 import { useExcuseDetail } from "@/app/share/api";
-import CanvasCard from "@/app/result/card-image/components/CanvasCard";
+import CanvasCard from "@/app/result/[excuseId]/components/CanvasCard";
 import Header from "./components/Header";
 import CustomButton from "@/components/Custombutton";
 

@@ -4,7 +4,7 @@ import React, { useRef, useState, useEffect, use } from "react";
 import { Carousel, ActionButtons } from "../../components";
 import FigmaButton from "@/components/FigmaButton";
 import { ToastContainer } from "@/components/common/Toast";
-import CanvasCard from "../../card-image/components/CanvasCard";
+import CanvasCard from "../components/CanvasCard";
 import { useRouter } from "next/navigation";
 import { useExcuseDetail } from "@/app/share/api";
 import LottieLoading from "@/components/LottieLoading";
@@ -36,7 +36,7 @@ export default function CreateImagePage({ params }: CreateImagePageProps) {
   const handleSelectionChange = (selectedId: string) => {
     console.log("Selected character style:", selectedId);
     setSelectedCardType(
-      selectedId as "default" | "formal" | "cute" | "humorous" | "pop"
+      selectedId as "default" | "formal" | "cute" | "humorous" | "pop",
     );
   };
 
