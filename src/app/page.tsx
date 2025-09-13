@@ -63,7 +63,7 @@ export default function Home() {
       </div>
 
       {/* 하단 텍스트 */}
-      <div className="w-full flex flex-row items-center border-t border-grey-4 px-[12px] py-[24px]">
+      <div className="w-full items-center border-t border-grey-4 px-[12px] py-[24px]">
         <FunctionIndicator
           icon={<Info size={16} />}
           label="서비스 개선을 위해 익명 사용통계를 수집합니다."

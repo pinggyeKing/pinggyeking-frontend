@@ -31,14 +31,15 @@ export default function ResultHeader({
           </CustomButton>
         </div>
         {onGoGallery && (
-          <div className="w-[44px]">
+          <div className="w-[120px]">
             <CustomButton
               typeStyle="outline2"
               size="medium"
               round="pills"
               onClick={onGoGallery}
-              leftIcon={<LayoutDashboard size={20} />}
-            />
+            >
+              핑계 갤러리
+            </CustomButton>
           </div>
         )}
       </div>

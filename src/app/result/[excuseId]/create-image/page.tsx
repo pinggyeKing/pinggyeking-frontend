@@ -10,6 +10,7 @@ import { useExcuseDetail } from "@/app/share/api";
 import LottieLoading from "@/components/LottieLoading";
 import Link from "next/link";
 import Image from "next/image";
+import CustomButton from "@/components/Custombutton";
 
 interface CreateImagePageProps {
   params: Promise<{
@@ -111,14 +112,16 @@ export default function CreateImagePage({ params }: CreateImagePageProps) {
             >
               이전으로
             </FigmaButton>
-            <Link href="/gallery" className="cursor-pointer content-center">
-              <Image
-                src="/icons/gallery-button.svg"
-                width={44}
-                height={36}
-                alt="gallery"
-              />
-            </Link>
+            <div className="w-[120px]">
+              <CustomButton
+                typeStyle="outline2"
+                size="medium"
+                round="pills"
+                onClick={() => router.push("/gallery")}
+              >
+                핑계 갤러리
+              </CustomButton>
+            </div>
           </div>
           {/* Title Area */}
           <div className="flex flex-col items-center gap-1">

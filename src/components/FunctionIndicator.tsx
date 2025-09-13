@@ -35,29 +35,31 @@ const FunctionIndicator: React.FC<FunctionIndicatorProps> = ({
       onClick={!isDisabled ? onClick : undefined}
       disabled={isDisabled}
       className={clsx(
-        "flex items-center gap-2 px-2 py-3 min-w-[287px] transition-all duration-200",
+        "items-end gap-2 px-2 py-3 w-full transition-all duration-200",
         isSelected
           ? "bg-white text-grey-10 shadow-sm border border-grey-3"
           : "bg-transparent text-grey-10 hover:bg-grey-1",
         isDisabled && "opacity-50 cursor-not-allowed",
-        className
+        className,
       )}
     >
-      {/* 왼쪽 아이콘 */}
-      {icon && (
-        <div className="flex items-center justify-center w-6 h-6 rounded-lg">
-          <div className="w-4 h-4 text-grey-10">{icon}</div>
-        </div>
-      )}
+      <div className="flex gap-2">
+        {/* 왼쪽 아이콘 */}
+        {icon && (
+          <div className="flex justify-center w-6 h-6 rounded-lg">
+            <div className="w-4 h-4 text-grey-10">{icon}</div>
+          </div>
+        )}
 
-      {/* 중앙 라벨 */}
-      <span className="flex-1 text-left text-body2-semibold whitespace-normal">
-        {label}
-      </span>
+        {/* 중앙 라벨 */}
+        <span className="flex-1 text-left text-body2-semibold whitespace-normal">
+          {label}
+        </span>
+      </div>
 
       {/* 오른쪽 "자세히 보기" 섹션 */}
       {hasChild && (
-        <div className="flex items-center gap-1">
+        <div className="flex gap-1 justify-end">
           <span className="text-body4-semibold text-grey-7">{childLabel}</span>
           <ChevronRight
             size={16}
