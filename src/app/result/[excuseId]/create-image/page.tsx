@@ -3,7 +3,6 @@
 import React, { useRef, useState, useEffect, use } from "react";
 import { Carousel, ActionButtons } from "../../components";
 import FigmaButton from "@/components/FigmaButton";
-import { ToastContainer } from "@/components/common/Toast";
 import CanvasCard from "../components/CanvasCard";
 import { useRouter } from "next/navigation";
 import { useExcuseDetail } from "@/app/share/api";
@@ -95,78 +94,75 @@ export default function CreateImagePage({ params }: CreateImagePageProps) {
   }
 
   return (
-    <>
-      <ToastContainer />
-      <div className="flex flex-col items-center min-h-full w-full">
-        {/* Header Section */}
-        <div className="flex flex-col w-full">
-          {/* Back Button */}
-          <div className="flex justify-end gap-1.5">
-            <FigmaButton
-              variant="primary"
+    <div className="flex flex-col items-center min-h-full w-full">
+      {/* Header Section */}
+      <div className="flex flex-col w-full">
+        {/* Back Button */}
+        <div className="flex justify-end gap-1.5">
+          <FigmaButton
+            variant="primary"
+            round="pills"
+            size={1.0}
+            active={false}
+            disabled={false}
+            onClick={handleBackClick}
+          >
+            이전으로
+          </FigmaButton>
+          <div className="w-[120px]">
+            <CustomButton
+              typeStyle="outline2"
+              size="medium"
               round="pills"
-              size={1.0}
-              active={false}
-              disabled={false}
-              onClick={handleBackClick}
+              onClick={() => router.push("/gallery")}
             >
-              이전으로
-            </FigmaButton>
-            <div className="w-[120px]">
-              <CustomButton
-                typeStyle="outline2"
-                size="medium"
-                round="pills"
-                onClick={() => router.push("/gallery")}
-              >
-                핑계 갤러리
-              </CustomButton>
-            </div>
-          </div>
-          {/* Title Area */}
-          <div className="flex flex-col items-center gap-1">
-            <h1 className="text-section-title text-grey-10 uppercase">
-              탬플릿을 선택해주세요
-            </h1>
+              핑계 갤러리
+            </CustomButton>
           </div>
         </div>
-
-        {/* Card Style Selection */}
-        <div className="w-full bg-gray-50 rounded-lg py-1 relative z-0">
-          <Carousel
-            onSelectionChange={handleSelectionChange}
-            initialSelected={selectedCardType}
-          />
+        {/* Title Area */}
+        <div className="flex flex-col items-center gap-1">
+          <h1 className="text-section-title text-grey-10 uppercase">
+            탬플릿을 선택해주세요
+          </h1>
         </div>
+      </div>
 
-        {/* Card Preview */}
-        <div
-          className="flex justify-center relative z-0"
-          style={{
-            width: "calc(100% + 2rem)",
-            marginLeft: "-1rem",
-            marginRight: "-1rem",
-          }}
-        >
-          <div className="transform origin-center max-w-full overflow-hidden">
-            <CanvasCard
-              ref={cardRef}
-              recipient={excuseData.target}
-              message={excuseData.excuse}
-              cardType={selectedCardType}
-              scale={cardScale}
-            />
-          </div>
-        </div>
-
-        {/* Action Buttons */}
-        <ActionButtons
-          cardRef={cardRef}
-          excuseData={excuseData}
-          excuseId={resolvedParams.excuseId}
-          selectedCardType={selectedCardType}
+      {/* Card Style Selection */}
+      <div className="w-full bg-gray-50 rounded-lg py-1 relative z-0">
+        <Carousel
+          onSelectionChange={handleSelectionChange}
+          initialSelected={selectedCardType}
         />
       </div>
-    </>
+
+      {/* Card Preview */}
+      <div
+        className="flex justify-center relative z-0"
+        style={{
+          width: "calc(100% + 2rem)",
+          marginLeft: "-1rem",
+          marginRight: "-1rem",
+        }}
+      >
+        <div className="transform origin-center max-w-full overflow-hidden">
+          <CanvasCard
+            ref={cardRef}
+            recipient={excuseData.target}
+            message={excuseData.excuse}
+            cardType={selectedCardType}
+            scale={cardScale}
+          />
+        </div>
+      </div>
+
+      {/* Action Buttons */}
+      <ActionButtons
+        cardRef={cardRef}
+        excuseData={excuseData}
+        excuseId={resolvedParams.excuseId}
+        selectedCardType={selectedCardType}
+      />
+    </div>
   );
 }

@@ -58,6 +58,7 @@ export default function RootLayout({
                   <SplashProvider>
                     <ToastProvider>
                       <ClientLayout>{children}</ClientLayout>
+                      <ToastContainer />
                     </ToastProvider>
                   </SplashProvider>
                 </QueryClientWrapper>
