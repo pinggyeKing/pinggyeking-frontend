@@ -98,6 +98,7 @@ export default function ResultPage({ params }: ResultPageProps) {
       {/* 홈으로 이동 확인 모달 */}
       <ExitModal
         open={interactions.showExitModal}
+        title={actions.exitTarget === "gallery" ? "커뮤니티로" : "홈으로"}
         onConfirm={actions.handleExitConfirm}
         onCancel={actions.handleExitCancel}
       />

@@ -1,13 +1,19 @@
-// result 페이지 액션 핸들러들을 관리하는 커스텀 훅
+// result 페이지 액션 처리 커스텀 훅
 
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 import { useToast } from "@/components/common/Toast";
-import { LikeStatus, RegenerateOption, FeedbackSource } from "./types";
+import {
+  LikeStatus,
+  RegenerateOption,
+  FeedbackSource,
+  ExitTarget,
+} from "./types";
 import {
   copyToClipboard,
   clearAllResultData,
-  setRegenerationData,
   validateFormData,
+  setRegenerationData,
   submitUserFeedback,
 } from "./utils";
 import { FEEDBACK_MESSAGES } from "./constants";
@@ -18,8 +24,9 @@ interface UseResultActionsProps {
   likeStatus: LikeStatus;
   feedback: string;
   feedbackSource: FeedbackSource | null;
+
   setLikeStatus: (status: LikeStatus) => void;
-  setRegenerateOpen: (isOpen: boolean) => void;
+  setRegenerateOpen: (open: boolean) => void;
   toggleRegenerateOpen: () => void;
   setSelectedRegenerateOption: (option: RegenerateOption | null) => void;
   setShowExitModal: (show: boolean) => void;
@@ -48,21 +55,32 @@ export const useResultActions = ({
   const router = useRouter();
   const { showInfoToast } = useToast();
 
+  // exitTarget을 내부 상태로 관리
+  const [exitTarget, setExitTarget] = useState<ExitTarget | null>(null);
+
   const handleGoHome = () => {
+    setExitTarget("home");
     setShowExitModal(true);
   };
 
   const handleGoGallery = () => {
-    router.push("/gallery");
+    setExitTarget("gallery");
+    setShowExitModal(true);
   };
 
   const handleExitConfirm = () => {
     clearAllResultData(excuseId);
-    router.push("/");
+
+    if (exitTarget === "gallery") {
+      router.push("/gallery");
+    } else {
+      router.push("/");
+    }
   };
 
   const handleExitCancel = () => {
     setShowExitModal(false);
+    setExitTarget(null);
   };
 
   const handleCopyText = async () => {
@@ -164,5 +182,6 @@ export const useResultActions = ({
     handleThumbsDown,
     handleFeedbackConfirm,
     handleFeedbackCancel,
+    exitTarget, // exitTarget을 반환값에 추가
   };
 };

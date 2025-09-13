@@ -8,6 +8,8 @@ export type RegenerateOption = "구체적으로" | "간결하게";
 
 export type FeedbackSource = "create-image" | "reaction";
 
+export type ExitTarget = "home" | "gallery";
+
 export interface ResultPageParams {
   excuseId: string;
 }

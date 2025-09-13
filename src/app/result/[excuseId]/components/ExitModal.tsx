@@ -5,12 +5,14 @@ import Image from "next/image";
 
 interface ExitModalProps {
   open: boolean;
+  title: string;
   onConfirm: () => void;
   onCancel: () => void;
 }
 
 export default function ExitModal({
   open,
+  title,
   onConfirm,
   onCancel,
 }: ExitModalProps) {
@@ -29,7 +31,7 @@ export default function ExitModal({
       <div className="flex flex-col justify-center items-center gap-4">
         <div className="flex flex-col gap-1">
           <p className="text-section-title text-grey-10 text-center">
-            홈으로 이동하시겠습니까?
+            {title} 이동하시겠습니까?
           </p>
           <p className="text-section-subtitle text-grey-10 text-center">
             생성된 핑계를 다시 볼 수 없습니다.
