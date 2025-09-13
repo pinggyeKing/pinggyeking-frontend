@@ -7,9 +7,8 @@ import CanvasCard from "../components/CanvasCard";
 import { useRouter } from "next/navigation";
 import { useExcuseDetail } from "@/app/share/api";
 import LottieLoading from "@/components/LottieLoading";
-import Link from "next/link";
-import Image from "next/image";
 import CustomButton from "@/components/Custombutton";
+import ExitModal from "../components/ExitModal";
 
 interface CreateImagePageProps {
   params: Promise<{
@@ -25,6 +24,7 @@ export default function CreateImagePage({ params }: CreateImagePageProps) {
   >("default");
   const cardScale = 286 / 444; // CanvasCard base width is 444px → fixed rendered width 286px
   const cardRef = useRef<HTMLDivElement>(null);
+  const [showExitModal, setShowExitModal] = useState(false);
 
   // API 호출
   const {
@@ -99,22 +99,23 @@ export default function CreateImagePage({ params }: CreateImagePageProps) {
       <div className="flex flex-col w-full">
         {/* Back Button */}
         <div className="flex justify-end gap-1.5">
-          <FigmaButton
-            variant="primary"
-            round="pills"
-            size={1.0}
-            active={false}
-            disabled={false}
-            onClick={handleBackClick}
-          >
-            이전으로
-          </FigmaButton>
+          <div className="w-[78px] h-[40px]">
+            <CustomButton
+              typeStyle="primary"
+              size="medium"
+              round="pills"
+              onClick={handleBackClick}
+            >
+              이전으로
+            </CustomButton>
+          </div>
+
           <div className="w-[120px]">
             <CustomButton
               typeStyle="outline2"
               size="medium"
               round="pills"
-              onClick={() => router.push("/gallery")}
+              onClick={() => setShowExitModal(true)}
             >
               핑계 갤러리
             </CustomButton>
@@ -155,6 +156,14 @@ export default function CreateImagePage({ params }: CreateImagePageProps) {
           />
         </div>
       </div>
+
+      {/* 홈으로 이동 확인 모달 */}
+      <ExitModal
+        open={showExitModal}
+        title="커뮤니티로"
+        onConfirm={() => router.push("/gallery")}
+        onCancel={() => setShowExitModal(false)}
+      />
 
       {/* Action Buttons */}
       <ActionButtons
